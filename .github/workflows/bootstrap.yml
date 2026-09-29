@@ -52,11 +52,13 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
-      - name: Publish expanded source
+      - name: Publish ordinary source files
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          rm -rf output
+          rm -f .github/workflows/build-apk.yml
           git add -A
-          git rm --ignore-unmatch context-english-v0.1-source.zip context-english-v0.1-source-r2.zip context-english-v0.1-source-r3.zip context-english-v0.1-source-r4.zip .github/workflows/bootstrap.yml
+          git rm --ignore-unmatch context-english-v0.1-source.zip context-english-v0.1-source-r2.zip context-english-v0.1-source-r3.zip context-english-v0.1-source-r4.zip
           git commit -m "Build Context English Android V0.1"
           git push
