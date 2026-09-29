@@ -1,23 +1,28 @@
-name: Bootstrap Context English V0.1
+name: Build APK
 
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+
+concurrency:
+  group: android-build-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  bootstrap:
+  build:
+    name: Build installable debug APK
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v5
 
-      - name: Expand corrected source package
-        run: unzip -o context-english-v0.1-source-r4.zip -d .
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v5
 
       - name: Set up Java 17
         uses: actions/setup-java@v5
@@ -36,10 +41,10 @@ jobs:
         with:
           gradle-version: "8.9"
 
-      - name: Build installable APK
+      - name: Build APK
         run: gradle :app:assembleDebug --stacktrace
 
-      - name: Prepare APK artifact
+      - name: Prepare artifact
         run: |
           mkdir -p output
           cp app/build/outputs/apk/debug/app-debug.apk output/Context-English-v0.1-debug.apk
@@ -51,14 +56,3 @@ jobs:
           path: output/Context-English-v0.1-debug.apk
           if-no-files-found: error
           retention-days: 30
-
-      - name: Publish ordinary source files
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          rm -rf output
-          rm -f .github/workflows/build-apk.yml
-          git add -A
-          git rm --ignore-unmatch context-english-v0.1-source.zip context-english-v0.1-source-r2.zip context-english-v0.1-source-r3.zip context-english-v0.1-source-r4.zip
-          git commit -m "Build Context English Android V0.1"
-          git push
