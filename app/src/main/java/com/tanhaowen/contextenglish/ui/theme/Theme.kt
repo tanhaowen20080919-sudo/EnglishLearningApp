@@ -13,12 +13,12 @@ private val AppColors = lightColorScheme(
     secondary = Amber,
     onSecondary = Color.White,
     secondaryContainer = SoftAmber,
-    onSecondaryContainer = Color(0xFF4E2C00),
+    onSecondaryContainer = Ink,
     background = Paper,
     onBackground = Ink,
     surface = WarmWhite,
     onSurface = Ink,
-    surfaceVariant = Color(0xFFF0F3EE),
+    surfaceVariant = Color(0xFFF3F3F3),
     onSurfaceVariant = MutedInk,
     outline = Line
 )

@@ -16,8 +16,29 @@ data class VocabWord(
     val state: WordState,
     val weak: Boolean,
     val seenCount: Int,
-    val correctCount: Int
-)
+    val correctCount: Int,
+    val partOfSpeech: String = "",
+    val importance: Int = 2,
+    val familiarity: Int = 0,
+    val mistakeCount: Int = 0,
+    val reviewCount: Int = 0,
+    val lastReviewTime: Long = 0,
+    val nextReviewTime: Long = 0,
+    val createdAt: Long = 0,
+    val updatedAt: Long = 0,
+    val streak: Int = 0,
+    val favorite: Boolean = false,
+    val exampleTranslation: String = ""
+) {
+    val due: Boolean get() = state != WordState.NEW && nextReviewTime <= System.currentTimeMillis()
+    val statusLabel: String get() = when {
+        weak -> "薄弱"
+        due -> "待复习"
+        state == WordState.NEW -> "未学习"
+        state == WordState.MASTERED -> "已掌握"
+        else -> "学习中"
+    }
+}
 
 data class LearningStats(
     val total: Int = 0,
@@ -66,6 +87,7 @@ data class AiUsageSummary(
 }
 
 data class AiSettings(
+    val provider: String = "OpenAI Compatible",
     val baseUrl: String = "https://api.openai.com/v1",
     val apiKey: String = "",
     val dailyModel: String = "gpt-5.6-sol",
@@ -123,3 +145,11 @@ val builtInReading = StudyReading(
         )
     )
 )
+
+
+data class StudySettings(val newWords: Int = 20, val dailyGoal: Int = 30,
+    val showPhonetic: Boolean = true, val autoSpeak: Boolean = false)
+data class DailyPlan(val ids: List<Long> = emptyList(), val completed: Set<Long> = emptySet(),
+    val newCount: Int = 0, val reviewCount: Int = 0, val weakCount: Int = 0)
+data class AiQuizQuestion(val wordId: Long, val prompt: String, val options: List<String>,
+    val answer: Int, val explanation: String)

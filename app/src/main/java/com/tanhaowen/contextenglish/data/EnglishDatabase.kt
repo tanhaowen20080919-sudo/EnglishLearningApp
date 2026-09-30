@@ -5,7 +5,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-class EnglishDatabase(context: Context) :
+class EnglishDatabase(private val context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -60,9 +60,45 @@ class EnglishDatabase(context: Context) :
             """.trimIndent()
         )
         seedWords(db)
+        upgradeV2(db)
+        importAssets(db)
     }
 
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) = Unit
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        if (oldVersion < 2) { upgradeV2(db); importAssets(db) }
+    }
+
+    private fun upgradeV2(db: SQLiteDatabase) {
+        listOf("part_of_speech TEXT NOT NULL DEFAULT ''", "importance INTEGER NOT NULL DEFAULT 2",
+            "familiarity INTEGER NOT NULL DEFAULT 0", "mistake_count INTEGER NOT NULL DEFAULT 0",
+            "review_count INTEGER NOT NULL DEFAULT 0", "last_review_at INTEGER NOT NULL DEFAULT 0",
+            "created_at INTEGER NOT NULL DEFAULT 0", "updated_at INTEGER NOT NULL DEFAULT 0",
+            "streak INTEGER NOT NULL DEFAULT 0", "favorite INTEGER NOT NULL DEFAULT 0",
+            "example_translation TEXT NOT NULL DEFAULT ''").forEach { db.execSQL("ALTER TABLE words ADD COLUMN $it") }
+        db.execSQL("ALTER TABLE study_events ADD COLUMN word_id INTEGER")
+        db.execSQL("CREATE TABLE daily_plan (day TEXT NOT NULL, word_id INTEGER NOT NULL, kind TEXT NOT NULL, PRIMARY KEY(day, word_id))")
+        db.execSQL("CREATE INDEX review_due ON words(next_review_at)")
+        db.execSQL("CREATE INDEX event_word ON study_events(word_id, created_at)")
+        db.execSQL("UPDATE words SET familiarity = CASE WHEN state = 'MASTERED' THEN 80 WHEN state = 'LEARNING' THEN 30 ELSE 0 END")
+    }
+
+    private fun importAssets(db: SQLiteDatabase) {
+        val array = org.json.JSONObject(context.assets.open("vocabulary.json").bufferedReader().use { it.readText() }).getJSONArray("words")
+        for (i in 0 until array.length()) {
+            val w = array.getJSONObject(i)
+            val now = System.currentTimeMillis()
+            val values = ContentValues().apply {
+                put("word", w.getString("word")); put("phonetic", w.optString("phonetic"))
+                put("meaning", w.getString("meaning")); put("part_of_speech", w.optString("partOfSpeech"))
+                put("context_meaning", w.optString("contextMeaning", w.getString("meaning")))
+                put("example", w.optString("example")); put("example_translation", w.optString("exampleTranslation"))
+                put("importance", w.optInt("importance", 2)); put("created_at", now); put("updated_at", now)
+            }
+            val existing = db.rawQuery("SELECT id FROM words WHERE word = ?", arrayOf(w.getString("word"))).use { if (it.moveToFirst()) it.getLong(0) else null }
+            if (existing == null) db.insertOrThrow("words", null, values)
+            else { values.remove("created_at"); db.update("words", values, "id = ?", arrayOf(existing.toString())) }
+        }
+    }
 
     private fun seedWords(db: SQLiteDatabase) {
         seedData.forEach { item ->
@@ -79,7 +115,7 @@ class EnglishDatabase(context: Context) :
 
     companion object {
         private const val DATABASE_NAME = "context_english.db"
-        private const val DATABASE_VERSION = 1
+        private const val DATABASE_VERSION = 2
 
         private val seedData = listOf(
             arrayOf("avoid", "/əˈvɔɪd/", "v. 避免；避开", "文中：逃避、不愿接触", "Try to avoid checking every unknown word."),

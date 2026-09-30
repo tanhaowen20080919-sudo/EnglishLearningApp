@@ -1,6 +1,7 @@
 package com.tanhaowen.contextenglish
 
 import android.os.Bundle
+import androidx.activity.compose.BackHandler
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -87,7 +88,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ContextEnglishTheme {
                 val appViewModel: AppViewModel = viewModel(
-                    factory = AppViewModelFactory(app.repository, app.settingsStore)
+                    factory = AppViewModelFactory(app.repository, app.settingsStore, app.studySettingsStore)
                 )
                 ContextEnglishRoot(appViewModel)
             }
@@ -99,7 +100,8 @@ private enum class AppTab(val label: String, val shortLabel: String) {
     HOME("今日", "今"),
     STUDY("学习", "学"),
     WORDS("词库", "词"),
-    AI("AI", "AI")
+    AI("AI", "AI"),
+    ME("我的", "我")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -108,8 +110,18 @@ private fun ContextEnglishRoot(viewModel: AppViewModel) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     var selectedTab by rememberSaveable { mutableStateOf(AppTab.HOME.name) }
     var showSettings by rememberSaveable { mutableStateOf(false) }
+    var aiWord by rememberSaveable { mutableStateOf("") }
+    val openWordAi: (VocabWord) -> Unit = { aiWord = it.word; viewModel.selectWord(null); selectedTab = AppTab.AI.name }
+    BackHandler(enabled = showSettings || state.selectedWord != null || selectedTab != AppTab.HOME.name) {
+        if(showSettings) showSettings=false else if(state.selectedWord != null) viewModel.selectWord(null) else selectedTab=AppTab.HOME.name
+    }
+    state.selectedWord?.let { WordDetail(it, state, viewModel, { viewModel.selectWord(null) }, openWordAi) }
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        while(true) { kotlinx.coroutines.delay(60_000); viewModel.refresh() }
+    }
 
     LaunchedEffect(state.aiMessage) {
         state.aiMessage?.let { message ->
@@ -124,7 +136,7 @@ private fun ContextEnglishRoot(viewModel: AppViewModel) {
                 title = {
                     Column {
                         Text(
-                            text = if (showSettings) "AI 设置" else "Context English",
+                            text = if (showSettings) "AI 设置" else "English Learning",
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 19.sp
                         )
@@ -187,34 +199,17 @@ private fun ContextEnglishRoot(viewModel: AppViewModel) {
                 )
             } else {
                 when (AppTab.valueOf(selectedTab)) {
-                    AppTab.HOME -> HomeScreen(
-                        stats = state.stats,
-                        onStartStudy = { selectedTab = AppTab.STUDY.name },
-                        onOpenWords = { selectedTab = AppTab.WORDS.name },
-                        onOpenAi = { selectedTab = AppTab.AI.name }
-                    )
-                    AppTab.STUDY -> StudyScreen(
-                        state = state,
-                        onWordClick = viewModel::selectWord,
-                        onChooseAnswer = viewModel::chooseAnswer,
-                        onSubmit = viewModel::submitReading,
-                        onMarkLearning = { viewModel.updateWordState(it, WordState.LEARNING) },
-                        onMarkMastered = { viewModel.updateWordState(it, WordState.MASTERED) },
-                        onToggleWeak = viewModel::toggleWeak
-                    )
-                    AppTab.WORDS -> WordLibraryScreen(
-                        words = state.words,
-                        onStateChange = viewModel::updateWordState,
-                        onToggleWeak = viewModel::toggleWeak
-                    )
-                    AppTab.AI -> AiScreen(
-                        state = state,
-                        onSettings = { showSettings = true },
-                        onTest = viewModel::testConnection,
-                        onLoadModels = viewModel::loadModels,
-                        onGenerate = viewModel::generateDailyReading,
-                        onOpenCached = viewModel::openCachedReading
-                    )
+                    AppTab.HOME -> UpgradeHome(state,
+                        start = { mode -> viewModel.startSession(mode); selectedTab = AppTab.STUDY.name },
+                        words = { selectedTab = AppTab.WORDS.name })
+                    AppTab.STUDY -> UpgradeStudy(state, viewModel, openWordAi) {
+                        StudyScreen(state, viewModel::selectWord, viewModel::chooseAnswer, viewModel::submitReading,
+                            { viewModel.updateWordState(it, WordState.LEARNING) },
+                            { viewModel.updateWordState(it, WordState.MASTERED) }, viewModel::toggleWeak)
+                    }
+                    AppTab.WORDS -> UpgradeWords(state, viewModel)
+                    AppTab.AI -> UpgradeAi(state, viewModel, { showSettings = true }, aiWord)
+                    AppTab.ME -> UpgradeMe(state, viewModel, { showSettings = true })
                 }
             }
         }
@@ -456,8 +451,8 @@ private fun WordMeaningCard(
                 modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                OutlinedButton(onClick = onMarkLearning, modifier = Modifier.weight(1f)) { Text("学习中") }
-                Button(onClick = onMarkMastered, modifier = Modifier.weight(1f)) { Text("已掌握") }
+                OutlinedButton(onClick = onMarkLearning, modifier = Modifier.weight(1f)) { Text("模糊") }
+                Button(onClick = onMarkMastered, modifier = Modifier.weight(1f)) { Text("认识") }
             }
             TextButton(onClick = onToggleWeak, modifier = Modifier.align(Alignment.End)) {
                 Text(if (word.weak) "移出薄弱词" else "加入薄弱词")
@@ -752,6 +747,7 @@ private fun AiScreen(
 
 @Composable
 private fun SettingsScreen(current: AiSettings, onSave: (AiSettings) -> Unit) {
+    var provider by remember(current) { mutableStateOf(current.provider) }
     var baseUrl by remember(current) { mutableStateOf(current.baseUrl) }
     var apiKey by remember(current) { mutableStateOf(current.apiKey) }
     var dailyModel by remember(current) { mutableStateOf(current.dailyModel) }
@@ -764,6 +760,7 @@ private fun SettingsScreen(current: AiSettings, onSave: (AiSettings) -> Unit) {
         contentPadding = PaddingValues(18.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+        item { OutlinedTextField(value=provider, onValueChange={ provider=it }, label={ Text("API Provider（OpenAI / DeepSeek / 其他兼容服务）") }, modifier=Modifier.fillMaxWidth()) }
         item {
             Text("接口", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             Text(
@@ -847,6 +844,7 @@ private fun SettingsScreen(current: AiSettings, onSave: (AiSettings) -> Unit) {
                 onClick = {
                     onSave(
                         AiSettings(
+                            provider = provider.trim(),
                             baseUrl = baseUrl.trim().trimEnd('/'),
                             apiKey = apiKey.trim(),
                             dailyModel = dailyModel.trim(),
