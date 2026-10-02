@@ -1,39 +1,49 @@
 # English Learning
 
-个人高考英语 Android App，本地学习，无需账号和服务器。当前版本 **0.2.0**（versionCode 2）。
+个人高考英语 Android App，本地学习，无需账号和服务器。当前版本 **0.3.0**（versionCode 3），applicationId 保持 `com.tanhaowen.contextenglish`，支持 Android 8.0 及以上。
 
-## 本次升级
+## 0.3.0 更新
 
-- 内置 1,640 词：用户此前的《高考重点词汇表_乱序.txt》全部 1,633 词，加上保留的 7 个原有情境词。词表完整保留，不宣称覆盖官方全部考纲词。
-- 每个词都有中文释义、词性、音标、英文例句和中文翻译。词典补充来自 ECDICT（MIT），部分例句来自 Tatoeba（CC BY 2.0 France）；许可和作者署名保存在 assets 中。
-- SQLite v1 → v2 增量迁移，保留旧版学习状态和记录。新增错误次数、掌握度、连续正确次数、收藏、复习时间等字段。
-- 每日自动安排到期词、薄弱词、学习中词及新词；计划按日期保存在本机，默认每天 20 个新词。
-- 单词三档反馈：认识、模糊、不认识；答对按 1/3/7/14/30 天延长间隔，不认识 5 分钟后到期并在本轮重新出现，模糊 4 小时后到期。连续四次正确才进入已掌握。
-- 保留情境阅读及阅读练习，新增词汇搜索、状态筛选、收藏和单词详情。
-- AI 助手：今日建议、薄弱分析、单词讲解、例句、词汇短文、小测、错词诊断、今日/7天报告。全部手动触发，最多发送 20 个重点词，短文最多 12 词。
-- AI 小测解析为可作答的选择题，本地评分；错误单词进入薄弱词；生成内容和小测结果保存本机历史。
-- 自定义 Provider、HTTPS Base URL、API Key、模型名称。Key 使用 Android Keystore 加密，迁移旧版明文配置。GET 模型列表测试不调用生成接口。
-- JSON 数据备份/恢复包括单词状态、收藏、学习记录、每日计划、AI 历史、学习设置；不包含 API Key。导入使用事务，无效文件不会覆盖原数据。
-- “我的”页面支持每日新词量、每日作答目标、音标、自动发音、统计、备份、清空记录和版本信息。新词量变更从下一天计划生效。
+- 词库资源保持上一版不变：1,640 词（原有筛选词表 1,633 词和 7 个旧情境词），保留释义、音标、中英例句及许可署名。
+- AI 学习中心新增通用英语问答、单词讲解（允许词库之外的词）、句子结构分析、阅读翻译/逐句解释/重点词/长难句/主旨/解题思路，以及作文批改、语法检查、用词优化、句式升级、参考评分、改写和参考范文。
+- 保留今日建议、薄弱分析、例句、词汇短文、可作答小测、错词诊断、学习报告和本地回复历史。支持手动重试、复制结果和清空显示。
+- AI 请求全部由用户手动触发；启动、页面切换、生命周期恢复和计时任务均不调用 AI。设置中的“保存并测试”会发送一条小请求并统计用量；读取模型列表只做 GET 请求。
+- Base URL、API Key、模型和接口类型可配置，支持 Chat Completions / Responses。新安装不预设模型名称；保留旧版已保存设置。密钥继续使用 Android Keystore 加密，不进入普通备份和日志。
+- 统一解析 OpenAI、DeepSeek 和兼容网关的输入、输出、缓存写入、缓存读取 Token。缺失字段显示 0，并提示用量不完整。支持自动判断及手动设置输入是否已包含缓存。
+- 模型价格统一为每 1M Tokens，支持普通输入、输出、Cache Creation、Cache Read 和货币设置；0 表示该项不计费。缓存 Token 从普通输入中排除，不重复计费。费用是根据用户填写价格计算的本地估算，不自动查价或换汇。
+- 每次请求保存 Token、分项费用及当时价格快照；结果可展开查看。今日和累计统计按货币分别合计，提供最近请求详情和需确认的统计重置。后续改价不会修改历史费用。
+- 页面使用 160ms 淡入淡出和独立状态保存，切页保留输入、筛选和滚动位置。去掉整库的每分钟轮询；本地数据在需要时和恢复到前台时更新。语音引擎按需初始化并在页面之间复用。
+- 底部导航统一为单行“今日、学习、词库、AI、我的”，去掉重复的简称层。
+- 新词同优先级随机排序，新增未掌握词优先的随机学习入口；既有词条与学习算法仍保留。
+- SQLite v1/v2 → v3 增量迁移只扩展 AI 用量与缓存关联，不重新导入旧版词库、不清空学习数据。
+- 新版 JSON 备份包含学习数据、AI 回复、AI 用量费用、学习设置和不含密钥的 API 配置。支持导入旧版 v2 备份，旧备份缺少的 AI 用量与配置保留当前值。无效数据通过事务回滚，费用小数不截断。
 
-## 构建和下载
+## 构建和验证
 
-推送 main 自动运行 **Build APK**。现有 workflow 已验证成功，未为改名调整它，因此下载包仍叫 `Context-English-v0.1-debug-apk`；包内 APK 的应用版本是 **0.2.0**。Android 8.0 及以上可安装。
-
-当前流水线沿用 Android debug 签名。不同云端运行的 debug 证书可能不同，不能保证覆盖安装旧 APK。如果系统提示签名不匹配，先在旧 App 导出备份再处理安装；后续应配置固定签名证书。不要卸载尚未备份的数据。
-
-## 验证
+推送 main 自动运行 **Build APK**，执行词表检查、v1/v2 数据迁移检查、费用/用量/接口解析单元测试、Android Lint 和 APK 构建；另一个 Android 模拟器任务检查主要页面、单行导航、输入/搜索状态恢复，以及真实数据库的备份恢复。
 
 ```sh
 python tools/verify_vocabulary.py
 python tools/verify_migration.py
-gradle :app:assembleDebug
+gradle :app:testDebugUnitTest :app:lintDebug :app:assembleDebug
+gradle :app:connectedDebugAndroidTest
 ```
 
-本地静态和 SQLite 迁移验证不调用 AI。AI 实际生成需用户自行配置服务商并手动触发；开发期间不使用用户密钥测试付费请求。发音依赖设备英语 TTS 语音包。
+APK 位于对应运行的 **Artifacts → Context-English-v0.3.0-debug-apk**。验证报告也会上传。
+
+## 安装和签名
+
+保留原有 Debug 构建。流水线可从加密 Secret `ANDROID_DEBUG_KEYSTORE_BASE64` 恢复固定 Debug 签名文件；没有该 Secret 时沿用原有临时 Debug 签名。签名私钥不进入源码或 APK。
+
+旧版云端 Debug 证书未固定，不能保证直接覆盖安装。若 Android 提示签名不一致，务必先在旧 App 的“我的 → 导出数据”备份，再处理安装，随后恢复备份并重新填写密钥。不要卸载尚未备份的数据。
 
 ## 技术信息
 
-Kotlin + Compose + Material 3，原生 SQLite，applicationId `com.tanhaowen.contextenglish`，minSdk 26，compileSdk/targetSdk 35，Java 17，Gradle 8.9，AGP 8.7.3。
+Kotlin 2.0.21 + Compose + Material 3，原生 SQLite，compileSdk/targetSdk 35，Java 17，Gradle 8.9，AGP 8.7.3。词库文件 `app/src/main/assets/vocabulary.json` 本次未修改。ECDICT（MIT）和 Tatoeba（CC BY 2.0 France）许可及署名继续保存在 assets。
 
-正式词库资源：`app/src/main/assets/vocabulary.json`。替换词库资源并提升数据库版本即可通过相同导入结构更新词库，无需改写学习核心代码。
+缓存字段规则参考供应商文档：
+- [OpenAI Prompt Caching](https://developers.openai.com/api/docs/guides/prompt-caching)
+- [DeepSeek Context Caching](https://api-docs.deepseek.com/guides/kv_cache)
+- [Claude Prompt Caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)
+
+验证过程不使用用户的付费 API Key；真实生成需用户配置服务商并主动发送。发音依赖设备的英语 TTS 语音包。

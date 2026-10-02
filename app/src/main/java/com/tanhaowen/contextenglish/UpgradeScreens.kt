@@ -19,6 +19,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -47,6 +48,7 @@ fun UpgradeHome(state: AppUiState, start: (String) -> Unit, words: () -> Unit) {
         item {
             Button(onClick = { start("today") }, modifier = Modifier.fillMaxWidth()) { Text(if(state.plan.completed.isEmpty()) "开始今日学习" else "继续学习") }
             TextButton(onClick = { start("review") }, modifier = Modifier.fillMaxWidth()) { Text("今日复习 · ${state.words.count { it.due }}") }
+            TextButton(onClick = { start("random") }, modifier = Modifier.fillMaxWidth()) { Text("随机学习 · 未掌握优先") }
             TextButton(onClick = { start("weak") }, modifier = Modifier.fillMaxWidth()) { Text("薄弱词强化 · ${state.stats.weak}") }
         }
         item {
@@ -64,26 +66,8 @@ fun UpgradeHome(state: AppUiState, start: (String) -> Unit, words: () -> Unit) {
 
 @Composable
 private fun rememberSpeak(): (String) -> Unit {
-    val context = LocalContext.current
-    var ready by remember { mutableStateOf(false) }
-    var initialized by remember { mutableStateOf(false) }
-    var pending by remember { mutableStateOf<String?>(null) }
-    var tts by remember { mutableStateOf<TextToSpeech?>(null) }
-    DisposableEffect(context) {
-        val engine = TextToSpeech(context) { status -> ready = status == TextToSpeech.SUCCESS; initialized = true }
-        tts = engine
-        onDispose { engine.stop(); engine.shutdown() }
-    }
-    val say: (String) -> Unit = { word ->
-        val engine = tts
-        if(ready && engine != null && engine.setLanguage(Locale.US) >= 0) engine.speak(word, TextToSpeech.QUEUE_FLUSH, null, word)
-        else Toast.makeText(context, "系统英语语音未就绪，请安装英语语音包后重试", Toast.LENGTH_SHORT).show()
-    }
-    LaunchedEffect(initialized, pending) {
-        val word = pending
-        if(initialized && word != null) { pending=null; say(word) }
-    }
-    return { word -> if(initialized) say(word) else pending=word }
+    val app = LocalContext.current.applicationContext as ContextEnglishApp
+    return remember(app) { { word: String -> app.speech.speak(word) } }
 }
 
 @Composable
@@ -172,7 +156,7 @@ fun UpgradeWords(state: AppUiState, vm: AppViewModel) {
         } && when(importance) { "核心" -> w.importance==1; "高频" -> w.importance==2; "普通" -> w.importance==3; else -> true }
     } }
     Column(Modifier.fillMaxSize()) {
-        OutlinedTextField(value=query,onValueChange={ query=it },label={ Text("搜索英文或中文释义") },singleLine=true,modifier=Modifier.fillMaxWidth().padding(horizontal=18.dp))
+        OutlinedTextField(value=query,onValueChange={ query=it },label={ Text("搜索英文或中文释义") },singleLine=true,modifier=Modifier.fillMaxWidth().padding(horizontal=18.dp).testTag("word-search"))
         Row(Modifier.horizontalScroll(rememberScrollState()).padding(horizontal=18.dp),horizontalArrangement=Arrangement.spacedBy(8.dp)) {
             listOf("全部","未学习","学习中","薄弱","待复习","已掌握","收藏").forEach { label -> FilterChip(selected=filter==label,onClick={ filter=label },label={ Text(label) }) }
         }
@@ -188,81 +172,6 @@ fun UpgradeWords(state: AppUiState, vm: AppViewModel) {
                 }
                 HorizontalDivider()
             }
-        }
-    }
-}
-
-@Composable
-fun UpgradeAi(state: AppUiState, vm: AppViewModel, settings: () -> Unit, initialWord: String = "") {
-    var kind by rememberSaveable { mutableStateOf("今日建议") }
-    var source by rememberSaveable { mutableStateOf("today") }
-    var input by rememberSaveable { mutableStateOf("") }
-    var days by rememberSaveable { mutableStateOf(1) }
-    LaunchedEffect(initialWord) { if(initialWord.isNotBlank()) { kind="单词讲解"; source="custom"; input=initialWord } }
-    LazyColumn(contentPadding=PaddingValues(22.dp),verticalArrangement=Arrangement.spacedBy(14.dp)) {
-        item {
-            Text("AI 学习助手",style=MaterialTheme.typography.headlineSmall,fontWeight=FontWeight.SemiBold)
-            Text("根据你的词汇学习数据提供针对性帮助",style=MaterialTheme.typography.bodySmall)
-            Text(if(state.settings.apiKey.isBlank()) "尚未配置 API" else "AI 已配置",modifier=Modifier.padding(top=8.dp),color=MaterialTheme.colorScheme.onSurfaceVariant)
-        }
-        item {
-            listOf("今日建议","薄弱分析","单词讲解","例句","短文","小测","错词诊断","学习报告").chunked(2).forEach { row ->
-                Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(8.dp)) {
-                    row.forEach { label -> OutlinedButton(onClick={ kind=label },modifier=Modifier.weight(1f)) { Text(if(kind==label) "• $label" else label) } }
-                }
-            }
-        }
-        if(kind in listOf("单词讲解","例句","短文","小测")) {
-            item {
-                Row(Modifier.horizontalScroll(rememberScrollState()),horizontalArrangement=Arrangement.spacedBy(8.dp)) {
-                    listOf("today" to "今日单词","weak" to "薄弱词","custom" to "自选词").forEach { (value,label) -> FilterChip(selected=source==value,onClick={ source=value },label={ Text(label) }) }
-                }
-                if(source=="custom") OutlinedTextField(value=input,onValueChange={ input=it },label={ Text("输入词库中的单词，以逗号或空格分隔") },modifier=Modifier.fillMaxWidth())
-                Text("短文最多12词，其他任务最多20词；单词讲解使用第一个词。",style=MaterialTheme.typography.bodySmall)
-            }
-        }
-        if(kind=="学习报告") item {
-            Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) { FilterChip(selected=days==1,onClick={ days=1 },label={ Text("今日") }); FilterChip(selected=days==7,onClick={ days=7 },label={ Text("最近7天") }) }
-        }
-        item {
-            Button(onClick={ vm.generateAssistant(kind,source,input,days) },enabled=!state.aiBusy,modifier=Modifier.fillMaxWidth()) { Text(if(state.aiBusy) "生成中…" else "生成$kind") }
-            if(state.aiBusy) LinearProgressIndicator(modifier=Modifier.fillMaxWidth().padding(top=8.dp))
-        }
-        state.aiError?.let { error -> item { Text(error,color=MaterialTheme.colorScheme.error); TextButton(onClick=vm::retryAi,enabled=!state.aiBusy) { Text("重试上次请求") } } }
-        state.aiOutput?.let { output -> item {
-            val primary = MaterialTheme.colorScheme.primary
-            SelectionContainer {
-                Text(buildAnnotatedString {
-                    val pattern = Regex("\\*\\*(.+?)\\*\\*")
-                    var position = 0
-                    pattern.findAll(output).forEach { m -> append(output.substring(position,m.range.first)); pushStyle(SpanStyle(fontWeight=FontWeight.Bold,color=primary)); append(m.groupValues[1]); pop(); position=m.range.last+1 }
-                    append(output.substring(position))
-                },lineHeight=26.sp)
-            }
-            if(state.lastTokens.isNotBlank()) Text(state.lastTokens,style=MaterialTheme.typography.bodySmall,modifier=Modifier.padding(top=12.dp))
-        } }
-        items(state.quiz.withIndex().toList(),key={ it.index }) { (i,q) ->
-            Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
-                Text("${i+1}. ${q.prompt}",fontWeight=FontWeight.SemiBold)
-                q.options.forEachIndexed { j,option -> OutlinedButton(onClick={ vm.chooseQuiz(i,j) },enabled=!state.quizSubmitted,modifier=Modifier.fillMaxWidth()) { Text("${if(state.quizAnswers[i]==j) "● " else ""}${'A'+j}. $option") } }
-                if(state.quizSubmitted) Text("${if(state.quizAnswers[i]==q.answer) "正确" else "回答错误"} · 正确答案 ${'A'+q.answer}\n${q.explanation}")
-                HorizontalDivider()
-            }
-        }
-        if(state.quiz.isNotEmpty()) item { Button(onClick=vm::submitQuiz,enabled=!state.quizSubmitted && !state.sessionBusy) { Text("提交小测并记录结果") } }
-        item {
-            HorizontalDivider()
-            Text("本地历史记录",fontWeight=FontWeight.SemiBold,modifier=Modifier.padding(top=16.dp))
-        }
-        items(state.cachedReadings,key={ it.id }) { record ->
-            TextButton(onClick={ vm.openCachedReading(record) },modifier=Modifier.fillMaxWidth()) { Text(record.title) }
-        }
-        item {
-            Text("累计请求 ${state.usage.calls} · 已知 Token ${state.usage.totalTokens}",style=MaterialTheme.typography.bodySmall)
-            TextButton(onClick={ vm.generateDailyReading() },enabled=!state.aiBusy) { Text("原有功能：生成情境阅读") }
-            TextButton(onClick=settings) { Text("AI 设置") }
-            Row { TextButton(onClick=vm::testConnection,enabled=!state.aiBusy) { Text("测试连接") }; TextButton(onClick=vm::loadModels,enabled=!state.aiBusy) { Text("读取模型") } }
-            if(state.availableModels.isNotEmpty()) Text(state.availableModels.take(30).joinToString("\n"),style=MaterialTheme.typography.bodySmall)
         }
     }
 }
@@ -288,7 +197,7 @@ fun UpgradeMe(state: AppUiState, vm: AppViewModel, aiSettings: () -> Unit) {
     }
     val import = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri -> importUri=uri }
     if(clear) AlertDialog(onDismissRequest={ clear=false },title={ Text("清空学习记录？") },text={ Text("词库和收藏会保留，学习状态及学习记录将清空。建议先导出备份。") },confirmButton={ TextButton(onClick={ vm.clearStudyRecords(); clear=false }) { Text("清空") } },dismissButton={ TextButton(onClick={ clear=false }) { Text("取消") } })
-    importUri?.let { uri -> AlertDialog(onDismissRequest={ importUri=null },title={ Text("恢复备份？") },text={ Text("将用备份覆盖当前学习数据，API Key 保持现有配置。") },confirmButton={ TextButton(onClick={
+    importUri?.let { uri -> AlertDialog(onDismissRequest={ importUri=null },title={ Text("恢复备份？") },text={ Text("将用备份恢复学习数据、AI 使用统计和设置，API Key 保持现有配置。") },confirmButton={ TextButton(onClick={
         importUri=null; scope.launch {
             backupBusy=true
             try { val text=withContext(Dispatchers.IO) { context.contentResolver.openInputStream(uri)?.bufferedReader()?.use { reader -> val buffer=CharArray(8192); val out=StringBuilder(); while(true) { val n=reader.read(buffer); if(n<0) break; require(out.length+n<=20_000_000); out.append(buffer,0,n) }; out.toString() } ?: error("无法读取文件") }; vm.importBackup(text) }
@@ -305,6 +214,7 @@ fun UpgradeMe(state: AppUiState, vm: AppViewModel, aiSettings: () -> Unit) {
             Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween) { Text("自动发音"); Switch(checked=autoSpeak,onCheckedChange={ autoSpeak=it }) }
             Button(onClick={ vm.saveStudySettings(StudySettings(newWords.toInt(),goal.toInt(),phonetic,autoSpeak)) },enabled=(newWords.toIntOrNull() ?: 0) in 1..100 && (goal.toIntOrNull() ?: 0) in 1..500) { Text("保存学习设置") }
         }
+        item { AiUsageOverview(state, vm) }
         item { HorizontalDivider(); Text("学习统计",style=MaterialTheme.typography.titleLarge,modifier=Modifier.padding(top=14.dp)); Text("词库 ${state.stats.total} · 已学 ${state.stats.seen} · 已掌握 ${state.stats.mastered}\n薄弱 ${state.stats.weak} · 今日正确率 ${state.stats.todayAccuracy}%\n连续学习 ${state.streak} 天") }
         item {
             TextButton(onClick={ export.launch("EnglishLearning-backup.json") },enabled=!backupBusy) { Text("导出数据") }

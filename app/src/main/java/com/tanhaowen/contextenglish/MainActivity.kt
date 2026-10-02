@@ -1,6 +1,13 @@
 package com.tanhaowen.contextenglish
 
 import android.os.Bundle
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.saveable.rememberSaveableStateHolder
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.activity.compose.BackHandler
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -96,12 +103,12 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-private enum class AppTab(val label: String, val shortLabel: String) {
-    HOME("今日", "今"),
-    STUDY("学习", "学"),
-    WORDS("词库", "词"),
-    AI("AI", "AI"),
-    ME("我的", "我")
+private enum class AppTab(val label: String) {
+    HOME("今日"),
+    STUDY("学习"),
+    WORDS("词库"),
+    AI("AI"),
+    ME("我的")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -117,10 +124,14 @@ private fun ContextEnglishRoot(viewModel: AppViewModel) {
     }
     state.selectedWord?.let { WordDetail(it, state, viewModel, { viewModel.selectWord(null) }, openWordAi) }
     val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
-
-    LaunchedEffect(Unit) {
-        while(true) { kotlinx.coroutines.delay(60_000); viewModel.refresh() }
+    val pageStates = rememberSaveableStateHolder()
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) viewModel.refreshOnResume()
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 
     LaunchedEffect(state.aiMessage) {
@@ -164,19 +175,9 @@ private fun ContextEnglishRoot(viewModel: AppViewModel) {
                             selected = selectedTab == tab.name,
                             onClick = { selectedTab = tab.name },
                             icon = {
-                                Surface(
-                                    shape = CircleShape,
-                                    color = if (selectedTab == tab.name) Mint else Color.Transparent
-                                ) {
-                                    Box(
-                                        modifier = Modifier.size(30.dp),
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        Text(tab.shortLabel, style = MaterialTheme.typography.labelMedium)
-                                    }
-                                }
-                            },
-                            label = { Text(tab.label) }
+                                Text(tab.label, style = MaterialTheme.typography.labelLarge,
+                                    fontWeight = if (selectedTab == tab.name) FontWeight.SemiBold else FontWeight.Normal)
+                            }
                         )
                     }
                 }
@@ -189,27 +190,23 @@ private fun ContextEnglishRoot(viewModel: AppViewModel) {
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            if (showSettings) {
-                SettingsScreen(
-                    current = state.settings,
-                    onSave = {
-                        viewModel.saveSettings(it)
-                        showSettings = false
+            Crossfade(targetState = if (showSettings) "SETTINGS" else selectedTab,
+                animationSpec = tween(160), label = "pageTransition") { route ->
+                pageStates.SaveableStateProvider(route) {
+                    when (route) {
+                        "SETTINGS" -> AiSettingsScreen(state, viewModel) { showSettings = false }
+                        AppTab.HOME.name -> UpgradeHome(state,
+                            start = { mode -> viewModel.startSession(mode); selectedTab = AppTab.STUDY.name },
+                            words = { selectedTab = AppTab.WORDS.name })
+                        AppTab.STUDY.name -> UpgradeStudy(state, viewModel, openWordAi) {
+                            StudyScreen(state, viewModel::selectWord, viewModel::chooseAnswer, viewModel::submitReading,
+                                { viewModel.updateWordState(it, WordState.LEARNING) },
+                                { viewModel.updateWordState(it, WordState.MASTERED) }, viewModel::toggleWeak)
+                        }
+                        AppTab.WORDS.name -> UpgradeWords(state, viewModel)
+                        AppTab.AI.name -> UpgradeAi(state, viewModel, { showSettings = true }, aiWord) { aiWord = "" }
+                        AppTab.ME.name -> UpgradeMe(state, viewModel, { showSettings = true })
                     }
-                )
-            } else {
-                when (AppTab.valueOf(selectedTab)) {
-                    AppTab.HOME -> UpgradeHome(state,
-                        start = { mode -> viewModel.startSession(mode); selectedTab = AppTab.STUDY.name },
-                        words = { selectedTab = AppTab.WORDS.name })
-                    AppTab.STUDY -> UpgradeStudy(state, viewModel, openWordAi) {
-                        StudyScreen(state, viewModel::selectWord, viewModel::chooseAnswer, viewModel::submitReading,
-                            { viewModel.updateWordState(it, WordState.LEARNING) },
-                            { viewModel.updateWordState(it, WordState.MASTERED) }, viewModel::toggleWeak)
-                    }
-                    AppTab.WORDS -> UpgradeWords(state, viewModel)
-                    AppTab.AI -> UpgradeAi(state, viewModel, { showSettings = true }, aiWord)
-                    AppTab.ME -> UpgradeMe(state, viewModel, { showSettings = true })
                 }
             }
         }
@@ -738,131 +735,6 @@ private fun AiScreen(
         item {
             Text(
                 "API Key 只保存在本机设置中，不会写入源码；本 App 不会在后台自动调用 API。",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-}
-
-@Composable
-private fun SettingsScreen(current: AiSettings, onSave: (AiSettings) -> Unit) {
-    var provider by remember(current) { mutableStateOf(current.provider) }
-    var baseUrl by remember(current) { mutableStateOf(current.baseUrl) }
-    var apiKey by remember(current) { mutableStateOf(current.apiKey) }
-    var dailyModel by remember(current) { mutableStateOf(current.dailyModel) }
-    var deepModel by remember(current) { mutableStateOf(current.deepModel) }
-    var inputPrice by remember(current) { mutableStateOf(current.inputPricePerMillion.toString()) }
-    var outputPrice by remember(current) { mutableStateOf(current.outputPricePerMillion.toString()) }
-
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(18.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        item { OutlinedTextField(value=provider, onValueChange={ provider=it }, label={ Text("API Provider（OpenAI / DeepSeek / 其他兼容服务）") }, modifier=Modifier.fillMaxWidth()) }
-        item {
-            Text("接口", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-            Text(
-                "支持 OpenAI 兼容接口。Base URL 应包含 /v1。",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-        item {
-            OutlinedTextField(
-                value = baseUrl,
-                onValueChange = { baseUrl = it },
-                label = { Text("Base URL") },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-        item {
-            OutlinedTextField(
-                value = apiKey,
-                onValueChange = { apiKey = it },
-                label = { Text("API Key") },
-                visualTransformation = PasswordVisualTransformation(),
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-        item {
-            Text("模型", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-        }
-        item {
-            OutlinedTextField(
-                value = dailyModel,
-                onValueChange = { dailyModel = it },
-                label = { Text("日常模型") },
-                supportingText = { Text("短文、练习等日常生成") },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-        item {
-            OutlinedTextField(
-                value = deepModel,
-                onValueChange = { deepModel = it },
-                label = { Text("深度模型") },
-                supportingText = { Text("预留给后续周诊断和深度分析") },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-        item {
-            Text("费用估算（可选）", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-            Text(
-                "填写供应商每 100 万 Token 的人民币价格；不填则只统计 Token。",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-        item {
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                OutlinedTextField(
-                    value = inputPrice,
-                    onValueChange = { inputPrice = it },
-                    label = { Text("输入价格") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                    singleLine = true,
-                    modifier = Modifier.weight(1f)
-                )
-                OutlinedTextField(
-                    value = outputPrice,
-                    onValueChange = { outputPrice = it },
-                    label = { Text("输出价格") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                    singleLine = true,
-                    modifier = Modifier.weight(1f)
-                )
-            }
-        }
-        item {
-            Button(
-                onClick = {
-                    onSave(
-                        AiSettings(
-                            provider = provider.trim(),
-                            baseUrl = baseUrl.trim().trimEnd('/'),
-                            apiKey = apiKey.trim(),
-                            dailyModel = dailyModel.trim(),
-                            deepModel = deepModel.trim(),
-                            inputPricePerMillion = inputPrice.toDoubleOrNull() ?: 0.0,
-                            outputPricePerMillion = outputPrice.toDoubleOrNull() ?: 0.0
-                        )
-                    )
-                },
-                enabled = baseUrl.isNotBlank() && dailyModel.isNotBlank() && deepModel.isNotBlank(),
-                modifier = Modifier.fillMaxWidth().padding(top = 6.dp)
-            ) {
-                Text("保存设置")
-            }
-        }
-        item {
-            Text(
-                "安全说明：密钥不会进入 GitHub 或备份文件。卸载 App 会删除本机密钥和学习数据。",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

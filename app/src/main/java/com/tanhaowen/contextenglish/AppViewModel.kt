@@ -5,6 +5,8 @@ import org.json.JSONObject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.tanhaowen.contextenglish.ai.AiCallResult
+import com.tanhaowen.contextenglish.ai.friendlyAiError
 import com.tanhaowen.contextenglish.ai.AiClient
 import com.tanhaowen.contextenglish.data.AiSettings
 import com.tanhaowen.contextenglish.data.AiSettingsStore
@@ -15,6 +17,7 @@ import com.tanhaowen.contextenglish.data.LearningStats
 import com.tanhaowen.contextenglish.data.VocabWord
 import com.tanhaowen.contextenglish.data.WordState
 import com.tanhaowen.contextenglish.data.builtInReading
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,6 +42,10 @@ data class AppUiState(
     val aiOutput: String? = null,
     val cachedReadings: List<CachedReading> = emptyList(),
     val usage: AiUsageSummary = AiUsageSummary(),
+    val todayUsage: AiUsageSummary = AiUsageSummary(),
+    val usageRecords: List<AiUsageRecord> = emptyList(),
+    val lastUsage: AiUsageRecord? = null,
+    val aiResultTitle: String = "",
     val studySettings: StudySettings = StudySettings(),
     val plan: DailyPlan = DailyPlan(),
     val streak: Int = 0,
@@ -63,28 +70,37 @@ class AppViewModel(
     private val _uiState = MutableStateFlow(AppUiState(settings = settingsStore.load(), studySettings = studyStore.load()))
     val uiState: StateFlow<AppUiState> = _uiState.asStateFlow()
 
-    init {
-        refresh()
+    private var refreshJob: Job? = null
+    private var lastLocalRefresh = 0L
+
+    init { refresh() }
+
+    fun refreshOnResume() {
+        if (refreshJob?.isActive != true && System.currentTimeMillis() - lastLocalRefresh > 30_000) refresh()
     }
 
     fun refresh() {
-        viewModelScope.launch {
+        refreshJob?.cancel()
+        refreshJob = viewModelScope.launch {
             val data = withContext(Dispatchers.IO) {
                 RefreshData(
                     words = repository.loadWords(),
                     stats = repository.stats(),
                     cached = repository.cachedReadings(),
                     usage = repository.aiUsageSummary(),
+                    todayUsage = repository.aiUsageSummary(today = true),
+                    usageRecords = repository.aiUsageRecords(),
                     plan = repository.dailyPlan(studyStore.load()),
                     streak = repository.studyStreak()
                 )
             }
+            lastLocalRefresh = System.currentTimeMillis()
             _uiState.update {
                 it.copy(
                     words = data.words,
                     stats = data.stats,
                     cachedReadings = data.cached,
-                    usage = data.usage, plan = data.plan, streak = data.streak,
+                    usage = data.usage, todayUsage = data.todayUsage, usageRecords = data.usageRecords, plan = data.plan, streak = data.streak,
                     selectedWord = it.selectedWord?.let { w -> data.words.find { word -> word.id == w.id } }
                 )
             }
@@ -138,8 +154,20 @@ class AppViewModel(
     }
 
     fun saveSettings(settings: AiSettings) {
-        settingsStore.save(settings)
-        _uiState.update { it.copy(settings = settings, aiMessage = "AI 设置已保存到本机") }
+        viewModelScope.launch {
+            runCatching { withContext(Dispatchers.IO) { settingsStore.save(settings) } }.fold(
+                onSuccess = { _uiState.update { it.copy(settings = settings, aiMessage = "AI 设置已保存到本机") } },
+                onFailure = { _uiState.update { it.copy(aiMessage = "无法安全保存 API 设置，请重试") } })
+        }
+    }
+
+    fun saveAndTest(settings: AiSettings) {
+        if (_uiState.value.aiBusy) return
+        viewModelScope.launch {
+            runCatching { withContext(Dispatchers.IO) { settingsStore.save(settings) } }.fold(
+                onSuccess = { _uiState.update { it.copy(settings = settings) }; testConnection() },
+                onFailure = { _uiState.update { it.copy(aiMessage = "无法安全保存 API 设置，请重试") } })
+        }
     }
 
     fun clearMessage() {
@@ -147,23 +175,21 @@ class AppViewModel(
     }
 
     fun testConnection() {
+        if (_uiState.value.aiBusy) return
+        lastAi = { testConnection() }
+        prepareAiOutput()
         runAiAction { settings ->
-            aiClient.listModels(settings).fold(
-                onSuccess = { models ->
-                    _uiState.update {
-                        it.copy(
-                            aiBusy = false,
-                            availableModels = models,
-                            aiMessage = "连接成功，读取到 ${models.size} 个模型"
-                        )
-                    }
-                },
-                onFailure = ::showAiError
-            )
+            aiClient.generate(settings, "仅回复 OK，确认接口和当前模型可用。", maxTokens = 32).fold(
+                onSuccess = { result ->
+                    persistAiResult("接口测试", result, settings)
+                    require(result.content.isNotBlank()) { "接口已响应但没有返回文字，请检查模型或接口类型" }
+                    _uiState.update { it.copy(aiBusy = false, aiMessage = "当前模型连接成功，用量和费用已记录") }
+                }, onFailure = ::showAiError)
         }
     }
 
     fun loadModels() {
+        lastAi = { loadModels() }
         runAiAction { settings ->
             aiClient.listModels(settings).fold(
                 onSuccess = { models ->
@@ -181,56 +207,122 @@ class AppViewModel(
     }
 
     fun generateDailyReading() {
-        if(_uiState.value.aiBusy) return
+        if (_uiState.value.aiBusy) return
         lastAi = { generateDailyReading() }
-        _uiState.update { it.copy(aiError=null, quiz=emptyList(), aiOutput=null, lastTokens="") }
+        prepareAiOutput()
         runAiAction { settings ->
             aiClient.generateDailyReading(settings).fold(
                 onSuccess = { result ->
-                    val title = "AI 情境阅读 · " +
-                        SimpleDateFormat("MM-dd HH:mm", Locale.getDefault()).format(Date())
-                    withContext(Dispatchers.IO) {
-                        repository.cacheAiReading(title, result.content, settings.dailyModel)
-                        repository.recordAiUsage(
-                            settings.dailyModel,
-                            result.promptTokens,
-                            result.completionTokens,
-                            settings
-                        )
-                    }
-                    _uiState.update {
-                        it.copy(
-                            aiBusy = false,
-                            aiOutput = result.content,
-                            aiMessage = "已生成并缓存到本机"
-                        )
-                    }
-                    refresh()
-                },
-                onFailure = ::showAiError
-            )
+                    persistAiResult("AI 情境阅读", result, settings)
+                    require(result.content.isNotBlank()) { "模型没有返回文字，请检查接口类型或手动重试" }
+                    _uiState.update { it.copy(aiBusy = false, aiOutput = result.content, aiMessage = "已生成并缓存到本机") }
+                }, onFailure = ::showAiError)
         }
     }
 
     fun openCachedReading(reading: CachedReading) {
-        if(reading.title.startsWith("小测 ·")) {
-            runCatching { parseQuiz(reading.content, _uiState.value.words) }.fold(
-                onSuccess = { quiz -> _uiState.update { it.copy(quiz=quiz, quizAnswers=emptyMap(), quizSubmitted=false, aiOutput=null, aiError=null, lastTokens="", aiMessage="从本地历史打开小测") } },
-                onFailure = { _uiState.update { it.copy(aiMessage="这份历史小测无法解析") } })
-            return
+        if (_uiState.value.aiBusy) return
+        viewModelScope.launch {
+            val usage = withContext(Dispatchers.IO) { reading.usageId?.let(repository::aiUsageRecord) }
+            if (reading.title.startsWith("小测 ·")) {
+                runCatching { parseQuiz(reading.content, _uiState.value.words) }.fold(
+                    onSuccess = { quiz -> _uiState.update { it.copy(quiz = quiz, quizAnswers = emptyMap(),
+                        quizSubmitted = false, aiOutput = null, aiError = null, lastTokens = "", lastUsage = usage,
+                        aiResultTitle = reading.title, aiMessage = "从本地历史打开小测") } },
+                    onFailure = { _uiState.update { it.copy(aiMessage = "这份历史小测无法解析") } })
+            } else _uiState.update { it.copy(aiOutput = reading.content, aiResultTitle = reading.title,
+                lastUsage = usage, aiMessage = reading.title, quiz = emptyList(), quizAnswers = emptyMap(),
+                quizSubmitted = false, aiError = null, lastTokens = "") }
         }
-        _uiState.update { it.copy(aiOutput = reading.content, aiMessage = reading.title, quiz=emptyList(), quizAnswers=emptyMap(), quizSubmitted=false, aiError=null, lastTokens="") }
+    }
+
+    fun clearAiOutput() {
+        if (_uiState.value.aiBusy) return
+        lastAi = null
+        prepareAiOutput()
+    }
+
+    private fun prepareAiOutput() {
+        _uiState.update { it.copy(aiError = null, quiz = emptyList(), quizAnswers = emptyMap(),
+            quizSubmitted = false, aiOutput = null, lastTokens = "", lastUsage = null, aiResultTitle = "") }
+    }
+
+    private suspend fun persistAiResult(title: String, result: AiCallResult, settings: AiSettings) {
+        val record = withContext(Dispatchers.IO) {
+            repository.recordAiUsage(settings.dailyModel, result.usage, settings).also {
+                if (result.content.isNotBlank()) repository.cacheAiReading(
+                    title + " · " + SimpleDateFormat("MM-dd HH:mm", Locale.getDefault()).format(Date()),
+                    result.content, settings.dailyModel, it.id)
+            }
+        }
+        _uiState.update { it.copy(lastUsage = record, aiResultTitle = title) }
+        refreshAiData()
+    }
+
+    private suspend fun refreshAiData() {
+        val usage = withContext(Dispatchers.IO) { repository.aiUsageSummary() }
+        val today = withContext(Dispatchers.IO) { repository.aiUsageSummary(today = true) }
+        val records = withContext(Dispatchers.IO) { repository.aiUsageRecords() }
+        val cached = withContext(Dispatchers.IO) { repository.cachedReadings() }
+        _uiState.update { it.copy(usage = usage, todayUsage = today, usageRecords = records, cachedReadings = cached) }
+    }
+
+    fun resetAiUsage() {
+        if (_uiState.value.aiBusy) return
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) { repository.resetAiUsage() }
+            _uiState.update { it.copy(lastUsage = null, aiMessage = "AI 使用统计已重置") }
+            refreshAiData()
+        }
+    }
+
+    fun generateLearningTool(kind: String, input: String, extra: String = "", action: String = "") {
+        if (_uiState.value.aiBusy) return
+        val text = input.trim()
+        val topic = extra.trim()
+        if (text.isBlank() && !(kind == "写作助手" && action == "参考范文" && topic.isNotBlank())) {
+            _uiState.update { it.copy(aiMessage = "请先填写需要分析的内容") }; return
+        }
+        if (text.length + topic.length > 24_000) {
+            _uiState.update { it.copy(aiMessage = "内容太长，请分段输入（每次最多 24000 字符）") }; return
+        }
+        val instruction = when (kind) {
+            "学习助手" -> "回答下面的英语学习问题。先给出清楚的答案，再用适合基础较弱高中生的步骤说明，并给必要例句。"
+            "单词讲解" -> "讲解这个英语单词：词性、中文核心义、高考常见义、常见搭配、一词多义、熟词生义、易混词、记忆提示，以及简单英文例句和中文翻译。"
+            "句子分析" -> "先给中文翻译，抽出句子主干，再标明主语、谓语、宾语或表语；解释从句、非谓语和修饰成分，给高考考点与读句顺序。不要把简单句硬说成复杂句。"
+            "阅读辅助" -> when (action) {
+                "逐句解释" -> "逐句列出原句、中文译文和关键结构解释。"
+                "提取重点词" -> "提取高考英语中值得优先学习的重点词，标明原形、词性、文中词义与搭配。"
+                "长难句分析" -> "挑选文中较难的句子，说明主干、从句、非谓语、修饰关系与翻译。"
+                "文章总结" -> "概括文章主题、段落作用和逻辑关系，给简短英文摘要及中文解释。"
+                "解题思路" -> "说明如何读懂文章主旨、定位细节、推断词义和作者态度。有题目时逐题给证据；没有题目时仅给阅读思路，不编造题目。"
+                else -> "按原文段落给出完整、自然的中文翻译。"
+            }
+            "写作助手" -> when (action) {
+                "语法检查" -> "逐项检查语法错误：原句、改正、中文原因。避免把正确表达说成错误。"
+                "用词优化" -> "保留作文原意和学生水平，给具体词语替换及理由。"
+                "句式升级" -> "改进句式并解释变化，避免为了复杂而复杂。"
+                "评分建议" -> "结合题目给高考作文评分建议，说明内容、语言与结构。未提供满分或题型时不要声称官方确定分数；给清楚的参考依据与提升点。"
+                "改写版本" -> "保留原意给出自然、正确、适合高中生的改写作文，附中文翻译和主要修改理由。"
+                "参考范文" -> "依据作文题目写一篇适合基础较弱高三学生学习的参考范文，给中文翻译与可积累表达，不冒充学生原文。"
+                else -> "批改作文：指出具体错误、给正确写法与理由，分析内容和结构，给有依据的评分建议，最后给保留原意的改写版本与中文翻译。"
+            }
+            else -> "回答英语学习问题。"
+        }
+        lastAi = { generateLearningTool(kind, input, extra, action) }
+        prepareAiOutput()
+        runAiAction { settings ->
+            val prompt = "$instruction\n${if (topic.isNotBlank()) "作文题目：$topic\n" else ""}待分析材料：\n$text"
+            aiClient.generate(settings, prompt).fold(onSuccess = { result ->
+                persistAiResult(if (action.isBlank()) kind else "$kind · $action", result, settings)
+                require(result.content.isNotBlank()) { "模型没有返回文字，请检查接口类型或手动重试" }
+                _uiState.update { it.copy(aiBusy = false, aiOutput = result.content, aiMessage = "结果已保存到本地历史") }
+            }, onFailure = ::showAiError)
+        }
     }
 
     private var lastAi: (() -> Unit)? = null
     fun retryAi() { lastAi?.invoke() }
-    private fun friendlyError(e: Throwable): String = when(e) {
-        is java.net.SocketTimeoutException -> "请求超时，请稍后重试"
-        is org.json.JSONException -> "AI 返回格式不符合要求，请重试"
-        is java.io.IOException -> "网络连接失败，请检查网络后重试"
-        else -> e.message?.take(150) ?: "请求失败，请检查 AI 配置后重试"
-    }
-
     fun saveStudySettings(s: StudySettings) {
         studyStore.save(s); _uiState.update { it.copy(studySettings = studyStore.load(), aiMessage = "学习设置已保存，新的每日词量从明天生效") }; refresh()
     }
@@ -239,6 +331,9 @@ class AppViewModel(
         val ids = when(mode) {
             "review" -> state.words.filter { it.due }.sortedBy { it.nextReviewTime }.map { it.id }
             "weak" -> state.words.filter { it.weak }.sortedByDescending { it.mistakeCount }.map { it.id }
+            "random" -> state.words.filter { it.state != WordState.MASTERED }.shuffled()
+                .sortedWith(compareByDescending<VocabWord> { it.weak }.thenByDescending { it.mistakeCount }.thenBy { it.importance })
+                .take(state.studySettings.dailyGoal).map { it.id }
             else -> state.plan.ids.filter { it !in state.plan.completed }
         }
         _uiState.update { it.copy(sessionIds = ids, sessionIndex = 0) }
@@ -260,10 +355,14 @@ class AppViewModel(
     }
     fun toggleFavorite(w: VocabWord) { viewModelScope.launch { withContext(Dispatchers.IO) { repository.toggleFavorite(w) }; refresh() } }
     fun clearStudyRecords() { viewModelScope.launch { withContext(Dispatchers.IO) { repository.clearStudyRecords() }; _uiState.update { it.copy(sessionIds = emptyList(), sessionIndex = 0, aiMessage = "学习记录已清空") }; refresh() } }
-    suspend fun exportBackup(): String = withContext(Dispatchers.IO) { repository.exportData(studyStore.load()) }
+    suspend fun exportBackup(): String = withContext(Dispatchers.IO) { repository.exportData(studyStore.load(), settingsStore.load()) }
     fun importBackup(text: String) { viewModelScope.launch {
-        runCatching { withContext(Dispatchers.IO) { repository.importData(text) } }.fold(
-            onSuccess = { studyStore.save(it); _uiState.update { current -> current.copy(studySettings = it, sessionIds = emptyList(), selectedWord = null, aiMessage = "备份恢复成功") }; refresh() },
+        runCatching { withContext(Dispatchers.IO) { repository.importData(text, _uiState.value.settings) } }.fold(
+            onSuccess = { restored ->
+                withContext(Dispatchers.IO) { studyStore.save(restored.study); restored.ai?.let(settingsStore::save) }
+                _uiState.update { current -> current.copy(studySettings = restored.study, settings = restored.ai ?: current.settings,
+                    sessionIds = emptyList(), selectedWord = null, lastUsage = null, aiMessage = "备份恢复成功，API Key 已保留") }; refresh()
+            },
             onFailure = { _uiState.update { it.copy(aiMessage = "导入失败：备份文件无效，原有数据已保留") } })
     } }
 
@@ -286,7 +385,7 @@ class AppViewModel(
             _uiState.update { it.copy(aiMessage = "没有可用词汇，请选择词库中存在的单词") }; return
         }
         lastAi = { generateAssistant(kind, source, input, days) }
-        _uiState.update { it.copy(aiError = null, quiz = emptyList(), quizAnswers = emptyMap(), quizSubmitted = false, aiOutput = null) }
+        prepareAiOutput()
         runAiAction { settings ->
             val summary = withContext(Dispatchers.IO) { repository.report(days) }
             val taskWords = if(kind == "错词诊断") withContext(Dispatchers.IO) { repository.recentMistakes() } else dataWords
@@ -303,14 +402,11 @@ class AppViewModel(
             }
             val prompt = "$instruction\n数据：$summary\n今日计划：新词${current.plan.newCount}，复习${current.plan.reviewCount}，薄弱${current.plan.weakCount}，完成${current.plan.completed.size}/${current.plan.ids.size}。\n目标词：\n$data"
             aiClient.generate(settings, prompt).fold(onSuccess = { result ->
-                withContext(Dispatchers.IO) {
-                    repository.cacheAiReading(kind + " · " + SimpleDateFormat("MM-dd HH:mm", Locale.getDefault()).format(Date()), result.content, settings.dailyModel)
-                    repository.recordAiUsage(settings.dailyModel, result.promptTokens, result.completionTokens, settings)
-                }
+                persistAiResult(kind, result, settings)
+                require(result.content.isNotBlank()) { "模型没有返回文字，请手动重试" }
                 val quiz = if(kind == "小测") parseQuiz(result.content, taskWords) else emptyList()
                 _uiState.update { it.copy(aiBusy = false, aiOutput = if(kind == "小测") null else result.content, quiz = quiz,
-                    outputTargets = taskWords.map { w -> w.word }, lastTokens = if(result.promptTokens < 0 || result.completionTokens < 0) "服务商未返回 Token 用量" else "输入 ${result.promptTokens} · 输出 ${result.completionTokens} · 总计 ${result.promptTokens + result.completionTokens}", aiMessage = "已保存到本地历史") }
-                refresh()
+                    outputTargets = taskWords.map { w -> w.word }, lastTokens = "", aiMessage = "已保存到本地历史") }
             }, onFailure = ::showAiError)
         }
     }
@@ -347,15 +443,19 @@ class AppViewModel(
     private fun runAiAction(block: suspend (AiSettings) -> Unit) {
         if (_uiState.value.aiBusy) return
         val settings = _uiState.value.settings
-        _uiState.update { it.copy(aiBusy = true, aiMessage = null) }
-        viewModelScope.launch { try { block(settings) } catch (e: Exception) { showAiError(e) } }
+        _uiState.update { it.copy(aiBusy = true, aiMessage = null, aiError = null) }
+        viewModelScope.launch {
+            try { block(settings) }
+            catch (e: kotlinx.coroutines.CancellationException) { throw e }
+            catch (e: Exception) { showAiError(e) }
+        }
     }
 
     private fun showAiError(error: Throwable) {
         _uiState.update {
             it.copy(
                 aiBusy = false,
-                aiMessage = friendlyError(error), aiError = friendlyError(error)
+                aiMessage = friendlyAiError(error), aiError = friendlyAiError(error)
             )
         }
     }
@@ -364,7 +464,7 @@ class AppViewModel(
         val words: List<VocabWord>,
         val stats: LearningStats,
         val cached: List<CachedReading>,
-        val usage: AiUsageSummary, val plan: DailyPlan, val streak: Int
+        val usage: AiUsageSummary, val todayUsage: AiUsageSummary, val usageRecords: List<AiUsageRecord>, val plan: DailyPlan, val streak: Int
     )
 }
 

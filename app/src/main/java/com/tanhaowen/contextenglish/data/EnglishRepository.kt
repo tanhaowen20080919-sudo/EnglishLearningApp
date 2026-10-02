@@ -62,11 +62,12 @@ class EnglishRepository(private val database: EnglishDatabase) {
         return LearningStats(total, seen, learning, mastered, weak, answered, correct)
     }
 
-    fun cacheAiReading(title: String, content: String, model: String): Long {
+    fun cacheAiReading(title: String, content: String, model: String, usageId: Long? = null): Long {
         val values = ContentValues().apply {
             put("title", title)
             put("content", content)
             put("model", model)
+            if (usageId != null) put("usage_id", usageId)
             put("created_at", System.currentTimeMillis())
         }
         return database.writableDatabase.insert("ai_cache", null, values)
@@ -90,50 +91,82 @@ class EnglishRepository(private val database: EnglishDatabase) {
                     title = cursor.getString(cursor.getColumnIndexOrThrow("title")),
                     content = cursor.getString(cursor.getColumnIndexOrThrow("content")),
                     model = cursor.getString(cursor.getColumnIndexOrThrow("model")),
-                    createdAt = cursor.getLong(cursor.getColumnIndexOrThrow("created_at"))
+                    createdAt = cursor.getLong(cursor.getColumnIndexOrThrow("created_at")),
+                    usageId = cursor.getColumnIndexOrThrow("usage_id").let { if (cursor.isNull(it)) null else cursor.getLong(it) }
                 )
             }
         }
         return result
     }
 
-    fun recordAiUsage(
-        model: String,
-        promptTokens: Int,
-        completionTokens: Int,
-        settings: AiSettings
-    ) {
-        val cost = promptTokens.coerceAtLeast(0) / 1_000_000.0 * settings.inputPricePerMillion +
-            completionTokens.coerceAtLeast(0) / 1_000_000.0 * settings.outputPricePerMillion
+    fun recordAiUsage(model: String, usage: TokenUsage, settings: AiSettings): AiUsageRecord {
+        val cost = AiCostCalculator.calculate(usage, settings)
+        val now = System.currentTimeMillis()
         val values = ContentValues().apply {
-            put("model", model)
-            put("prompt_tokens", promptTokens)
-            put("completion_tokens", completionTokens)
-            put("estimated_cost", cost)
-            put("created_at", System.currentTimeMillis())
+            put("model", model); put("prompt_tokens", usage.promptTokens); put("completion_tokens", usage.completionTokens)
+            put("cache_creation_tokens", usage.cacheCreationTokens); put("cache_read_tokens", usage.cacheReadTokens)
+            put("total_tokens", usage.totalTokens); put("usage_known", if (usage.known) 1 else 0)
+            put("input_cost", cost.input); put("output_cost", cost.output)
+            put("cache_creation_cost", cost.cacheCreation); put("cache_read_cost", cost.cacheRead)
+            put("estimated_cost", cost.total); put("currency", settings.currency); put("created_at", now)
+            put("input_price", settings.inputPricePerMillion); put("output_price", settings.outputPricePerMillion)
+            put("cache_creation_price", settings.cacheCreationPricePerMillion); put("cache_read_price", settings.cacheReadPricePerMillion)
+            put("price_snapshot", 1)
         }
-        database.writableDatabase.insert("ai_usage", null, values)
+        val id = database.writableDatabase.insertOrThrow("ai_usage", null, values)
+        return AiUsageRecord(id, model, usage, cost, cost.total, settings.currency, now,
+            settings.inputPricePerMillion, settings.outputPricePerMillion,
+            settings.cacheCreationPricePerMillion, settings.cacheReadPricePerMillion)
     }
 
-    fun aiUsageSummary(): AiUsageSummary {
-        database.readableDatabase.rawQuery(
-            """
-            SELECT COUNT(*) AS calls,
-                   COALESCE(SUM(CASE WHEN prompt_tokens >= 0 THEN prompt_tokens ELSE 0 END), 0) AS prompt_tokens,
-                   COALESCE(SUM(CASE WHEN completion_tokens >= 0 THEN completion_tokens ELSE 0 END), 0) AS completion_tokens,
-                   COALESCE(SUM(estimated_cost), 0) AS estimated_cost
-            FROM ai_usage
-            """.trimIndent(),
-            null
-        ).use { cursor ->
-            cursor.moveToFirst()
-            return AiUsageSummary(
-                calls = cursor.getInt(cursor.getColumnIndexOrThrow("calls")),
-                promptTokens = cursor.getInt(cursor.getColumnIndexOrThrow("prompt_tokens")),
-                completionTokens = cursor.getInt(cursor.getColumnIndexOrThrow("completion_tokens")),
-                estimatedCost = cursor.getDouble(cursor.getColumnIndexOrThrow("estimated_cost"))
-            )
+    fun aiUsageSummary(today: Boolean = false): AiUsageSummary {
+        val where = if (today) " WHERE created_at >= ?" else ""
+        val args = if (today) arrayOf(startOfToday().toString()) else null
+        val db = database.readableDatabase
+        val costs = linkedMapOf<String, Double>()
+        db.rawQuery("SELECT currency, SUM(estimated_cost) FROM ai_usage$where GROUP BY currency", args).use { c ->
+            while (c.moveToNext()) costs[c.getString(0)] = c.getDouble(1)
         }
+        db.rawQuery("""
+            SELECT COUNT(*), COALESCE(SUM(MAX(prompt_tokens,0)),0),
+                COALESCE(SUM(MAX(completion_tokens,0)),0), COALESCE(SUM(estimated_cost),0),
+                COALESCE(SUM(cache_creation_tokens),0), COALESCE(SUM(cache_read_tokens),0),
+                COALESCE(SUM(total_tokens),0), COALESCE(SUM(CASE WHEN usage_known=0 THEN 1 ELSE 0 END),0)
+            FROM ai_usage$where
+        """.trimIndent(), args).use { c ->
+            c.moveToFirst()
+            return AiUsageSummary(c.getLong(0), c.getLong(1), c.getLong(2), c.getDouble(3),
+                c.getLong(4), c.getLong(5), c.getLong(6), costs, c.getLong(7))
+        }
+    }
+
+    fun aiUsageRecord(id: Long): AiUsageRecord? = database.readableDatabase.query("ai_usage", null,
+        "id = ?", arrayOf(id.toString()), null, null, null).use { if (it.moveToFirst()) it.toUsageRecord() else null }
+
+    fun aiUsageRecords(limit: Int = 100): List<AiUsageRecord> = buildList {
+        database.readableDatabase.query("ai_usage", null, null, null, null, null,
+            "created_at DESC, id DESC", limit.toString()).use { c -> while (c.moveToNext()) add(c.toUsageRecord()) }
+    }
+
+    fun resetAiUsage() {
+        val db = database.writableDatabase
+        db.beginTransaction()
+        try {
+            db.delete("ai_usage", null, null)
+            db.execSQL("UPDATE ai_cache SET usage_id = NULL")
+            db.setTransactionSuccessful()
+        } finally { db.endTransaction() }
+    }
+
+    private fun Cursor.toUsageRecord(): AiUsageRecord {
+        fun n(key: String) = getLong(getColumnIndexOrThrow(key))
+        fun d(key: String) = getDouble(getColumnIndexOrThrow(key))
+        return AiUsageRecord(n("id"), getString(getColumnIndexOrThrow("model")),
+            TokenUsage(n("prompt_tokens").coerceAtLeast(0), n("completion_tokens").coerceAtLeast(0),
+                n("cache_creation_tokens"), n("cache_read_tokens"), n("total_tokens"), n("usage_known") == 1L),
+            AiCost(d("input_cost"), d("output_cost"), d("cache_creation_cost"), d("cache_read_cost")),
+            d("estimated_cost"), getString(getColumnIndexOrThrow("currency")), n("created_at"),
+            d("input_price"), d("output_price"), d("cache_creation_price"), d("cache_read_price"), n("price_snapshot") == 1L)
     }
 
     fun reviewWord(id: Long, rating: Int) {
@@ -178,7 +211,7 @@ class EnglishRepository(private val database: EnglishDatabase) {
             val words = loadWords()
             val existing = words.filter { it.state != WordState.NEW }.sortedWith(compareByDescending<VocabWord> { it.due }.thenByDescending { it.weak }.thenByDescending { it.mistakeCount }.thenBy { it.lastReviewTime })
             val chosen = existing.filter { it.due || it.weak } + existing.filter { !it.due && !it.weak && it.state == WordState.LEARNING }.take(5) +
-                words.filter { it.state == WordState.NEW }.sortedBy { it.importance }.take(settings.newWords)
+                words.filter { it.state == WordState.NEW }.shuffled().sortedBy { it.importance }.take(settings.newWords)
             db.beginTransaction()
             try {
                 chosen.distinctBy { it.id }.forEach { w -> db.insertWithOnConflict("daily_plan", null, ContentValues().apply {
@@ -232,9 +265,9 @@ class EnglishRepository(private val database: EnglishDatabase) {
         } finally { db.endTransaction() }
     }
 
-    fun exportData(settings: StudySettings): String {
-        val root = JSONObject().put("format", "context-english").put("version", 2)
-        listOf("words", "study_events", "daily_plan", "ai_cache").forEach { table ->
+    fun exportData(settings: StudySettings, ai: AiSettings): String {
+        val root = JSONObject().put("format", "context-english").put("version", 3)
+        listOf("words", "study_events", "daily_plan", "ai_cache", "ai_usage").forEach { table ->
             val rows = JSONArray()
             database.readableDatabase.query(table, null, null, null, null, null, null).use { c ->
                 while(c.moveToNext()) {
@@ -251,20 +284,24 @@ class EnglishRepository(private val database: EnglishDatabase) {
             root.put(table, rows)
         }
         root.put("settings", JSONObject().put("newWords", settings.newWords).put("dailyGoal", settings.dailyGoal).put("showPhonetic", settings.showPhonetic).put("autoSpeak", settings.autoSpeak))
+        root.put("ai_settings", ai.toBackupJson())
         return root.toString(2)
     }
 
-    fun importData(text: String): StudySettings {
+    fun importData(text: String, currentAi: AiSettings): RestoredBackup {
         val root = JSONObject(text)
-        require(root.getString("format") == "context-english" && root.getInt("version") == 2) { "备份格式不兼容" }
+        require(root.getString("format") == "context-english" && root.getInt("version") in 2..3) { "备份格式不兼容" }
+        val version = root.getInt("version")
+        val restoredAi = if (version >= 3) aiSettingsFromBackup(root.getJSONObject("ai_settings"), currentAi) else null
+        val tables = if (version >= 3) listOf("words", "study_events", "daily_plan", "ai_cache", "ai_usage") else listOf("words", "study_events", "daily_plan", "ai_cache")
         val config = root.getJSONObject("settings")
         val settings = StudySettings(config.getInt("newWords"), config.getInt("dailyGoal"), config.getBoolean("showPhonetic"), config.getBoolean("autoSpeak"))
         require(settings.newWords in 1..100 && settings.dailyGoal in 1..500)
         val db = database.writableDatabase
         db.beginTransaction()
         try {
-            listOf("daily_plan", "study_events", "ai_cache", "words").forEach { db.delete(it, null, null) }
-            listOf("words", "study_events", "daily_plan", "ai_cache").forEach { table ->
+            tables.asReversed().forEach { db.delete(it, null, null) }
+            tables.forEach { table ->
                 val allowed = db.rawQuery("SELECT * FROM $table LIMIT 0", null).use { it.columnNames.toSet() }
                 val rows = root.getJSONArray(table)
                 require(rows.length() <= 200_000)
@@ -276,6 +313,8 @@ class EnglishRepository(private val database: EnglishDatabase) {
                     row.keys().forEach { key ->
                         when(val value = row.get(key)) {
                             JSONObject.NULL -> values.putNull(key)
+                            is Double -> { require(value.isFinite()); values.put(key, value) }
+                            is Float -> { require(value.isFinite()); values.put(key, value.toDouble()) }
                             is Number -> values.put(key, value.toLong())
                             else -> values.put(key, value.toString())
                         }
@@ -286,7 +325,7 @@ class EnglishRepository(private val database: EnglishDatabase) {
             require(db.singleInt("SELECT COUNT(*) FROM words") > 0)
             db.setTransactionSuccessful()
         } finally { db.endTransaction() }
-        return settings
+        return RestoredBackup(settings, restoredAi)
     }
 
     private fun Cursor.toWord() = VocabWord(

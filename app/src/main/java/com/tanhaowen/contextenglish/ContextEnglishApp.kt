@@ -16,6 +16,8 @@ class ContextEnglishApp : Application() {
     lateinit var studySettingsStore: StudySettingsStore
         private set
 
+    val speech by lazy { SpeechController(this) }
+
     override fun onCreate() {
         super.onCreate()
         repository = EnglishRepository(EnglishDatabase(this))

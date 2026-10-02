@@ -17,10 +17,15 @@ class AiSettingsStore(context: Context) {
         provider = preferences.getString("provider", null) ?: "OpenAI Compatible",
         baseUrl = preferences.getString("base_url", null) ?: "https://api.openai.com/v1",
         apiKey = readKey(),
-        dailyModel = preferences.getString("daily_model", null) ?: "gpt-5.6-sol",
-        deepModel = preferences.getString("deep_model", null) ?: "gpt-6-astra",
+        dailyModel = preferences.getString("daily_model", null) ?: "",
+        deepModel = preferences.getString("deep_model", null) ?: "",
         inputPricePerMillion = preferences.getString("input_price", null)?.toDoubleOrNull() ?: 0.0,
-        outputPricePerMillion = preferences.getString("output_price", null)?.toDoubleOrNull() ?: 0.0
+        outputPricePerMillion = preferences.getString("output_price", null)?.toDoubleOrNull() ?: 0.0,
+        cacheCreationPricePerMillion = preferences.getString("cache_creation_price", null)?.toDoubleOrNull() ?: 0.0,
+        cacheReadPricePerMillion = preferences.getString("cache_read_price", null)?.toDoubleOrNull() ?: 0.0,
+        currency = preferences.getString("currency", null) ?: "CNY",
+        apiStyle = preferences.getString("api_style", null) ?: "chat",
+        cacheInputMode = preferences.getString("cache_input_mode", null) ?: "auto"
     )
 
     fun save(settings: AiSettings) {
@@ -33,6 +38,11 @@ class AiSettingsStore(context: Context) {
             .putString("deep_model", settings.deepModel.trim())
             .putString("input_price", settings.inputPricePerMillion.toString())
             .putString("output_price", settings.outputPricePerMillion.toString())
+            .putString("cache_creation_price", settings.cacheCreationPricePerMillion.toString())
+            .putString("cache_read_price", settings.cacheReadPricePerMillion.toString())
+            .putString("currency", settings.currency)
+            .putString("api_style", settings.apiStyle)
+            .putString("cache_input_mode", settings.cacheInputMode)
             .apply()
     }
 

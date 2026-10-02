@@ -74,26 +74,37 @@ data class CachedReading(
     val title: String,
     val content: String,
     val model: String,
-    val createdAt: Long
+    val createdAt: Long,
+    val usageId: Long? = null
 )
 
 data class AiUsageSummary(
-    val calls: Int = 0,
-    val promptTokens: Int = 0,
-    val completionTokens: Int = 0,
-    val estimatedCost: Double = 0.0
+    val calls: Long = 0,
+    val promptTokens: Long = 0,
+    val completionTokens: Long = 0,
+    val estimatedCost: Double = 0.0,
+    val cacheCreationTokens: Long = 0,
+    val cacheReadTokens: Long = 0,
+    val reportedTotalTokens: Long = 0,
+    val costsByCurrency: Map<String, Double> = emptyMap(),
+    val unknownUsageCalls: Long = 0
 ) {
-    val totalTokens: Int get() = promptTokens + completionTokens
+    val totalTokens: Long get() = reportedTotalTokens
 }
 
 data class AiSettings(
     val provider: String = "OpenAI Compatible",
     val baseUrl: String = "https://api.openai.com/v1",
     val apiKey: String = "",
-    val dailyModel: String = "gpt-5.6-sol",
-    val deepModel: String = "gpt-6-astra",
+    val dailyModel: String = "",
+    val deepModel: String = "",
     val inputPricePerMillion: Double = 0.0,
-    val outputPricePerMillion: Double = 0.0
+    val outputPricePerMillion: Double = 0.0,
+    val cacheCreationPricePerMillion: Double = 0.0,
+    val cacheReadPricePerMillion: Double = 0.0,
+    val currency: String = "CNY",
+    val apiStyle: String = "chat",
+    val cacheInputMode: String = "auto"
 )
 
 val builtInReading = StudyReading(

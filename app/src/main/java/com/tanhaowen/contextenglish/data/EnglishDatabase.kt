@@ -62,10 +62,12 @@ class EnglishDatabase(private val context: Context) :
         seedWords(db)
         upgradeV2(db)
         importAssets(db)
+        upgradeV3(db)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         if (oldVersion < 2) { upgradeV2(db); importAssets(db) }
+        if (oldVersion < 3) upgradeV3(db)
     }
 
     private fun upgradeV2(db: SQLiteDatabase) {
@@ -100,6 +102,21 @@ class EnglishDatabase(private val context: Context) :
         }
     }
 
+    private fun upgradeV3(db: SQLiteDatabase) {
+        listOf(
+            "cache_creation_tokens INTEGER NOT NULL DEFAULT 0", "cache_read_tokens INTEGER NOT NULL DEFAULT 0",
+            "total_tokens INTEGER NOT NULL DEFAULT 0", "input_cost REAL NOT NULL DEFAULT 0",
+            "output_cost REAL NOT NULL DEFAULT 0", "cache_creation_cost REAL NOT NULL DEFAULT 0",
+            "cache_read_cost REAL NOT NULL DEFAULT 0", "currency TEXT NOT NULL DEFAULT 'CNY'",
+            "usage_known INTEGER NOT NULL DEFAULT 0", "input_price REAL NOT NULL DEFAULT 0",
+            "output_price REAL NOT NULL DEFAULT 0", "cache_creation_price REAL NOT NULL DEFAULT 0",
+            "cache_read_price REAL NOT NULL DEFAULT 0", "price_snapshot INTEGER NOT NULL DEFAULT 0"
+        ).forEach { db.execSQL("ALTER TABLE ai_usage ADD COLUMN $it") }
+        db.execSQL("UPDATE ai_usage SET total_tokens = MAX(prompt_tokens,0) + MAX(completion_tokens,0), usage_known = CASE WHEN prompt_tokens >= 0 AND completion_tokens >= 0 THEN 1 ELSE 0 END")
+        db.execSQL("ALTER TABLE ai_cache ADD COLUMN usage_id INTEGER")
+        db.execSQL("CREATE INDEX ai_usage_time ON ai_usage(created_at)")
+    }
+
     private fun seedWords(db: SQLiteDatabase) {
         seedData.forEach { item ->
             val values = ContentValues().apply {
@@ -115,7 +132,7 @@ class EnglishDatabase(private val context: Context) :
 
     companion object {
         private const val DATABASE_NAME = "context_english.db"
-        private const val DATABASE_VERSION = 2
+        private const val DATABASE_VERSION = 3
 
         private val seedData = listOf(
             arrayOf("avoid", "/əˈvɔɪd/", "v. 避免；避开", "文中：逃避、不愿接触", "Try to avoid checking every unknown word."),
