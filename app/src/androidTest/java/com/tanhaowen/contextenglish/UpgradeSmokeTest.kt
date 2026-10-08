@@ -10,6 +10,9 @@ import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import androidx.compose.ui.graphics.asAndroidBitmap
+import android.graphics.Bitmap
+import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class UpgradeSmokeTest {
@@ -17,18 +20,68 @@ class UpgradeSmokeTest {
 
     @Test fun tabsHaveSingleLabelsAndPreserveDraftsAndSearch() {
         listOf("今", "学", "词", "我").forEach { compose.onNodeWithText(it, substring = false).assertDoesNotExist() }
-        compose.onNodeWithText("AI", substring = false).performClick()
+        compose.onNodeWithTag("tab-AI").performClick()
         compose.onNodeWithTag("learning-input").performTextInput("Explain a simple sentence")
-        compose.onNodeWithText("词库", substring = false).performClick()
+        compose.onNodeWithTag("tab-WORDS").performClick()
         compose.onNodeWithTag("word-search").performTextInput("avoid")
-        compose.onNodeWithText("AI", substring = false).performClick()
+        compose.onNodeWithTag("tab-AI").performClick()
         compose.onNodeWithTag("learning-input").assertTextContains("Explain a simple sentence")
-        compose.onNodeWithText("词库", substring = false).performClick()
+        compose.onNodeWithTag("tab-WORDS").performClick()
         compose.onNodeWithTag("word-search").assertTextContains("avoid")
-        compose.onNodeWithText("学习", substring = false).performClick()
+        compose.onNodeWithTag("tab-STUDY").performClick()
         compose.onNodeWithText("单词学习").assertIsDisplayed()
-        compose.onNodeWithText("我的", substring = false).performClick()
+        compose.onNodeWithTag("tab-ME").performClick()
         compose.onNodeWithText("学习设置").assertIsDisplayed()
+    }
+
+    private fun screenshot(name: String) {
+        val context=InstrumentationRegistry.getInstrumentation().targetContext
+        val output=File(context.getExternalFilesDir(null),"screenshots").apply { mkdirs() }
+        compose.onRoot().captureToImage().asAndroidBitmap().let { bitmap ->
+            File(output,"$name.png").outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG,100,it) }
+        }
+    }
+
+    @Test fun immersiveLearningKeepsFeedbackAndResumesWithoutNavigation() {
+        compose.waitUntil(15000) { compose.onAllNodesWithTag("start-study").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithTag("start-study").performClick()
+        compose.waitUntil(15000) { compose.onAllNodesWithTag("answer-0").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithTag("tab-AI").assertDoesNotExist()
+        screenshot("01-immersive-question")
+        compose.onNodeWithTag("dont-know").performScrollTo().performClick()
+        compose.onNodeWithTag("continue-study").performScrollTo().assertIsDisplayed()
+        screenshot("02-wrong-feedback")
+        compose.onNodeWithTag("study-detail").performScrollTo().performClick()
+        compose.onNodeWithText("需要更多？AI讲解").assertExists()
+        // Dismiss the native sheet; the question is still graded and remains on screen.
+        compose.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
+        compose.waitUntil(5000) { compose.onAllNodesWithTag("continue-study").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithContentDescription("退出学习并保存进度").performClick()
+        compose.onNodeWithTag("start-study").performClick()
+        compose.onNodeWithTag("continue-study").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithTag("continue-study").performClick()
+        compose.waitForIdle()
+        compose.onNodeWithTag("answer-feedback").assertDoesNotExist()
+    }
+
+    @Test fun sessionSnapshotAndAnswerAreAtomicAndBackupSafe() {
+        val app=InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as ContextEnglishApp
+        val repo=app.repository
+        val original=repo.exportData(StudySettings(),AiSettings())
+        try {
+            val words=repo.loadWords()
+            val s=com.tanhaowen.contextenglish.study.StudyEngine.create(words.take(4),"fixture","day")
+            val q=com.tanhaowen.contextenglish.study.StudyEngine.question(s,words)!!
+            val graded=com.tanhaowen.contextenglish.study.StudyEngine.answer(s,q,q.answer)
+            val before=repo.loadWords().first { it.id==q.word.id }.reviewCount
+            repo.saveSessionAnswer(graded,q.task,2);repo.saveSessionAnswer(graded,q.task,2)
+            assertEquals(before+1,repo.loadWords().first { it.id==q.word.id }.reviewCount)
+            assertEquals(graded,repo.loadSession())
+            val backup=repo.exportData(StudySettings(sound=false,autoAi=false),AiSettings())
+            val restored=repo.importData(backup,AiSettings())
+            assertFalse(restored.study.sound);assertFalse(restored.study.autoAi)
+            assertEquals(graded,repo.loadSession())
+        } finally { repo.importData(original,AiSettings()) }
     }
 
     @Test fun billingBackupRoundTripAndInvalidImportKeepLocalData() {
