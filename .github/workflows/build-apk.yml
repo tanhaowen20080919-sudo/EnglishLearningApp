@@ -67,13 +67,13 @@ jobs:
       - name: Prepare artifact
         run: |
           mkdir -p output
-          cp app/build/outputs/apk/debug/app-debug.apk output/Context-English-v0.3.0-debug.apk
+          cp app/build/outputs/apk/debug/app-debug.apk output/Context-English-v0.4.0-debug.apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Context-English-v0.3.0-debug-apk
-          path: output/Context-English-v0.3.0-debug.apk
+          name: Context-English-v0.4.0-debug-apk
+          path: output/Context-English-v0.4.0-debug.apk
           if-no-files-found: error
           retention-days: 30
 
@@ -128,7 +128,9 @@ jobs:
           target: google_apis
           arch: x86_64
           disable-animations: true
-          script: gradle :app:connectedDebugAndroidTest --stacktrace
+          script: |
+            gradle :app:connectedDebugAndroidTest --stacktrace
+            adb pull /sdcard/Android/data/com.tanhaowen.contextenglish/files/screenshots app/build/screenshots || true
       - name: Upload Android test reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -137,5 +139,6 @@ jobs:
           path: |
             app/build/reports/androidTests/connected/
             app/build/outputs/androidTest-results/connected/
+            app/build/screenshots/
           if-no-files-found: ignore
           retention-days: 30
