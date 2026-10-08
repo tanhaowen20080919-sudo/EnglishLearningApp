@@ -1,6 +1,18 @@
 # English Learning
 
-个人高考英语 Android App，本地学习，无需账号和服务器。当前版本 **0.3.0**（versionCode 3），applicationId 保持 `com.tanhaowen.contextenglish`，支持 Android 8.0 及以上。
+个人高考英语 Android App，本地学习，无需账号和服务器。当前版本 **0.4.0**（versionCode 4），applicationId 保持 `com.tanhaowen.contextenglish`，支持 Android 8.0 及以上。
+
+## 0.4.0 更新
+
+- 沉浸式、无图片的四选一学习：学习时隐藏主导航，一题一屏；即时本地判题、颜色反馈、可关闭的短音效和轻振动。正确后默认自动继续，错误后展示解释并手动继续。
+- 新词和复习穿插；错词延后重现且限制重试次数。支持提示、拼写模式、暂停续学和本轮结果。提示后的答对不算独立掌握；答题记录原子保存且防重复。
+- 单词详情使用原生底部面板，释义、例句、收藏、薄弱词和 AI 解释不再跳网页。学习偏好移入“我的”。
+- 自动 AI 仅在前台学习且反复出错时按需排队，最多合并 3 词、单并发；不阻塞本地学习。结果缓存后可加入后续情境练习。退出学习或 App 进入后台后不发新请求；已发送请求可完成并记账。
+- 自动 AI 默认开启，可关闭；需先配置模型、密钥及正数输入/输出价格。每日最多 5 次，默认本地预算为配置货币的 0.10；费用仅按填写价格估算，不是服务商硬限额。用量不明时当天暂停，失败不自动重试；任务和费用可查看。
+- 保留 1,640 词及现有学习数据，SQLite v1/v2/v3 增量迁移到 v4；备份包含会话和自动 AI 记录，密钥仍不导出。
+- 点击单词可朗读，优先设备离线 en-US 语音，语速可调。美式真人语音包尚未提供；预留 `assets/pronunciation/manifest.json` 接口，当前为空并回退到系统 TTS。
+
+下面为旧版更新记录；其中“AI 全部手动触发”自 0.4.0 起由上述按需自动机制替代。
 
 ## 0.3.0 更新
 
@@ -20,7 +32,7 @@
 
 ## 构建和验证
 
-推送 main 自动运行 **Build APK**，执行词表检查、v1/v2 数据迁移检查、费用/用量/接口解析单元测试、Android Lint 和 APK 构建；另一个 Android 模拟器任务检查主要页面、单行导航、输入/搜索状态恢复，以及真实数据库的备份恢复。
+推送 main 或向 main 提交 PR 自动运行 **Build APK**，执行词表检查、v1/v2/v3 数据迁移检查、学习队列与 AI 限额及费用/接口单元测试、Android Lint 和 APK 构建；另一个 Android 模拟器任务检查沉浸式答题、详情面板、暂停续学、主要页面和真实数据库备份恢复，并保存测试截图。
 
 ```sh
 python tools/verify_vocabulary.py
@@ -29,7 +41,7 @@ gradle :app:testDebugUnitTest :app:lintDebug :app:assembleDebug
 gradle :app:connectedDebugAndroidTest
 ```
 
-APK 位于对应运行的 **Artifacts → Context-English-v0.3.0-debug-apk**。验证报告也会上传。
+APK 位于对应运行的 **Artifacts → Context-English-v0.4.0-debug-apk**。验证报告也会上传。
 
 ## 安装和签名
 
@@ -46,4 +58,4 @@ Kotlin 2.0.21 + Compose + Material 3，原生 SQLite，compileSdk/targetSdk 35�
 - [DeepSeek Context Caching](https://api-docs.deepseek.com/guides/kv_cache)
 - [Claude Prompt Caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)
 
-验证过程不使用用户的付费 API Key；真实生成需用户配置服务商并主动发送。发音依赖设备的英语 TTS 语音包。
+验证过程不使用用户的付费 API Key；真实生成需用户配置服务商。发音目前依赖设备的英语 TTS 语音包，不宣称是真人录音。

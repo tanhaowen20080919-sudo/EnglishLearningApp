@@ -61,6 +61,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
@@ -119,16 +121,20 @@ private fun ContextEnglishRoot(viewModel: AppViewModel) {
     var showSettings by rememberSaveable { mutableStateOf(false) }
     var aiWord by rememberSaveable { mutableStateOf("") }
     val openWordAi: (VocabWord) -> Unit = { aiWord = it.word; viewModel.selectWord(null); selectedTab = AppTab.AI.name }
-    BackHandler(enabled = showSettings || state.selectedWord != null || selectedTab != AppTab.HOME.name) {
+    BackHandler(enabled = !state.studyActive && (showSettings || state.selectedWord != null || selectedTab != AppTab.HOME.name)) {
         if(showSettings) showSettings=false else if(state.selectedWord != null) viewModel.selectWord(null) else selectedTab=AppTab.HOME.name
     }
     state.selectedWord?.let { WordDetail(it, state, viewModel, { viewModel.selectWord(null) }, openWordAi) }
     val snackbarHostState = remember { SnackbarHostState() }
     val pageStates = rememberSaveableStateHolder()
     val lifecycleOwner = LocalLifecycleOwner.current
+    val app=LocalContext.current.applicationContext as ContextEnglishApp
     DisposableEffect(lifecycleOwner) {
+        viewModel.setForeground(lifecycleOwner.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED))
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) viewModel.refreshOnResume()
+            if (event == Lifecycle.Event.ON_START) viewModel.setForeground(true)
+            if (event == Lifecycle.Event.ON_STOP) { viewModel.setForeground(false);app.speech.stop();app.feedback.stop() }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
         onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
@@ -141,23 +147,24 @@ private fun ContextEnglishRoot(viewModel: AppViewModel) {
         }
     }
 
+    if(state.studyActive) {
+        Box(Modifier.fillMaxSize()) {
+            ImmersiveStudyScreen(state,viewModel)
+            SnackbarHost(snackbarHostState,modifier=Modifier.align(Alignment.BottomCenter))
+        }
+        return
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Column {
                         Text(
-                            text = if (showSettings) "AI 设置" else "English Learning",
+                            text = if (showSettings) "AI 设置" else AppTab.valueOf(selectedTab).label,
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 19.sp
                         )
-                        if (!showSettings) {
-                            Text(
-                                text = "在语境里真正掌握单词",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
                     }
                 },
                 navigationIcon = {
@@ -172,6 +179,7 @@ private fun ContextEnglishRoot(viewModel: AppViewModel) {
                 NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
                     AppTab.entries.forEach { tab ->
                         NavigationBarItem(
+                            modifier=Modifier.testTag("tab-${tab.name}"),
                             selected = selectedTab == tab.name,
                             onClick = { selectedTab = tab.name },
                             icon = {

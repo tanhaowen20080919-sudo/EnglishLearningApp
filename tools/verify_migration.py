@@ -4,7 +4,8 @@ from pathlib import Path
 root=Path(__file__).resolve().parents[1]
 text=(root/'app/src/main/java/com/tanhaowen/contextenglish/data/EnglishDatabase.kt').read_text()
 db=sqlite3.connect(':memory:')
-for sql in re.findall(r'"""\s*(CREATE TABLE .*?)\s*"""',text,re.S): db.execute(sql)
+initial=text[text.index('override fun onCreate'):text.index('override fun onUpgrade')]
+for sql in re.findall(r'"""\s*(CREATE TABLE .*?)\s*"""',initial,re.S): db.execute(sql)
 db.execute("INSERT INTO words(word,phonetic,meaning,context_meaning,example,state,weak,seen_count,correct_count,next_review_at) VALUES('avoid','x','避免','避免','example','LEARNING',1,7,3,1234)")
 columns=re.search(r'listOf\((.*?)\)\.forEach \{ db.execSQL\("ALTER TABLE words',text,re.S).group(1)
 for definition in re.findall(r'"([^"]+)"',columns):db.execute('ALTER TABLE words ADD COLUMN '+definition)
@@ -21,7 +22,7 @@ print('PASS: v1 migration preserves state and review records; full vocabulary co
 db.execute("INSERT INTO ai_usage(model,prompt_tokens,completion_tokens,estimated_cost,created_at) VALUES('old-model',1000,200,0.125,1234)")
 db.execute("INSERT INTO ai_usage(model,prompt_tokens,completion_tokens,estimated_cost,created_at) VALUES('unknown',-1,-1,0,1234)")
 db.execute("INSERT INTO ai_cache(title,content,model,created_at) VALUES('old reply','keep me','old-model',1234)")
-v3=text[text.index('private fun upgradeV3'):text.index('private fun seedWords')]
+v3=text[text.index('private fun upgradeV3'):text.index('private fun upgradeV4')]
 columns=re.search(r'listOf\((.*?)\)\.forEach',v3,re.S).group(1)
 for definition in re.findall(r'"([^"]+)"',columns): db.execute('ALTER TABLE ai_usage ADD COLUMN '+definition)
 for sql in re.findall(r'db.execSQL\("([^"$]+)"\)',v3): db.execute(sql)
@@ -30,3 +31,21 @@ assert db.execute("SELECT total_tokens,usage_known FROM ai_usage WHERE model='un
 assert db.execute("SELECT content,usage_id FROM ai_cache").fetchone()==('keep me',None)
 assert db.execute("SELECT correct_count FROM words WHERE word='avoid'").fetchone()[0]==3
 print('PASS: v2 usage costs, replies and word progress survive v3 migration; unknown tokens normalize to 0')
+
+v4=text[text.index('private fun upgradeV4'):text.index('private fun seedWords')]
+simple=re.findall(r'db.execSQL\("([^"$]+)"\)',v4)
+for sql in simple:
+    if not sql.startswith('CREATE INDEX'):db.execute(sql)
+for sql in re.findall(r'"""\s*(CREATE TABLE .*?)\s*"""',v4,re.S):db.execute(sql)
+for sql in simple:
+    if sql.startswith('CREATE INDEX'):db.execute(sql)
+db.execute("INSERT INTO study_session VALUES(1,'snapshot')")
+db.execute("INSERT INTO session_attempts VALUES('task-1','session-1',1,1234)")
+try:db.execute("INSERT INTO session_attempts VALUES('task-1','session-1',1,1234)")
+except sqlite3.IntegrityError:pass
+else:raise AssertionError('Duplicate answer must be rejected')
+assert db.execute('SELECT COUNT(*) FROM session_attempts').fetchone()[0]==1
+assert db.execute("SELECT correct_count FROM words WHERE word='avoid'").fetchone()[0]==3
+assert db.execute("SELECT content FROM ai_cache").fetchone()==('keep me',)
+assert db.execute("SELECT COUNT(*) FROM words").fetchone()[0]==1640
+print('PASS: v3 -> v4 retains all words/learning/AI data; session answers are idempotent')

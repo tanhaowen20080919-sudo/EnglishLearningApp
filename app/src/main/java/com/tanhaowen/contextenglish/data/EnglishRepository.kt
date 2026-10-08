@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase
 import java.util.Calendar
 import org.json.JSONObject
 import org.json.JSONArray
+import com.tanhaowen.contextenglish.study.*
 
 class EnglishRepository(private val database: EnglishDatabase) {
 
@@ -222,7 +223,7 @@ class EnglishRepository(private val database: EnglishDatabase) {
             ids = chosen.map { it.id }.distinct().toMutableList()
         }
         val done = mutableSetOf<Long>()
-        db.rawQuery("SELECT DISTINCT word_id FROM study_events WHERE word_id IS NOT NULL AND created_at >= ?", arrayOf(startOfToday().toString())).use { while(it.moveToNext()) done.add(it.getLong(0)) }
+        db.rawQuery("SELECT DISTINCT word_id FROM study_events WHERE word_id IS NOT NULL AND correct=1 AND created_at >= ?", arrayOf(startOfToday().toString())).use { while(it.moveToNext()) done.add(it.getLong(0)) }
         val kinds = mutableMapOf<String, Int>()
         db.rawQuery("SELECT kind, COUNT(*) FROM daily_plan WHERE day = ? GROUP BY kind", arrayOf(day)).use { while(it.moveToNext()) kinds[it.getString(0)] = it.getInt(1) }
         return DailyPlan(ids, done.intersect(ids.toSet()), kinds["new"] ?: 0, kinds["review"] ?: 0, kinds["weak"] ?: 0)
@@ -261,13 +262,14 @@ class EnglishRepository(private val database: EnglishDatabase) {
         try {
             db.execSQL("UPDATE words SET state='NEW', weak=0, seen_count=0, correct_count=0, mistake_count=0, review_count=0, familiarity=0, streak=0, last_review_at=0, next_review_at=0")
             db.delete("study_events", null, null); db.delete("daily_plan", null, null)
+            db.delete("study_session", null, null); db.delete("session_attempts", null, null)
             db.setTransactionSuccessful()
         } finally { db.endTransaction() }
     }
 
     fun exportData(settings: StudySettings, ai: AiSettings): String {
-        val root = JSONObject().put("format", "context-english").put("version", 3)
-        listOf("words", "study_events", "daily_plan", "ai_cache", "ai_usage").forEach { table ->
+        val root = JSONObject().put("format", "context-english").put("version", 4)
+        listOf("words", "study_events", "daily_plan", "ai_cache", "ai_usage", "study_session", "session_attempts", "auto_ai_jobs").forEach { table ->
             val rows = JSONArray()
             database.readableDatabase.query(table, null, null, null, null, null, null).use { c ->
                 while(c.moveToNext()) {
@@ -283,23 +285,33 @@ class EnglishRepository(private val database: EnglishDatabase) {
             }
             root.put(table, rows)
         }
-        root.put("settings", JSONObject().put("newWords", settings.newWords).put("dailyGoal", settings.dailyGoal).put("showPhonetic", settings.showPhonetic).put("autoSpeak", settings.autoSpeak))
+        root.put("settings", JSONObject().put("newWords", settings.newWords).put("dailyGoal", settings.dailyGoal)
+            .put("showPhonetic", settings.showPhonetic).put("autoSpeak", settings.autoSpeak)
+            .put("sound",settings.sound).put("haptics",settings.haptics).put("autoAdvance",settings.autoAdvance)
+            .put("autoAi",settings.autoAi).put("autoAiBudget",settings.autoAiBudget).put("speechRate",settings.speechRate.toDouble()))
         root.put("ai_settings", ai.toBackupJson())
         return root.toString(2)
     }
 
     fun importData(text: String, currentAi: AiSettings): RestoredBackup {
         val root = JSONObject(text)
-        require(root.getString("format") == "context-english" && root.getInt("version") in 2..3) { "备份格式不兼容" }
+        require(root.getString("format") == "context-english" && root.getInt("version") in 2..4) { "备份格式不兼容" }
         val version = root.getInt("version")
         val restoredAi = if (version >= 3) aiSettingsFromBackup(root.getJSONObject("ai_settings"), currentAi) else null
-        val tables = if (version >= 3) listOf("words", "study_events", "daily_plan", "ai_cache", "ai_usage") else listOf("words", "study_events", "daily_plan", "ai_cache")
+        val tables = listOf("words", "study_events", "daily_plan", "ai_cache") +
+            (if(version>=3) listOf("ai_usage") else emptyList()) +
+            (if(version>=4) listOf("study_session", "session_attempts", "auto_ai_jobs") else emptyList())
         val config = root.getJSONObject("settings")
-        val settings = StudySettings(config.getInt("newWords"), config.getInt("dailyGoal"), config.getBoolean("showPhonetic"), config.getBoolean("autoSpeak"))
+        val settings = StudySettings(config.getInt("newWords"), config.getInt("dailyGoal"), config.getBoolean("showPhonetic"), config.getBoolean("autoSpeak"),
+            config.optBoolean("sound",true),config.optBoolean("haptics",true),config.optBoolean("autoAdvance",true),
+            config.optBoolean("autoAi",true),config.optDouble("autoAiBudget",0.10),config.optDouble("speechRate",0.9).toFloat())
         require(settings.newWords in 1..100 && settings.dailyGoal in 1..500)
+        require(settings.autoAiBudget.isFinite() && settings.autoAiBudget in 0.0..100.0 && settings.speechRate in 0.6f..1.2f)
         val db = database.writableDatabase
         db.beginTransaction()
         try {
+            db.delete("study_session",null,null); db.delete("session_attempts",null,null)
+            // Keep the spending ledger when restoring old backups: usage reset must not reset safety limits.
             tables.asReversed().forEach { db.delete(it, null, null) }
             tables.forEach { table ->
                 val allowed = db.rawQuery("SELECT * FROM $table LIMIT 0", null).use { it.columnNames.toSet() }
@@ -309,6 +321,7 @@ class EnglishRepository(private val database: EnglishDatabase) {
                     val row = rows.getJSONObject(i)
                     require(row.keys().asSequence().all { it in allowed })
                     if(table == "words") { WordState.valueOf(row.getString("state")); require(row.getString("word").isNotBlank()) }
+                    if(table == "study_session") StudyCodec.decode(row.getString("snapshot"))
                     val values = ContentValues()
                     row.keys().forEach { key ->
                         when(val value = row.get(key)) {
@@ -326,6 +339,68 @@ class EnglishRepository(private val database: EnglishDatabase) {
             db.setTransactionSuccessful()
         } finally { db.endTransaction() }
         return RestoredBackup(settings, restoredAi)
+    }
+
+    fun loadSession(): StudySession? = database.readableDatabase.rawQuery("SELECT snapshot FROM study_session WHERE id=1",null).use {
+        if(it.moveToFirst()) runCatching { StudyCodec.decode(it.getString(0)) }.getOrNull() else null
+    }
+
+    fun saveSession(session: StudySession) {
+        database.writableDatabase.insertWithOnConflict("study_session",null,ContentValues().apply {
+            put("id",1); put("snapshot",StudyCodec.encode(session))
+        },SQLiteDatabase.CONFLICT_REPLACE)
+    }
+
+    /** Grading and resume state are one transaction; repeated taps/process death cannot count twice. */
+    fun saveSessionAnswer(session: StudySession, task: StudyTask, rating: Int) {
+        val db=database.writableDatabase
+        db.beginTransaction()
+        try {
+            val exists=db.singleInt("SELECT COUNT(*) FROM session_attempts WHERE task_key=?",arrayOf(task.key))>0
+            if(!exists) {
+                reviewWord(task.wordId,rating)
+                db.insertOrThrow("session_attempts",null,ContentValues().apply {
+                    put("task_key",task.key);put("session_id",session.id);put("word_id",task.wordId);put("created_at",System.currentTimeMillis())
+                })
+            }
+            saveSession(session)
+            db.setTransactionSuccessful()
+        } finally { db.endTransaction() }
+    }
+
+    fun autoAiJobs(today: Boolean = false): List<AutoAiJob> = buildList {
+        database.readableDatabase.query("auto_ai_jobs",null,if(today) "created_at>=?" else null,
+            if(today) arrayOf(startOfToday().toString()) else null,null,null,"created_at DESC,id DESC",if(today) null else "200").use { c ->
+            while(c.moveToNext()) {
+                fun str(k: String)=c.getString(c.getColumnIndexOrThrow(k))
+                fun n(k: String)=c.getLong(c.getColumnIndexOrThrow(k))
+                val ids=JSONArray(str("word_ids"))
+                val actual=c.getColumnIndexOrThrow("actual_cost")
+                add(AutoAiJob(n("id"),str("scope"),(0 until ids.length()).map { ids.getLong(it) }.toSet(),str("reason"),str("status"),
+                    str("model"),str("currency"),c.getDouble(c.getColumnIndexOrThrow("reserved_cost")),
+                    if(c.isNull(actual)) null else c.getDouble(actual),n("usage_known")==1L,str("result"),str("error"),n("created_at"),n("finished_at"),
+                    c.getColumnIndexOrThrow("usage_id").let { if(c.isNull(it)) null else c.getLong(it) }))
+            }
+        }
+    }
+
+    fun beginAutoAi(settings: AiSettings, ids: Set<Long>, reason: String, reserve: Double): Long =
+        database.writableDatabase.insertOrThrow("auto_ai_jobs",null,ContentValues().apply {
+            put("scope",AutoAiPolicy.scope(settings));put("word_ids",JSONArray(ids.toList()).toString());put("reason",reason)
+            put("status","RUNNING");put("model",settings.dailyModel);put("currency",settings.currency)
+            put("reserved_cost",reserve);put("created_at",System.currentTimeMillis())
+        })
+
+    fun finishAutoAi(id: Long, status: String, result: String = "", error: String = "", usage: AiUsageRecord? = null) {
+        database.writableDatabase.update("auto_ai_jobs",ContentValues().apply {
+            put("status",status);put("result",result);put("error",error.take(150));put("finished_at",System.currentTimeMillis())
+            if(usage!=null) { put("usage_id",usage.id);put("usage_known",if(usage.usage.known) 1 else 0)
+                if(usage.usage.known) put("actual_cost",usage.cost.total) }
+        },"id=?",arrayOf(id.toString()))
+    }
+
+    fun recoverAutoAiJobs() {
+        database.writableDatabase.execSQL("UPDATE auto_ai_jobs SET status='FAILED',error='上次请求被中断，用量未知；不会自动重复扣费' WHERE status='RUNNING'")
     }
 
     private fun Cursor.toWord() = VocabWord(

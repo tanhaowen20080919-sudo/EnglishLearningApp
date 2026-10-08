@@ -24,7 +24,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import com.tanhaowen.contextenglish.study.*
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -57,7 +61,14 @@ data class AppUiState(
     val quizSubmitted: Boolean = false,
     val aiError: String? = null,
     val lastTokens: String = "",
-    val outputTargets: List<String> = emptyList()
+    val outputTargets: List<String> = emptyList(),
+    val loaded: Boolean = false,
+    val studyActive: Boolean = false,
+    val studySession: StudySession? = null,
+    val autoAiJobs: List<AutoAiJob> = emptyList(),
+    val coachNotes: Map<Long,CoachNote> = emptyMap(),
+    val autoAiStatus: String = "",
+    val autoAiRunning: Boolean = false
 )
 
 class AppViewModel(
@@ -73,7 +84,13 @@ class AppViewModel(
     private var refreshJob: Job? = null
     private var lastLocalRefresh = 0L
 
-    init { refresh() }
+    private val sessionMutex = Mutex()
+    private var appForeground = false
+    private val pendingCoach = linkedSetOf<Long>()
+    private var coachJob: Job? = null
+    private var loadedSession = false
+
+    init { viewModelScope.launch { withContext(Dispatchers.IO) { repository.recoverAutoAiJobs() }; refresh() } }
 
     fun refreshOnResume() {
         if (refreshJob?.isActive != true && System.currentTimeMillis() - lastLocalRefresh > 30_000) refresh()
@@ -91,7 +108,8 @@ class AppViewModel(
                     todayUsage = repository.aiUsageSummary(today = true),
                     usageRecords = repository.aiUsageRecords(),
                     plan = repository.dailyPlan(studyStore.load()),
-                    streak = repository.studyStreak()
+                    streak = repository.studyStreak(),
+                    session = repository.loadSession(), jobs = repository.autoAiJobs()
                 )
             }
             lastLocalRefresh = System.currentTimeMillis()
@@ -101,9 +119,13 @@ class AppViewModel(
                     stats = data.stats,
                     cachedReadings = data.cached,
                     usage = data.usage, todayUsage = data.todayUsage, usageRecords = data.usageRecords, plan = data.plan, streak = data.streak,
+                    loaded = true, studySession = if(!loadedSession) data.session else it.studySession,
+                    autoAiJobs = data.jobs,
                     selectedWord = it.selectedWord?.let { w -> data.words.find { word -> word.id == w.id } }
                 )
             }
+            loadedSession = true
+            restoreCoachNotes(data.jobs)
         }
     }
 
@@ -324,19 +346,158 @@ class AppViewModel(
     private var lastAi: (() -> Unit)? = null
     fun retryAi() { lastAi?.invoke() }
     fun saveStudySettings(s: StudySettings) {
-        studyStore.save(s); _uiState.update { it.copy(studySettings = studyStore.load(), aiMessage = "学习设置已保存，新的每日词量从明天生效") }; refresh()
+        studyStore.save(s); _uiState.update { it.copy(studySettings = studyStore.load(), aiMessage = "设置已保存；每日新词数量从明天生效") }; refresh()
+        if(!s.autoAi) pendingCoach.clear() else pumpCoach()
     }
     fun startSession(mode: String = "today") {
         val state = _uiState.value
+        if(!state.loaded || state.sessionBusy) return
+        val previous=state.studySession
+        if(mode=="today" && previous!=null && !previous.finished) {
+            _uiState.update { it.copy(studyActive=true) }; pumpCoach(); return
+        }
         val ids = when(mode) {
             "review" -> state.words.filter { it.due }.sortedBy { it.nextReviewTime }.map { it.id }
             "weak" -> state.words.filter { it.weak }.sortedByDescending { it.mistakeCount }.map { it.id }
             "random" -> state.words.filter { it.state != WordState.MASTERED }.shuffled()
                 .sortedWith(compareByDescending<VocabWord> { it.weak }.thenByDescending { it.mistakeCount }.thenBy { it.importance })
                 .take(state.studySettings.dailyGoal).map { it.id }
-            else -> state.plan.ids.filter { it !in state.plan.completed }
+            else -> state.plan.ids.filter { it !in state.plan.completed }.take(state.studySettings.dailyGoal)
         }
-        _uiState.update { it.copy(sessionIds = ids, sessionIndex = 0) }
+        val words=ids.mapNotNull { id -> state.words.find { it.id==id } }
+        val session=StudyEngine.create(words,mode,today())
+        _uiState.update { it.copy(sessionIds=ids,sessionIndex=0,studySession=session,studyActive=true) }
+        persistSession(session)
+    }
+    private fun today() = SimpleDateFormat("yyyy-MM-dd",Locale.ROOT).format(Date())
+
+    fun pauseStudy() { _uiState.update { it.copy(studyActive=false) } }
+
+    fun setForeground(active: Boolean) { appForeground=active; if(active) pumpCoach() }
+
+    private fun persistSession(s: StudySession) { viewModelScope.launch {
+        sessionMutex.withLock { withContext(Dispatchers.IO) { repository.saveSession(s) } }
+    } }
+
+    fun hintStudy() {
+        val s=_uiState.value.studySession ?: return
+        if(s.feedback!=null || _uiState.value.sessionBusy) return
+        val updated=s.copy(hinted=true)
+        _uiState.update { it.copy(studySession=updated) }; persistSession(updated)
+    }
+
+    fun toggleSpelling() {
+        val s=_uiState.value.studySession ?: return
+        if(s.feedback!=null || _uiState.value.sessionBusy || s.task?.kind==TaskKind.CONTEXT) return
+        val task=s.task ?: return
+        val updated=s.copy(tasks=s.tasks.toMutableList().also { it[s.index]=task.copy(
+            kind=if(task.kind==TaskKind.SPELLING) TaskKind.MEANING else TaskKind.SPELLING) },hinted=false)
+        _uiState.update { it.copy(studySession=updated) }; persistSession(updated)
+    }
+
+    fun answerStudy(selected: Int = -1, typed: String = "", unknown: Boolean = false) {
+        val state=_uiState.value
+        val session=state.studySession ?: return
+        if(state.sessionBusy || session.feedback!=null) return
+        val question=StudyEngine.question(session,state.words) ?: return
+        if(!unknown && question.task.kind!=TaskKind.SPELLING && selected !in question.options.indices) return
+        val updated=StudyEngine.answer(session,question,selected,typed,unknown)
+        _uiState.update { it.copy(studySession=updated,sessionBusy=true) }
+        viewModelScope.launch {
+            try {
+                val rating=if(updated.feedback!!.credited) 2 else if(updated.feedback.correct) 1 else 0
+                sessionMutex.withLock { withContext(Dispatchers.IO) { repository.saveSessionAnswer(updated,question.task,rating) } }
+                if(!updated.feedback.correct && (question.word.mistakeCount>=1 || question.word.id in session.wrongIds)) {
+                    pendingCoach.add(question.word.id); pumpCoach()
+                }
+                val cached=_uiState.value.coachNotes[question.word.id]
+                if(cached!=null) insertCoach(listOf(cached))
+                refresh()
+            } catch(e: Exception) {
+                _uiState.update { it.copy(studySession=session,aiMessage="本地记录未保存，请重试") }
+            } finally { _uiState.update { it.copy(sessionBusy=false) } }
+        }
+    }
+
+    fun nextStudy() {
+        val state=_uiState.value; val s=state.studySession ?: return
+        if(state.sessionBusy || s.feedback==null) return
+        val updated=StudyEngine.next(s)
+        _uiState.update { it.copy(studySession=updated,sessionIndex=updated.index) }; persistSession(updated)
+    }
+
+    private fun insertCoach(notes: List<CoachNote>) {
+        val session=_uiState.value.studySession ?: return
+        val updated=StudyEngine.addCoach(session,notes)
+        if(updated!=session) { _uiState.update { it.copy(studySession=updated) }; persistSession(updated) }
+    }
+
+    private fun restoreCoachNotes(jobs: List<AutoAiJob>) {
+        val scope=AutoAiPolicy.scope(_uiState.value.settings)
+        val notes=jobs.filter { it.status=="DONE" && it.scope==scope }.asReversed().flatMap {
+            runCatching { StudyCodec.notes(it.result,it.wordIds) }.getOrDefault(emptyList())
+        }.associateBy { it.wordId }
+        _uiState.update { it.copy(coachNotes=notes) }
+    }
+
+    /** Foreground-owned queue: at most one request, batched, cached, never blocks local study. */
+    private fun pumpCoach() {
+        if(!appForeground || !_uiState.value.studyActive || coachJob?.isActive==true || pendingCoach.isEmpty()) return
+        coachJob=viewModelScope.launch {
+            delay(800)
+            try {
+                while(appForeground && _uiState.value.studyActive && pendingCoach.isNotEmpty()) {
+                    val state=_uiState.value
+                    if(!state.studySettings.autoAi) { pendingCoach.clear(); break }
+                    if(state.aiBusy) { delay(1000); continue }
+                    val scope=AutoAiPolicy.scope(state.settings)
+                    val attempted=withContext(Dispatchers.IO) { repository.autoAiJobs(today=true) }
+                    val blockedIds=attempted.filter { it.scope==scope }.flatMap { it.wordIds }.toSet()
+                    val cached=pendingCoach.mapNotNull { state.coachNotes[it] }
+                    insertCoach(cached); pendingCoach.removeAll(cached.map { it.wordId }.toSet())
+                    pendingCoach.removeAll(blockedIds)
+                    val ids=pendingCoach.take(3).toSet()
+                    if(ids.isEmpty()) break
+                    val words=ids.mapNotNull { id -> state.words.find { it.id==id } }
+                    val prompt="""这些单词在学习中重复答错。仅说明可能的记忆难点，不断言具体错因。
+                        返回JSON {"items":[{"wordId":整数,"tip":"不超过80字中文记忆/辨析提示","example":"含目标单词原形的简单英文例句","translation":"例句中文翻译","cloze":"将例句中目标词替换为____，仅一个空格"}]}。
+                        每词一项，不输出Markdown，不生成选项，不在cloze泄露答案。
+                        词条：${words.joinToString("\n") { "${it.id}: ${it.word} / ${it.meaning.take(160)}" }}
+                    """.trimIndent()
+                    val reserve=AutoAiPolicy.reserve(state.settings,prompt)
+                    val reason=AutoAiPolicy.block(state.settings,state.studySettings,attempted,reserve)
+                    if(reason!=null) { _uiState.update { it.copy(autoAiStatus=reason) }; break }
+                    val jobId=withContext(Dispatchers.IO) { repository.beginAutoAi(state.settings,ids,"重复答错，生成记忆提示与语境强化",reserve) }
+                    pendingCoach.removeAll(ids)
+                    _uiState.update { it.copy(autoAiRunning=true,autoAiStatus="正在准备针对性练习，不影响当前学习") }
+                    var record: AiUsageRecord?=null
+                    try {
+                        val result=aiClient.generate(state.settings,prompt,AutoAiPolicy.MAX_OUTPUT_TOKENS).getOrThrow()
+                        val usageRecord=withContext(Dispatchers.IO) { repository.recordAiUsage(state.settings.dailyModel,result.usage,state.settings) }
+                        record=usageRecord
+                        val notes=StudyCodec.notes(result.content,ids)
+                        notes.forEach { n ->
+                            val w=words.first { it.id==n.wordId }
+                            val pattern=Regex("(?i)(?<![a-z])${Regex.escape(w.word)}(?![a-z])")
+                            require(pattern.containsMatchIn(n.example) && !pattern.containsMatchIn(n.cloze)) { "强化题格式未通过检查" }
+                        }
+                        withContext(Dispatchers.IO) {
+                            repository.finishAutoAi(jobId,"DONE",result.content,usage=usageRecord)
+                            repository.cacheAiReading("后台强化 · ${words.joinToString { it.word }}",result.content,state.settings.dailyModel,usageRecord.id)
+                        }
+                        _uiState.update { it.copy(coachNotes=it.coachNotes+notes.associateBy { n -> n.wordId },autoAiStatus="针对性练习已准备好") }
+                        insertCoach(notes)
+                    } catch(e: kotlinx.coroutines.CancellationException) { throw e }
+                    catch(e: Exception) {
+                        withContext(Dispatchers.IO) { repository.finishAutoAi(jobId,"FAILED",error=friendlyAiError(e),usage=record) }
+                        _uiState.update { it.copy(autoAiStatus="强化生成未完成；继续使用本地题目") }
+                    } finally { _uiState.update { it.copy(autoAiRunning=false) } }
+                    refreshAiData()
+                    val jobs=withContext(Dispatchers.IO) { repository.autoAiJobs() }
+                    _uiState.update { it.copy(autoAiJobs=jobs) }
+                }
+            } finally { _uiState.update { it.copy(autoAiRunning=false) } }
+        }
     }
     fun moveSession(delta: Int) { _uiState.update { it.copy(sessionIndex = (it.sessionIndex + delta).coerceIn(0,it.sessionIds.size)) } }
     fun rateWord(w: VocabWord, rating: Int, advance: Boolean = false) {
@@ -354,14 +515,14 @@ class AppViewModel(
         }
     }
     fun toggleFavorite(w: VocabWord) { viewModelScope.launch { withContext(Dispatchers.IO) { repository.toggleFavorite(w) }; refresh() } }
-    fun clearStudyRecords() { viewModelScope.launch { withContext(Dispatchers.IO) { repository.clearStudyRecords() }; _uiState.update { it.copy(sessionIds = emptyList(), sessionIndex = 0, aiMessage = "学习记录已清空") }; refresh() } }
+    fun clearStudyRecords() { viewModelScope.launch { sessionMutex.withLock { withContext(Dispatchers.IO) { repository.clearStudyRecords() } }; _uiState.update { it.copy(sessionIds = emptyList(), sessionIndex = 0, studySession=null, studyActive=false, aiMessage = "学习记录已清空") }; refresh() } }
     suspend fun exportBackup(): String = withContext(Dispatchers.IO) { repository.exportData(studyStore.load(), settingsStore.load()) }
     fun importBackup(text: String) { viewModelScope.launch {
         runCatching { withContext(Dispatchers.IO) { repository.importData(text, _uiState.value.settings) } }.fold(
             onSuccess = { restored ->
                 withContext(Dispatchers.IO) { studyStore.save(restored.study); restored.ai?.let(settingsStore::save) }
                 _uiState.update { current -> current.copy(studySettings = restored.study, settings = restored.ai ?: current.settings,
-                    sessionIds = emptyList(), selectedWord = null, lastUsage = null, aiMessage = "备份恢复成功，API Key 已保留") }; refresh()
+                    sessionIds = emptyList(), selectedWord = null, lastUsage = null, studyActive=false,studySession=null, aiMessage = "备份恢复成功，API Key 已保留") }; loadedSession=false; refresh()
             },
             onFailure = { _uiState.update { it.copy(aiMessage = "导入失败：备份文件无效，原有数据已保留") } })
     } }
@@ -464,7 +625,8 @@ class AppViewModel(
         val words: List<VocabWord>,
         val stats: LearningStats,
         val cached: List<CachedReading>,
-        val usage: AiUsageSummary, val todayUsage: AiUsageSummary, val usageRecords: List<AiUsageRecord>, val plan: DailyPlan, val streak: Int
+        val usage: AiUsageSummary, val todayUsage: AiUsageSummary, val usageRecords: List<AiUsageRecord>, val plan: DailyPlan, val streak: Int,
+        val session: StudySession?, val jobs: List<AutoAiJob>
     )
 }
 

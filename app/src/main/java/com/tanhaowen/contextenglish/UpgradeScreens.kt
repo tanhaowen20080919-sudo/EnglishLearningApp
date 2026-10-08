@@ -35,6 +35,7 @@ import java.util.Locale
 
 @Composable
 fun UpgradeHome(state: AppUiState, start: (String) -> Unit, words: () -> Unit) {
+    var more by rememberSaveable { mutableStateOf(false) }
     LazyColumn(contentPadding = PaddingValues(22.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
         item {
             Text(SimpleDateFormat("M月d日 EEEE", Locale.CHINA).format(Date()), color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -46,10 +47,14 @@ fun UpgradeHome(state: AppUiState, start: (String) -> Unit, words: () -> Unit) {
             LinearProgressIndicator(progress = { if(state.plan.ids.isEmpty()) 0f else state.plan.completed.size.toFloat()/state.plan.ids.size }, modifier = Modifier.fillMaxWidth())
         }
         item {
-            Button(onClick = { start("today") }, modifier = Modifier.fillMaxWidth()) { Text(if(state.plan.completed.isEmpty()) "开始今日学习" else "继续学习") }
-            TextButton(onClick = { start("review") }, modifier = Modifier.fillMaxWidth()) { Text("今日复习 · ${state.words.count { it.due }}") }
-            TextButton(onClick = { start("random") }, modifier = Modifier.fillMaxWidth()) { Text("随机学习 · 未掌握优先") }
-            TextButton(onClick = { start("weak") }, modifier = Modifier.fillMaxWidth()) { Text("薄弱词强化 · ${state.stats.weak}") }
+            Button(onClick = { start("today") }, enabled=state.loaded,modifier = Modifier.fillMaxWidth().height(54.dp).testTag("start-study")) {
+                Text(if(state.studySession?.finished==false) "继续上次学习" else "开始今日学习") }
+            TextButton(onClick={ more=!more }) { Text(if(more) "收起专项练习" else "专项练习") }
+            if(more) {
+                TextButton(onClick = { start("review") }, modifier = Modifier.fillMaxWidth()) { Text("到期复习 · ${state.words.count { it.due }}") }
+                TextButton(onClick = { start("random") }, modifier = Modifier.fillMaxWidth()) { Text("随机学习 · 未掌握优先") }
+                TextButton(onClick = { start("weak") }, modifier = Modifier.fillMaxWidth()) { Text("薄弱词强化 · ${state.stats.weak}") }
+            }
         }
         item {
             HorizontalDivider()
@@ -70,70 +75,62 @@ private fun rememberSpeak(): (String) -> Unit {
     return remember(app) { { word: String -> app.speech.speak(word) } }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WordDetail(w: VocabWord, state: AppUiState, vm: AppViewModel, close: () -> Unit, ai: (VocabWord) -> Unit) {
     val speak = rememberSpeak()
-    AlertDialog(onDismissRequest=close, title={ Text(w.word) }, text={
-        Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement=Arrangement.spacedBy(10.dp)) {
-            if(state.studySettings.showPhonetic) Text(w.phonetic)
-            Text("${w.partOfSpeech} · ${w.statusLabel} · 掌握度 ${w.familiarity}%")
-            Text(w.meaning)
-            if(w.example.isNotBlank()) { Text(w.example); Text(w.exampleTranslation) }
-            else Text("此词暂未附本地例句，可手动生成 AI 例句。", style=MaterialTheme.typography.bodySmall)
-            Text("正确 ${w.correctCount} · 错误 ${w.mistakeCount} · 复习 ${w.reviewCount}")
-            if(w.nextReviewTime > 0) Text("下次复习：${SimpleDateFormat("M-d HH:mm", Locale.CHINA).format(Date(w.nextReviewTime))}")
-            TextButton(onClick={ speak(w.word) }) { Text("发音") }
-            TextButton(onClick={ vm.toggleFavorite(w) }) { Text(if(w.favorite) "取消收藏" else "收藏 / 重点") }
+    var requested by rememberSaveable(w.id) { mutableStateOf(false) }
+    ModalBottomSheet(onDismissRequest=close, sheetState=rememberModalBottomSheetState(skipPartiallyExpanded=false)) {
+        Column(Modifier.fillMaxWidth().heightIn(max=520.dp).verticalScroll(rememberScrollState())
+            .padding(start=24.dp,end=24.dp,bottom=28.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
+            Row(Modifier.fillMaxWidth(),verticalAlignment=androidx.compose.ui.Alignment.CenterVertically) {
+                Text(w.word,style=MaterialTheme.typography.headlineMedium,fontWeight=FontWeight.SemiBold,modifier=Modifier.weight(1f))
+                StudyIconButton(StudyIcon.SOUND,"朗读单词",{ speak(w.word) })
+                StudyIconButton(StudyIcon.STAR,if(w.favorite) "取消收藏" else "收藏单词",{ vm.toggleFavorite(w) })
+            }
+            if(state.studySettings.showPhonetic) Text(w.phonetic,color=MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(w.meaning,style=MaterialTheme.typography.bodyLarge)
+            if(w.example.isNotBlank()) { Text(w.example);Text(w.exampleTranslation,color=MaterialTheme.colorScheme.onSurfaceVariant) }
+            state.coachNotes[w.id]?.let { Text(it.tip,color=MaterialTheme.colorScheme.primary) }
+            HorizontalDivider()
+            Text("正确 ${w.correctCount} · 错误 ${w.mistakeCount} · 复习 ${w.reviewCount}",style=MaterialTheme.typography.bodySmall)
+            Text("掌握度 ${w.familiarity}% · ${w.statusLabel}",style=MaterialTheme.typography.bodySmall)
+            if(w.nextReviewTime>0) Text("下次复习：${SimpleDateFormat("M-d HH:mm",Locale.CHINA).format(Date(w.nextReviewTime))}",style=MaterialTheme.typography.bodySmall)
             TextButton(onClick={ vm.toggleWeak(w) }) { Text(if(w.weak) "移出薄弱词" else "加入薄弱词") }
-            TextButton(onClick={ ai(w) }) { Text("AI 讲解这个词") }
+            TextButton(onClick={ requested=true;vm.generateLearningTool("单词讲解",w.word) },enabled=!state.aiBusy) { Text("需要更多？AI讲解") }
+            if(requested) {
+                if(state.aiBusy) Text("后台生成中，可以先关闭面板继续学习。",style=MaterialTheme.typography.bodySmall)
+                state.aiError?.let { Text(it,color=MaterialTheme.colorScheme.error) }
+                state.aiOutput?.let { SelectionContainer { Text(it,style=MaterialTheme.typography.bodyMedium) } }
+            }
         }
-    }, confirmButton={ TextButton(onClick=close) { Text("关闭") } })
+    }
 }
 
 @Composable
 fun UpgradeStudy(state: AppUiState, vm: AppViewModel, ai: (VocabWord) -> Unit, reading: @Composable () -> Unit) {
-    var mode by rememberSaveable { mutableStateOf("words") }
-    Column(Modifier.fillMaxSize()) {
-        Row(Modifier.padding(horizontal=18.dp), horizontalArrangement=Arrangement.spacedBy(8.dp)) {
-            FilterChip(selected=mode=="words", onClick={ mode="words" }, label={ Text("单词学习") })
-            FilterChip(selected=mode=="reading", onClick={ mode="reading" }, label={ Text("情境阅读") })
+    var inReading by rememberSaveable { mutableStateOf(false) }
+    if(inReading) {
+        androidx.activity.compose.BackHandler { inReading=false }
+        Column(Modifier.fillMaxSize()) {
+            TextButton(onClick={ inReading=false }) { Text("返回学习") }
+            Box(Modifier.weight(1f)) { reading() }
         }
-        if(mode=="reading") reading()
-        else {
-            val w = state.sessionIds.getOrNull(state.sessionIndex)?.let { id -> state.words.find { it.id==id } }
-            val speak = rememberSpeak()
-            var reveal by rememberSaveable(state.sessionIndex, w?.id) { mutableStateOf(false) }
-            LaunchedEffect(w?.id, state.studySettings.autoSpeak) { if(w != null && state.studySettings.autoSpeak) speak(w.word) }
-            LazyColumn(contentPadding=PaddingValues(22.dp), verticalArrangement=Arrangement.spacedBy(16.dp)) {
-                if(w==null) {
-                    item { Text(if(state.sessionIds.isEmpty()) "当前没有待学习词汇" else "本轮学习已完成", style=MaterialTheme.typography.headlineSmall) }
-                    item { Button(onClick={ vm.startSession() }) { Text("加载今日未完成单词") } }
-                    item { TextButton(onClick={ vm.startSession("review") }) { Text("复习到期词") }; TextButton(onClick={ vm.startSession("weak") }) { Text("强化薄弱词") } }
-                } else {
-                    item { Text("${state.sessionIndex+1} / ${state.sessionIds.size} · ${w.statusLabel}") }
-                    item { Text(w.word, style=MaterialTheme.typography.displaySmall, fontWeight=FontWeight.SemiBold); if(state.studySettings.showPhonetic) Text(w.phonetic) }
-                    item { TextButton(onClick={ speak(w.word) }) { Text("听发音") } }
-                    if(reveal) {
-                        item { Text(w.partOfSpeech, color=MaterialTheme.colorScheme.onSurfaceVariant); Text(w.meaning, lineHeight=26.sp) }
-                        if(w.example.isNotBlank()) item { Text(w.example); Text(w.exampleTranslation, modifier=Modifier.padding(top=8.dp)) }
-                        item {
-                            Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
-                                listOf("认识", "模糊", "不认识").forEachIndexed { i,label ->
-                                    OutlinedButton(onClick={ vm.rateWord(w,2-i,true) }, enabled=!state.sessionBusy, modifier=Modifier.fillMaxWidth()) { Text(label) }
-                                }
-                            }
-                        }
-                    } else item { Button(onClick={ reveal=true }, modifier=Modifier.fillMaxWidth()) { Text("显示释义，再判断记忆程度") } }
-                    item {
-                        Row(Modifier.fillMaxWidth(), horizontalArrangement=Arrangement.SpaceBetween) {
-                            TextButton(onClick={ vm.moveSession(-1) }, enabled=state.sessionIndex>0 && !state.sessionBusy) { Text("上一个") }
-                            TextButton(onClick={ vm.moveSession(1) }, enabled=!state.sessionBusy) { Text("下一个") }
-                        }
-                        TextButton(onClick={ vm.selectWord(w) }) { Text("详细信息 / 收藏") }
-                        TextButton(onClick={ ai(w) }) { Text("AI 单词讲解") }
-                    }
-                }
+    } else {
+        Column(Modifier.fillMaxSize().padding(24.dp),verticalArrangement=Arrangement.spacedBy(18.dp)) {
+            Text("单词学习",style=MaterialTheme.typography.headlineSmall,fontWeight=FontWeight.SemiBold)
+            Text("一次只学一个词，新词与复习自动安排。",color=MaterialTheme.colorScheme.onSurfaceVariant)
+            Button(onClick={ vm.startSession() },enabled=state.loaded,modifier=Modifier.fillMaxWidth()) {
+                Text(if(state.studySession?.finished==false) "继续上次学习" else "开始今日学习")
             }
+            HorizontalDivider()
+            Text("专项练习",style=MaterialTheme.typography.titleMedium)
+            TextButton(onClick={ vm.startSession("review") }) { Text("到期复习 · ${state.words.count { it.due }}") }
+            TextButton(onClick={ vm.startSession("weak") }) { Text("薄弱词强化 · ${state.stats.weak}") }
+            TextButton(onClick={ vm.startSession("random") }) { Text("随机学习 · 未掌握优先") }
+            HorizontalDivider()
+            TextButton(onClick={ inReading=true }) { Text("情境阅读") }
+            Text("阅读独立于单词答题，不打断当前学习进度。",style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }
@@ -178,6 +175,12 @@ fun UpgradeWords(state: AppUiState, vm: AppViewModel) {
 
 @Composable
 fun UpgradeMe(state: AppUiState, vm: AppViewModel, aiSettings: () -> Unit) {
+    var preferences by rememberSaveable { mutableStateOf(false) }
+    if(preferences) {
+        androidx.activity.compose.BackHandler { preferences=false }
+        StudyPreferences(state,vm) { preferences=false }
+        return
+    }
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var newWords by remember(state.studySettings) { mutableStateOf(state.studySettings.newWords.toString()) }
@@ -206,15 +209,9 @@ fun UpgradeMe(state: AppUiState, vm: AppViewModel, aiSettings: () -> Unit) {
         }
     }) { Text("恢复") } },dismissButton={ TextButton(onClick={ importUri=null }) { Text("取消") } }) }
     LazyColumn(contentPadding=PaddingValues(22.dp),verticalArrangement=Arrangement.spacedBy(14.dp)) {
-        item { Text("学习设置",style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.SemiBold) }
-        item { OutlinedTextField(value=newWords,onValueChange={ newWords=it.filter(Char::isDigit) },label={ Text("每日新词数量（1–100）") },singleLine=true,modifier=Modifier.fillMaxWidth()) }
-        item { OutlinedTextField(value=goal,onValueChange={ goal=it.filter(Char::isDigit) },label={ Text("每日作答目标（1–500）") },singleLine=true,modifier=Modifier.fillMaxWidth()) }
-        item {
-            Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween) { Text("显示音标"); Switch(checked=phonetic,onCheckedChange={ phonetic=it }) }
-            Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween) { Text("自动发音"); Switch(checked=autoSpeak,onCheckedChange={ autoSpeak=it }) }
-            Button(onClick={ vm.saveStudySettings(StudySettings(newWords.toInt(),goal.toInt(),phonetic,autoSpeak)) },enabled=(newWords.toIntOrNull() ?: 0) in 1..100 && (goal.toIntOrNull() ?: 0) in 1..500) { Text("保存学习设置") }
-        }
+        item { TextButton(onClick={ preferences=true }) { Text("学习设置") } }
         item { AiUsageOverview(state, vm) }
+        item { AutoAiHistory(state) }
         item { HorizontalDivider(); Text("学习统计",style=MaterialTheme.typography.titleLarge,modifier=Modifier.padding(top=14.dp)); Text("词库 ${state.stats.total} · 已学 ${state.stats.seen} · 已掌握 ${state.stats.mastered}\n薄弱 ${state.stats.weak} · 今日正确率 ${state.stats.todayAccuracy}%\n连续学习 ${state.streak} 天") }
         item {
             TextButton(onClick={ export.launch("EnglishLearning-backup.json") },enabled=!backupBusy) { Text("导出数据") }
