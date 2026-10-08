@@ -159,7 +159,9 @@ val builtInReading = StudyReading(
 
 
 data class StudySettings(val newWords: Int = 20, val dailyGoal: Int = 30,
-    val showPhonetic: Boolean = true, val autoSpeak: Boolean = false)
+    val showPhonetic: Boolean = true, val autoSpeak: Boolean = false,
+    val sound: Boolean = true, val haptics: Boolean = true, val autoAdvance: Boolean = true,
+    val autoAi: Boolean = true, val autoAiBudget: Double = 0.10, val speechRate: Float = 0.9f)
 data class DailyPlan(val ids: List<Long> = emptyList(), val completed: Set<Long> = emptySet(),
     val newCount: Int = 0, val reviewCount: Int = 0, val weakCount: Int = 0)
 data class AiQuizQuestion(val wordId: Long, val prompt: String, val options: List<String>,
