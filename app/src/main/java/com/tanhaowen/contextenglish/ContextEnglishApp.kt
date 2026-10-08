@@ -17,6 +17,7 @@ class ContextEnglishApp : Application() {
         private set
 
     val speech by lazy { SpeechController(this) }
+    val feedback by lazy { FeedbackController(this) }
 
     override fun onCreate() {
         super.onCreate()
