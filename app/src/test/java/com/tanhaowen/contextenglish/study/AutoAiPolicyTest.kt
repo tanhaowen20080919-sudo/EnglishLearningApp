@@ -30,4 +30,15 @@ class AutoAiPolicyTest {
         assertTrue(AutoAiPolicy.reserve(s,"中文提示")>AutoAiPolicy.reserve(ai,"hint"))
     }
     @Test fun noApiKeyInCacheScope() { assertFalse(AutoAiPolicy.scope(ai).contains("test-only")) }
+    @Test fun skippedJobDoesNotSpendBudgetOrBlockLaterCalls() {
+        val jobs=List(10) { AutoAiJob(it.toLong(),"scope",setOf(1),"reason","SKIPPED","fixture","CNY",0.5,null,false,"","",0,0) }
+        assertNull(AutoAiPolicy.block(ai,study,jobs,0.001))
+    }
+    @Test fun paletteDefaultsAndCorruptSettingsAreNormalized() {
+        assertEquals(AppPalette.BLUE,StudySettings().palette)
+        val normalized=StudySettings(newWords=0,dailyGoal=999,autoAiBudget=Double.NaN,speechRate=Float.NaN,palette=AppPalette.GREEN).normalized()
+        assertEquals(1,normalized.newWords);assertEquals(500,normalized.dailyGoal)
+        assertEquals(AppPalette.GREEN,normalized.palette)
+        assertTrue(normalized.autoAiBudget.isFinite());assertTrue(normalized.speechRate.isFinite())
+    }
 }

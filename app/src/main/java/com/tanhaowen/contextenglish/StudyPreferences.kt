@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.tanhaowen.contextenglish.data.AutoAiPolicy
+import com.tanhaowen.contextenglish.data.AppPalette
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -34,9 +35,17 @@ fun StudyPreferences(state: AppUiState,vm: AppViewModel,close: ()->Unit) {
     var autoAi by rememberSaveable { mutableStateOf(saved.autoAi) }
     var budget by rememberSaveable { mutableStateOf(saved.autoAiBudget.toString()) }
     var rate by rememberSaveable { mutableFloatStateOf(saved.speechRate) }
+    var palette by rememberSaveable { mutableStateOf(saved.palette.name) }
     val app=androidx.compose.ui.platform.LocalContext.current.applicationContext as ContextEnglishApp
     LazyColumn(contentPadding=PaddingValues(24.dp),verticalArrangement=Arrangement.spacedBy(14.dp)) {
         item { TextButton(onClick=close) { Text("返回我的") };Text("学习设置",style=MaterialTheme.typography.headlineSmall,fontWeight=FontWeight.SemiBold) }
+        item {
+            Text("配色",style=MaterialTheme.typography.titleMedium)
+            Row(horizontalArrangement=Arrangement.spacedBy(12.dp)) {
+                AppPalette.entries.forEach { p -> FilterChip(selected=palette==p.name,onClick={ palette=p.name },
+                    label={ Text(if(p==AppPalette.BLUE) "清爽蓝" else "自然绿") }) }
+            }
+        }
         item { OutlinedTextField(newWords,{ newWords=it.filter(Char::isDigit) },label={ Text("每日新词（1–100）") },singleLine=true,modifier=Modifier.fillMaxWidth()) }
         item { OutlinedTextField(goal,{ goal=it.filter(Char::isDigit) },label={ Text("每组最多词数（1–500）") },singleLine=true,modifier=Modifier.fillMaxWidth()) }
         item {
@@ -66,7 +75,8 @@ fun StudyPreferences(state: AppUiState,vm: AppViewModel,close: ()->Unit) {
             val valid=(newWords.toIntOrNull() ?: 0) in 1..100 && (goal.toIntOrNull() ?: 0) in 1..500 &&
                 budget.toDoubleOrNull()?.let { it.isFinite() && it in 0.0..100.0 }==true
             Button(onClick={ vm.saveStudySettings(saved.copy(newWords=newWords.toInt(),dailyGoal=goal.toInt(),showPhonetic=phonetic,
-                autoSpeak=autoSpeak,sound=sound,haptics=haptics,autoAdvance=advance,autoAi=autoAi,autoAiBudget=budget.toDouble(),speechRate=rate));close() },
+                autoSpeak=autoSpeak,sound=sound,haptics=haptics,autoAdvance=advance,autoAi=autoAi,autoAiBudget=budget.toDouble(),speechRate=rate,
+                palette=AppPalette.valueOf(palette)));close() },
                 enabled=valid,modifier=Modifier.fillMaxWidth()) { Text("保存设置") }
         }
     }
@@ -82,14 +92,14 @@ fun AutoAiHistory(state: AppUiState) {
             if(state.autoAiJobs.isEmpty()) Text("尚无自动调用；本地答题不会产生API费用。",style=MaterialTheme.typography.bodySmall)
             state.autoAiJobs.take(20).forEach { job ->
                 val time=SimpleDateFormat("M-d HH:mm",Locale.CHINA).format(Date(job.createdAt))
-                val status=when(job.status) { "DONE" -> "完成";"RUNNING" -> "生成中";else -> "失败，不自动重发" }
+                val status=when(job.status) { "DONE" -> "完成";"RUNNING" -> "生成中";"SKIPPED" -> "未发送，等待前台学习";else -> "失败，不自动重发" }
                 Text("$time · $status",fontWeight=FontWeight.Medium)
                 Text(job.reason,style=MaterialTheme.typography.bodySmall)
                 Text("模型 ${job.model} · ${job.wordIds.size}词",style=MaterialTheme.typography.bodySmall)
                 state.usageRecords.find { it.id==job.usageId }?.let { r ->
                     Text("输入 ${r.usage.promptTokens} · 输出 ${r.usage.completionTokens} · 缓存写入 ${r.usage.cacheCreationTokens} · 缓存读取 ${r.usage.cacheReadTokens}",style=MaterialTheme.typography.bodySmall)
                 }
-                Text(if(job.usageKnown) "估算费用 ${String.format(Locale.ROOT,"%.6f",job.actualCost ?: 0.0)} ${job.currency}"
+                Text(if(job.status=="SKIPPED") "尚未调用 · 费用 0" else if(job.usageKnown) "估算费用 ${String.format(Locale.ROOT,"%.6f",job.actualCost ?: 0.0)} ${job.currency}"
                     else "费用/用量未确认，预留 ${String.format(Locale.ROOT,"%.6f",job.reservedCost)} ${job.currency}",style=MaterialTheme.typography.bodySmall)
                 if(job.finishedAt>0) Text("耗时 ${(job.finishedAt-job.createdAt)/1000}秒",style=MaterialTheme.typography.bodySmall)
                 if(job.error.isNotBlank()) Text(job.error,style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.error)

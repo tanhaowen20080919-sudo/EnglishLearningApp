@@ -1,6 +1,8 @@
 package com.tanhaowen.contextenglish
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
@@ -73,14 +75,16 @@ fun AiUsageOverview(state: AppUiState, vm: AppViewModel) {
     }
     if (details) AlertDialog(onDismissRequest = { details = false }, title = { Text("AI 使用统计") },
         text = {
-            Column(Modifier.heightIn(max = 520.dp).verticalScroll(rememberScrollState()),
+            LazyColumn(Modifier.heightIn(max = 520.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                item {
                 UsageSummary("今日", state.todayUsage, detailed = true)
                 UsageSummary("全部", state.usage, detailed = true)
                 Text("按每次请求时的模型价格计算；不同货币分别统计。", style = MaterialTheme.typography.bodySmall)
                 HorizontalDivider()
                 Text("最近 ${state.usageRecords.size} 次请求", fontWeight = FontWeight.SemiBold)
-                state.usageRecords.forEach { record ->
+                }
+                items(state.usageRecords,key={ it.id }) { record ->
                     Text(SimpleDateFormat("M-d HH:mm", Locale.CHINA).format(Date(record.createdAt)), style = MaterialTheme.typography.bodySmall)
                     AiCallUsage(record, "请求 #${record.id}")
                     HorizontalDivider()

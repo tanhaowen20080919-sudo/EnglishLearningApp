@@ -10,6 +10,9 @@ import com.tanhaowen.contextenglish.study.*
 
 class EnglishRepository(private val database: EnglishDatabase) {
 
+    fun loadWord(id: Long): VocabWord? = database.readableDatabase.query("words",null,
+        "id=?",arrayOf(id.toString()),null,null,null).use { if(it.moveToFirst()) it.toWord() else null }
+
     fun loadWords(): List<VocabWord> {
         val words = mutableListOf<VocabWord>()
         database.readableDatabase.query(
@@ -175,7 +178,7 @@ class EnglishRepository(private val database: EnglishDatabase) {
         val db = database.writableDatabase
         db.beginTransaction()
         try {
-            val w = loadWords().first { it.id == id }
+            val w = requireNotNull(loadWord(id))
             val now = System.currentTimeMillis()
             val spaced = w.streak == 0 || now - w.lastReviewTime >= 12 * 60 * 60_000L
             val streak = if (rating == 2) w.streak + (if(spaced) 1 else 0) else 0
@@ -203,13 +206,13 @@ class EnglishRepository(private val database: EnglishDatabase) {
         database.writableDatabase.update("words", ContentValues().apply { put("favorite", if(w.favorite) 0 else 1) }, "id = ?", arrayOf(w.id.toString()))
     }
 
-    fun dailyPlan(settings: StudySettings): DailyPlan {
+    fun dailyPlan(settings: StudySettings, knownWords: List<VocabWord>? = null): DailyPlan {
         val day = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.ROOT).format(java.util.Date())
         val db = database.writableDatabase
         var ids = mutableListOf<Long>()
         db.rawQuery("SELECT word_id FROM daily_plan WHERE day = ? ORDER BY rowid", arrayOf(day)).use { c -> while(c.moveToNext()) ids.add(c.getLong(0)) }
         if(ids.isEmpty()) {
-            val words = loadWords()
+            val words = knownWords ?: loadWords()
             val existing = words.filter { it.state != WordState.NEW }.sortedWith(compareByDescending<VocabWord> { it.due }.thenByDescending { it.weak }.thenByDescending { it.mistakeCount }.thenBy { it.lastReviewTime })
             val chosen = existing.filter { it.due || it.weak } + existing.filter { !it.due && !it.weak && it.state == WordState.LEARNING }.take(5) +
                 words.filter { it.state == WordState.NEW }.shuffled().sortedBy { it.importance }.take(settings.newWords)
@@ -288,7 +291,8 @@ class EnglishRepository(private val database: EnglishDatabase) {
         root.put("settings", JSONObject().put("newWords", settings.newWords).put("dailyGoal", settings.dailyGoal)
             .put("showPhonetic", settings.showPhonetic).put("autoSpeak", settings.autoSpeak)
             .put("sound",settings.sound).put("haptics",settings.haptics).put("autoAdvance",settings.autoAdvance)
-            .put("autoAi",settings.autoAi).put("autoAiBudget",settings.autoAiBudget).put("speechRate",settings.speechRate.toDouble()))
+            .put("autoAi",settings.autoAi).put("autoAiBudget",settings.autoAiBudget).put("speechRate",settings.speechRate.toDouble())
+            .put("palette",settings.palette.name))
         root.put("ai_settings", ai.toBackupJson())
         return root.toString(2)
     }
@@ -304,7 +308,8 @@ class EnglishRepository(private val database: EnglishDatabase) {
         val config = root.getJSONObject("settings")
         val settings = StudySettings(config.getInt("newWords"), config.getInt("dailyGoal"), config.getBoolean("showPhonetic"), config.getBoolean("autoSpeak"),
             config.optBoolean("sound",true),config.optBoolean("haptics",true),config.optBoolean("autoAdvance",true),
-            config.optBoolean("autoAi",true),config.optDouble("autoAiBudget",0.10),config.optDouble("speechRate",0.9).toFloat())
+            config.optBoolean("autoAi",true),config.optDouble("autoAiBudget",0.10),config.optDouble("speechRate",0.9).toFloat(),
+            runCatching { AppPalette.valueOf(config.optString("palette","BLUE")) }.getOrDefault(AppPalette.BLUE))
         require(settings.newWords in 1..100 && settings.dailyGoal in 1..500)
         require(settings.autoAiBudget.isFinite() && settings.autoAiBudget in 0.0..100.0 && settings.speechRate in 0.6f..1.2f)
         val db = database.writableDatabase

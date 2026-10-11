@@ -12,6 +12,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import androidx.compose.ui.graphics.asAndroidBitmap
 import android.graphics.Bitmap
+import androidx.compose.ui.semantics.SemanticsProperties
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
@@ -43,8 +44,18 @@ class UpgradeSmokeTest {
     }
 
     @Test fun immersiveLearningKeepsFeedbackAndResumesWithoutNavigation() {
-        compose.waitUntil(15000) { compose.onAllNodesWithTag("start-study").fetchSemanticsNodes().isNotEmpty() }
+        compose.waitUntil(15000) { compose.onAllNodesWithTag("start-study").fetchSemanticsNodes().any {
+            !it.config.contains(SemanticsProperties.Disabled)
+        } }
         compose.onNodeWithTag("start-study").performClick()
+        repeat(8) {
+            compose.waitUntil(15000) {
+                compose.onAllNodesWithTag("finish-learning").fetchSemanticsNodes().isNotEmpty() ||
+                    compose.onAllNodesWithTag("answer-0").fetchSemanticsNodes().isNotEmpty()
+            }
+            if(compose.onAllNodesWithTag("finish-learning").fetchSemanticsNodes().isNotEmpty())
+                compose.onNodeWithTag("finish-learning").performScrollTo().performClick()
+        }
         compose.waitUntil(15000) { compose.onAllNodesWithTag("answer-0").fetchSemanticsNodes().isNotEmpty() }
         compose.onNodeWithTag("tab-AI").assertDoesNotExist()
         screenshot("01-immersive-question")
@@ -70,16 +81,17 @@ class UpgradeSmokeTest {
         val original=repo.exportData(StudySettings(),AiSettings())
         try {
             val words=repo.loadWords()
-            val s=com.tanhaowen.contextenglish.study.StudyEngine.create(words.take(4),"fixture","day")
+            val s=com.tanhaowen.contextenglish.study.StudyEngine.create(words.take(4),"fixture","day",learnFirst=false)
             val q=com.tanhaowen.contextenglish.study.StudyEngine.question(s,words)!!
             val graded=com.tanhaowen.contextenglish.study.StudyEngine.answer(s,q,q.answer)
             val before=repo.loadWords().first { it.id==q.word.id }.reviewCount
             repo.saveSessionAnswer(graded,q.task,2);repo.saveSessionAnswer(graded,q.task,2)
             assertEquals(before+1,repo.loadWords().first { it.id==q.word.id }.reviewCount)
             assertEquals(graded,repo.loadSession())
-            val backup=repo.exportData(StudySettings(sound=false,autoAi=false),AiSettings())
+            val backup=repo.exportData(StudySettings(sound=false,autoAi=false,palette=AppPalette.GREEN),AiSettings())
             val restored=repo.importData(backup,AiSettings())
             assertFalse(restored.study.sound);assertFalse(restored.study.autoAi)
+            assertEquals(AppPalette.GREEN,restored.study.palette)
             assertEquals(graded,repo.loadSession())
         } finally { repo.importData(original,AiSettings()) }
     }

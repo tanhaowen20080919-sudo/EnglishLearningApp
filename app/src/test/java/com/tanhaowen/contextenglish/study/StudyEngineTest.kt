@@ -8,7 +8,7 @@ class StudyEngineTest {
     private fun word(id: Long,text: String,meaning: String,state: WordState=WordState.NEW)=VocabWord(id,text,"",meaning,meaning,"",state,false,0,0)
     private val words=listOf(word(1,"available","adj. 可获得的；有空的"),word(2,"colorful","adj. 多彩的"),
         word(3,"gas","n. 气体"),word(4,"decide","v. 决定"),word(5,"room","n. 房间"),word(6,"learn","v. 学习"))
-    private fun session()=StudyEngine.create(words,"today","2026-10-09")
+    private fun session()=StudyEngine.create(words,"today","2026-10-09",learnFirst=false)
 
     @Test fun deterministicDistinctFourOptions() {
         val s=session(); val q=StudyEngine.question(s,words)!!
@@ -18,7 +18,7 @@ class StudyEngineTest {
     }
     @Test fun identicalAndOverlappingMeaningsAreNotDistractors() {
         val pool=words+word(7,"obtainable","adj. 可获得的")
-        val q=StudyEngine.question(StudyEngine.create(pool,"today","day"),pool)!!
+        val q=StudyEngine.question(StudyEngine.create(pool,"today","day",learnFirst=false),pool)!!
         assertFalse(q.options.contains("adj. 可获得的"))
     }
     @Test fun correctDoesNotAutomaticallyBecomeMastered() {
@@ -38,7 +38,7 @@ class StudyEngineTest {
         assertEquals(1,StudyEngine.next(rated).index)
     }
     @Test fun retriesAreBounded() {
-        var s=StudyEngine.create(words.take(1),"today","day")
+        var s=StudyEngine.create(words.take(1),"today","day",learnFirst=false)
         repeat(3) {
             val q=StudyEngine.question(s,words)!!
             s=StudyEngine.next(StudyEngine.answer(s,q,unknown=true))

@@ -1,6 +1,15 @@
 # English Learning
 
-个人高考英语 Android App，本地学习，无需账号和服务器。当前版本 **0.4.0**（versionCode 4），applicationId 保持 `com.tanhaowen.contextenglish`，支持 Android 8.0 及以上。
+个人高考英语 Android App，本地学习，无需账号和服务器。源码版本 **0.5.0**（versionCode 6），applicationId 保持 `com.tanhaowen.contextenglish`，支持 Android 8.0 及以上。本次源码的完整 Android 构建尚未完成；当前可安装的已交付稳定包仍为 0.4.1。
+
+## 0.5.0 学习流程
+
+- 新词先显示词义、中英例句和发音按钮，点击“看懂了，稍后测一测”后穿插其他卡片再测试。只看卡片不增加正确数、作答数、掌握度或今日完成数，退出后可继续。
+- 今日页新增“先学5词”，一组最多5个不同词，混合复习与新词。错词仍延后重现且最多重试两次，实际题数可能超过5题；结束后可再学5词或返回。未完成的组优先续学，不覆盖当前进度。
+- 已学词在可用时使用本地例句填空，并保留中文翻译帮助理解；目标词必须以原形出现一次，不在翻译中泄露英文答案，检查不通过则保留词义题。复用原有带署名的例句，不调用AI；1,640条词汇中1,508条例句符合此条件。
+- 保留0.4.1的蓝/绿配色、即时绿/红反馈、原生详情面板、异步准备与预取题目、单词记录的轻量刷新、后台前发送检查及固定签名。当前单词发音继续使用设备英语TTS，美式发音包仍暂缓。
+
+SQLite仍为v4，词库及词汇来源文件未修改；旧会话沿用原有题目，不强制重新学习。备份保留配色，API Key仍不导出。
 
 ## 0.4.0 更新
 
@@ -37,15 +46,17 @@
 ```sh
 python tools/verify_vocabulary.py
 python tools/verify_migration.py
-gradle :app:testDebugUnitTest :app:lintDebug :app:assembleDebug
+gradle :app:testDebugUnitTest :app:lintDebug :app:assembleRelease -PunsignedRelease=true
 gradle :app:connectedDebugAndroidTest
 ```
 
-APK 位于对应运行的 **Artifacts → Context-English-v0.4.0-debug-apk**。验证报告也会上传。
+成功构建后待签名 APK 位于对应运行的 **Artifacts → Context-English-v0.5.0-unsigned-apk**，附带 SHA-256 校验值。此文件不能直接安装，必须完成下面的本地签名步骤。验证报告也会上传。
 
 ## 安装和签名
 
-保留原有 Debug 构建。流水线可从加密 Secret `ANDROID_DEBUG_KEYSTORE_BASE64` 恢复固定 Debug 签名文件；没有该 Secret 时沿用原有临时 Debug 签名。签名私钥不进入源码或 APK。
+发布包关闭调试，沿用0.4.1的固定个人签名。流水线只生成未签名 release 包，不读取或上传签名私钥；下载后在本地使用原签名备份签署并核对证书，再交付可安装 APK。`-PunsignedRelease=true` 明确关闭 release 签名；省略此参数的本地构建会使用本机 `~/.android/debug.keystore`，需要自行确认其为原固定签名。签名私钥不进入源码或 APK。
+
+固定证书SHA-256：`99278f5e7fbe0bc2392a2fe3c2afa304f61a5fa438423b1ff3d670d26dcbb31a`。相同签名和应用ID的新包可覆盖0.4.1；本次尚未生成0.5.0安装包，勿把源码版本号当成已交付包。
 
 旧版云端 Debug 证书未固定，不能保证直接覆盖安装。若 Android 提示签名不一致，务必先在旧 App 的“我的 → 导出数据”备份，再处理安装，随后恢复备份并重新填写密钥。不要卸载尚未备份的数据。
 

@@ -1,12 +1,6 @@
 package com.tanhaowen.contextenglish
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -25,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.testTag
@@ -48,7 +43,7 @@ import android.os.Build
 enum class StudyIcon { BACK, SOUND, HINT, SPELL, STAR, CLOSE }
 
 @Composable
-fun StudyGlyph(icon: StudyIcon, color: Color = MaterialTheme.colorScheme.onSurfaceVariant) {
+fun StudyGlyph(icon: StudyIcon, color: Color = MaterialTheme.colorScheme.onSurfaceVariant, selected: Boolean = false) {
     Canvas(Modifier.size(24.dp)) {
         val scale=size.width/24f
         fun pt(x: Float,y: Float)=Offset(x*scale,y*scale)
@@ -56,7 +51,7 @@ fun StudyGlyph(icon: StudyIcon, color: Color = MaterialTheme.colorScheme.onSurfa
         fun path(vararg points: Pair<Float,Float>, close: Boolean = false) {
             val p=Path().apply { moveTo(points[0].first*scale,points[0].second*scale)
                 points.drop(1).forEach { lineTo(it.first*scale,it.second*scale) }; if(close) close() }
-            drawPath(p,color,style=Stroke(1.8f*scale,cap=StrokeCap.Round))
+            drawPath(p,color,style=if(selected && icon==StudyIcon.STAR) Fill else Stroke(1.8f*scale,cap=StrokeCap.Round))
         }
         when(icon) {
             StudyIcon.BACK -> { line(14f,4f,6f,12f);line(6f,12f,14f,20f) }
@@ -82,9 +77,10 @@ fun StudyGlyph(icon: StudyIcon, color: Color = MaterialTheme.colorScheme.onSurfa
 }
 
 @Composable
-fun StudyIconButton(icon: StudyIcon, label: String, onClick: () -> Unit, enabled: Boolean = true) {
+fun StudyIconButton(icon: StudyIcon, label: String, onClick: () -> Unit, enabled: Boolean = true, selected: Boolean = false) {
     IconButton(onClick=onClick,enabled=enabled,modifier=Modifier.semantics { contentDescription=label }) {
-        StudyGlyph(icon,if(enabled) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.outlineVariant)
+        StudyGlyph(icon,if(!enabled) MaterialTheme.colorScheme.outlineVariant else if(selected) MaterialTheme.colorScheme.primary
+            else MaterialTheme.colorScheme.onSurfaceVariant,selected)
     }
 }
 
@@ -96,11 +92,12 @@ fun ImmersiveStudyScreen(state: AppUiState, vm: AppViewModel) {
     val view=LocalView.current
     val lifecycle by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
     val foreground=lifecycle.isAtLeast(Lifecycle.State.RESUMED)
-    val question=remember(session.id,session.task,state.words) { StudyEngine.question(session,state.words) }
+    val question=state.studyQuestion?.takeIf { it.task==session.task }
     var lastSound by rememberSaveable(session.id) { mutableStateOf("") }
     DisposableEffect(app) { app.feedback.prepare(); onDispose { app.speech.stop(); app.feedback.stop() } }
-    LaunchedEffect(session.task?.key,session.task?.kind,foreground) {
-        if(foreground && state.studySettings.autoSpeak && session.feedback==null && question!=null) app.speech.speak(question.word.word)
+    LaunchedEffect(session.task,question?.task,foreground) {
+        if(foreground && state.studySettings.autoSpeak && session.feedback==null && question!=null && question.task.kind!=TaskKind.CONTEXT)
+            app.speech.speak(question.word.word)
     }
     LaunchedEffect(session.task?.key,session.feedback) {
         val f=session.feedback ?: return@LaunchedEffect
@@ -140,6 +137,8 @@ fun ImmersiveStudyScreen(state: AppUiState, vm: AppViewModel) {
                 modifier=Modifier.fillMaxWidth().height(2.dp),trackColor=MaterialTheme.colorScheme.surfaceVariant)
             if(session.finished) {
                 StudySummary(session,state,vm)
+            } else if(state.questionLoading) {
+                Box(Modifier.weight(1f).fillMaxWidth(),contentAlignment=Alignment.Center) { CircularProgressIndicator() }
             } else if(question==null) {
                 Column(Modifier.fillMaxSize().padding(28.dp),verticalArrangement=Arrangement.Center) {
                     Text("这个词暂时无法组成可靠题目")
@@ -147,15 +146,16 @@ fun ImmersiveStudyScreen(state: AppUiState, vm: AppViewModel) {
                     Button(onClick=vm::pauseStudy,modifier=Modifier.padding(top=20.dp)) { Text("返回") }
                 }
             } else {
-                AnimatedContent(targetState=question,transitionSpec={ fadeIn(tween(140)) togetherWith fadeOut(tween(90)) },
-                    modifier=Modifier.weight(1f),label="studyQuestion") { q ->
-                    QuestionBody(q,session,state,vm)
-                }
+                Box(Modifier.weight(1f)) { key(question.task) { QuestionBody(question,session,state,vm) } }
                 Row(Modifier.fillMaxWidth().padding(horizontal=32.dp,vertical=10.dp),horizontalArrangement=Arrangement.SpaceBetween) {
                     StudyIconButton(StudyIcon.SPELL,if(question.task.kind==TaskKind.SPELLING) "切换选择题" else "拼写练习",vm::toggleSpelling,
-                        enabled=session.feedback==null && !state.sessionBusy && question.task.kind!=TaskKind.CONTEXT)
-                    StudyIconButton(StudyIcon.HINT,"显示提示",vm::hintStudy,enabled=session.feedback==null && !state.sessionBusy)
-                    StudyIconButton(StudyIcon.SOUND,"朗读当前单词",{ app.speech.speak(question.word.word) })
+                        enabled=session.feedback==null && !state.sessionBusy && question.task.kind !in setOf(TaskKind.CONTEXT,TaskKind.LEARN))
+                    StudyIconButton(StudyIcon.HINT,"显示提示",vm::hintStudy,
+                        enabled=session.feedback==null && !state.sessionBusy && question.task.kind!=TaskKind.LEARN)
+                    StudyIconButton(StudyIcon.SOUND,"朗读当前单词",{
+                        if(question.task.kind==TaskKind.CONTEXT && session.feedback==null) vm.hintStudy()
+                        app.speech.speak(question.word.word)
+                    })
                 }
             }
         }
@@ -168,9 +168,17 @@ private fun QuestionBody(q: StudyQuestion, session: StudySession, state: AppUiSt
     var typed by rememberSaveable(q.task.key,q.task.kind) { mutableStateOf("") }
     val current=session.task?.key==q.task.key
     val feedback=if(current) session.feedback else null
-    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal=22.dp),
+    val scroll=rememberScrollState()
+    LaunchedEffect(q.task.key,feedback) {
+        if(feedback!=null && !feedback.correct) {
+            withFrameNanos { }; withFrameNanos { }; scroll.animateScrollTo(scroll.maxValue)
+        }
+    }
+    BoxWithConstraints(Modifier.fillMaxSize()) {
+    val breathingRoom=((maxHeight.value-470f)*0.55f).coerceIn(16f,140f).dp
+    Column(Modifier.fillMaxSize().verticalScroll(scroll).padding(horizontal=22.dp),
         horizontalAlignment=Alignment.CenterHorizontally) {
-        Spacer(Modifier.height(54.dp))
+        Spacer(Modifier.height(if(q.task.kind==TaskKind.LEARN) 24.dp else 42.dp))
         Column(Modifier.fillMaxWidth().heightIn(min=160.dp).padding(vertical=16.dp),horizontalAlignment=Alignment.CenterHorizontally,
             verticalArrangement=Arrangement.Center) {
             if(q.task.kind==TaskKind.CONTEXT) {
@@ -181,6 +189,8 @@ private fun QuestionBody(q: StudyQuestion, session: StudySession, state: AppUiSt
                 Text("听音或根据词义拼写",style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier=Modifier.padding(top=12.dp))
             } else {
+                if(q.task.kind==TaskKind.LEARN) Text("新词 · 先学一下",style=MaterialTheme.typography.labelMedium,
+                    color=MaterialTheme.colorScheme.onSurfaceVariant,modifier=Modifier.padding(bottom=16.dp))
                 Text(q.word.word,fontSize=if(q.word.word.length>15) 34.sp else 42.sp,fontWeight=FontWeight.SemiBold,
                     color=MaterialTheme.colorScheme.primary,textAlign=TextAlign.Center,
                     modifier=Modifier.clickable { app.speech.speak(q.word.word) }.testTag("study-word"))
@@ -188,7 +198,21 @@ private fun QuestionBody(q: StudyQuestion, session: StudySession, state: AppUiSt
                     fontSize=19.sp,color=MaterialTheme.colorScheme.onSurfaceVariant,modifier=Modifier.padding(top=12.dp))
             }
         }
-        Spacer(Modifier.weight(1f,fill=false).heightIn(min=28.dp,max=140.dp))
+        Spacer(Modifier.height(if(q.task.kind==TaskKind.LEARN) 20.dp else breathingRoom))
+        if(q.task.kind==TaskKind.LEARN) {
+            Column(Modifier.fillMaxWidth().padding(vertical=8.dp),verticalArrangement=Arrangement.spacedBy(16.dp)) {
+                Text(q.word.meaning,style=MaterialTheme.typography.titleLarge,modifier=Modifier.testTag("learn-meaning"))
+                if(q.word.example.isNotBlank()) {
+                    Text(q.word.example,style=MaterialTheme.typography.bodyLarge)
+                    Text(q.word.exampleTranslation,color=MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                Text("先看懂词义和例句，稍后再测一测。看过这张卡不会直接算掌握。",
+                    style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+                Button(onClick=vm::finishLearning,enabled=!state.sessionBusy,modifier=Modifier.fillMaxWidth().testTag("finish-learning")) {
+                    Text("看懂了，稍后测一测")
+                }
+            }
+        } else {
         if(session.hinted && feedback==null) {
             Text(if(q.task.kind==TaskKind.SPELLING) "首字母：${q.word.word.first()} · ${q.word.word.length} 个字符"
                 else StudyEngine.meaning(q.word),color=MaterialTheme.colorScheme.onSurfaceVariant,
@@ -205,14 +229,14 @@ private fun QuestionBody(q: StudyQuestion, session: StudySession, state: AppUiSt
             q.options.forEachIndexed { i,option ->
                 val correct=feedback!=null && i==q.answer
                 val wrong=feedback!=null && !feedback.correct && i==feedback.selected
-                val background by animateColorAsState(when { correct -> MaterialTheme.colorScheme.primaryContainer
-                    wrong -> MaterialTheme.colorScheme.errorContainer else -> MaterialTheme.colorScheme.surface },tween(100),label="answerColor")
+                val background=when { correct -> Color(0xFFDFF4E7)
+                    wrong -> MaterialTheme.colorScheme.errorContainer else -> MaterialTheme.colorScheme.surface }
                 Surface(onClick={ vm.answerStudy(i) },enabled=feedback==null && !state.sessionBusy && current,
                     shape=RoundedCornerShape(15.dp),color=background,tonalElevation=if(feedback==null) 1.dp else 0.dp,
                     modifier=Modifier.fillMaxWidth().padding(bottom=10.dp).testTag("answer-$i")) {
                     Row(Modifier.padding(horizontal=20.dp,vertical=20.dp).heightIn(min=28.dp),verticalAlignment=Alignment.CenterVertically) {
                         Text(option,style=MaterialTheme.typography.bodyLarge,modifier=Modifier.weight(1f),lineHeight=25.sp,
-                            color=when { correct -> MaterialTheme.colorScheme.onPrimaryContainer; wrong -> MaterialTheme.colorScheme.onErrorContainer
+                            color=when { correct -> Color(0xFF20533B); wrong -> MaterialTheme.colorScheme.onErrorContainer
                                 else -> MaterialTheme.colorScheme.onSurface })
                         if(correct || wrong) Text(if(correct) "✓" else "×",fontWeight=FontWeight.Bold,modifier=Modifier.padding(start=8.dp))
                     }
@@ -224,7 +248,7 @@ private fun QuestionBody(q: StudyQuestion, session: StudySession, state: AppUiSt
         } else {
             Column(Modifier.fillMaxWidth().padding(vertical=8.dp)) {
                 Text(if(feedback.correct) if(feedback.credited) "正确" else "提示后答对 · 稍后再复习" else "记住这个词，稍后再试",
-                    color=if(feedback.correct) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error,
+                    color=if(feedback.correct) Color(0xFF20533B) else MaterialTheme.colorScheme.error,
                     fontWeight=FontWeight.SemiBold,modifier=Modifier.testTag("answer-feedback"))
                 if(!feedback.correct) Text("${q.word.word} · ${StudyEngine.meaning(q.word)}",modifier=Modifier.padding(top=6.dp))
                 if(!feedback.correct && q.word.example.isNotBlank()) {
@@ -239,6 +263,9 @@ private fun QuestionBody(q: StudyQuestion, session: StudySession, state: AppUiSt
                 }
             }
         }
+        }
+        Spacer(Modifier.height(16.dp))
+    }
     }
 }
 
@@ -247,7 +274,7 @@ private fun ColumnScope.StudySummary(s: StudySession,state: AppUiState,vm: AppVi
     Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(28.dp),horizontalAlignment=Alignment.CenterHorizontally) {
         Spacer(Modifier.height(54.dp))
         Text(if(s.answered==0) "今日任务已完成" else "这一组，完成了",style=MaterialTheme.typography.headlineMedium,fontWeight=FontWeight.SemiBold)
-        Text("学习 ${s.originalIds.size} 词 · 作答 ${s.answered} 次",modifier=Modifier.padding(top=16.dp),color=MaterialTheme.colorScheme.onSurfaceVariant)
+        Text("本组 ${s.originalIds.size} 词 · 作答 ${s.answered} 次",modifier=Modifier.padding(top=16.dp),color=MaterialTheme.colorScheme.onSurfaceVariant)
         Text("${s.accuracy}%",fontSize=54.sp,fontWeight=FontWeight.SemiBold,color=MaterialTheme.colorScheme.primary,modifier=Modifier.padding(top=28.dp))
         Text("无提示正确率",color=MaterialTheme.colorScheme.onSurfaceVariant)
         Text("最高连对 ${s.bestCombo} · 连续学习 ${state.streak} 天",modifier=Modifier.padding(top=24.dp))
@@ -261,6 +288,11 @@ private fun ColumnScope.StudySummary(s: StudySession,state: AppUiState,vm: AppVi
         }
         Text("一次答对不等于长期掌握，后续会按间隔继续复习。",style=MaterialTheme.typography.bodySmall,
             color=MaterialTheme.colorScheme.onSurfaceVariant,modifier=Modifier.padding(vertical=24.dp),textAlign=TextAlign.Center)
-        Button(onClick=vm::pauseStudy,modifier=Modifier.fillMaxWidth()) { Text("完成，返回今日") }
+        if(state.plan.ids.any { it !in state.plan.completed }) {
+            Button(onClick={ vm.startSession("quick") },enabled=!state.sessionBusy,modifier=Modifier.fillMaxWidth().testTag("next-quick-group")) {
+                Text("再学 5 词")
+            }
+            TextButton(onClick=vm::pauseStudy) { Text("先到这里，返回") }
+        } else Button(onClick=vm::pauseStudy,modifier=Modifier.fillMaxWidth()) { Text("完成，返回") }
     }
 }

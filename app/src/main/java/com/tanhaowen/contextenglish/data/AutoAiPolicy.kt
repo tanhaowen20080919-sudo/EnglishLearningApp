@@ -22,9 +22,9 @@ object AutoAiPolicy {
         !settings.baseUrl.startsWith("https://") -> "请填写HTTPS接口地址"
         settings.inputPricePerMillion <= 0 || settings.outputPricePerMillion <= 0 -> "填写输入/输出单价后启用自动AI"
         !study.autoAiBudget.isFinite() || study.autoAiBudget <= 0 -> "自动AI预算为0，仅使用本地内容"
-        today.size >= MAX_DAILY_CALLS -> "今日自动调用次数已达上限"
-        today.any { !it.usageKnown && it.status != "QUEUED" } -> "有调用的扣费/用量不明，今日自动AI已暂停"
-        !reserve.isFinite() || today.filter { it.currency==settings.currency }.sumOf { it.actualCost ?: it.reservedCost } + reserve > study.autoAiBudget -> "今日自动AI估算预算不足"
+        today.count { it.status != "SKIPPED" } >= MAX_DAILY_CALLS -> "今日自动调用次数已达上限"
+        today.any { !it.usageKnown && it.status !in setOf("QUEUED","SKIPPED") } -> "有调用的扣费/用量不明，今日自动AI已暂停"
+        !reserve.isFinite() || today.filter { it.currency==settings.currency && it.status!="SKIPPED" }.sumOf { it.actualCost ?: it.reservedCost } + reserve > study.autoAiBudget -> "今日自动AI估算预算不足"
         else -> null
     }
 }

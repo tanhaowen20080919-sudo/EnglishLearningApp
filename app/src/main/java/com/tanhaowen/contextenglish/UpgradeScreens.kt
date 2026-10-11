@@ -36,9 +36,12 @@ import java.util.Locale
 @Composable
 fun UpgradeHome(state: AppUiState, start: (String) -> Unit, words: () -> Unit) {
     var more by rememberSaveable { mutableStateOf(false) }
+    val dueCount=remember(state.words) { state.words.count { it.due } }
+    val paused=state.studySession?.finished==false
+    val date=remember { SimpleDateFormat("M月d日 EEEE", Locale.CHINA).format(Date()) }
     LazyColumn(contentPadding = PaddingValues(22.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
         item {
-            Text(SimpleDateFormat("M月d日 EEEE", Locale.CHINA).format(Date()), color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(date, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Text("今日任务", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.SemiBold)
         }
         item {
@@ -49,9 +52,13 @@ fun UpgradeHome(state: AppUiState, start: (String) -> Unit, words: () -> Unit) {
         item {
             Button(onClick = { start("today") }, enabled=state.loaded,modifier = Modifier.fillMaxWidth().height(54.dp).testTag("start-study")) {
                 Text(if(state.studySession?.finished==false) "继续上次学习" else "开始今日学习") }
+            if(!paused && state.plan.ids.any { it !in state.plan.completed }) {
+                OutlinedButton(onClick={ start("quick") },enabled=state.loaded,
+                    modifier=Modifier.fillMaxWidth().padding(top=8.dp).testTag("quick-study")) { Text("时间不多？先学 5 词") }
+            }
             TextButton(onClick={ more=!more }) { Text(if(more) "收起专项练习" else "专项练习") }
             if(more) {
-                TextButton(onClick = { start("review") }, modifier = Modifier.fillMaxWidth()) { Text("到期复习 · ${state.words.count { it.due }}") }
+                TextButton(onClick = { start("review") }, modifier = Modifier.fillMaxWidth()) { Text("到期复习 · $dueCount") }
                 TextButton(onClick = { start("random") }, modifier = Modifier.fillMaxWidth()) { Text("随机学习 · 未掌握优先") }
                 TextButton(onClick = { start("weak") }, modifier = Modifier.fillMaxWidth()) { Text("薄弱词强化 · ${state.stats.weak}") }
             }
@@ -60,11 +67,11 @@ fun UpgradeHome(state: AppUiState, start: (String) -> Unit, words: () -> Unit) {
             HorizontalDivider()
             Text("已学 ${state.stats.seen} · 已掌握 ${state.stats.mastered}", modifier = Modifier.padding(top=18.dp))
             Text("薄弱 ${state.stats.weak} · 连续学习 ${state.streak} 天", modifier = Modifier.padding(top=8.dp))
-            Text("每日目标 ${state.studySettings.dailyGoal} 次 · 今日已完成 ${state.stats.todayAnswered} 次", modifier = Modifier.padding(top=8.dp))
+            Text("每组最多 ${state.studySettings.dailyGoal} 词 · 今日已作答 ${state.stats.todayAnswered} 次", modifier = Modifier.padding(top=8.dp))
         }
         item {
             TextButton(onClick = words) { Text("查看全部 ${state.stats.total} 个内置词汇") }
-            Text("优先复习到期和薄弱词，再学习新词。新词默认每天20个，可在“我的”中调整。", color = MaterialTheme.colorScheme.onSurfaceVariant, style=MaterialTheme.typography.bodySmall)
+            Text("新词先看词义和例句，再检查记忆；学过的词会穿插本地例句填空。每日新词数可在“我的”中调整。", color = MaterialTheme.colorScheme.onSurfaceVariant, style=MaterialTheme.typography.bodySmall)
         }
     }
 }
@@ -86,7 +93,7 @@ fun WordDetail(w: VocabWord, state: AppUiState, vm: AppViewModel, close: () -> U
             Row(Modifier.fillMaxWidth(),verticalAlignment=androidx.compose.ui.Alignment.CenterVertically) {
                 Text(w.word,style=MaterialTheme.typography.headlineMedium,fontWeight=FontWeight.SemiBold,modifier=Modifier.weight(1f))
                 StudyIconButton(StudyIcon.SOUND,"朗读单词",{ speak(w.word) })
-                StudyIconButton(StudyIcon.STAR,if(w.favorite) "取消收藏" else "收藏单词",{ vm.toggleFavorite(w) })
+                StudyIconButton(StudyIcon.STAR,if(w.favorite) "取消收藏" else "收藏单词",{ vm.toggleFavorite(w) },selected=w.favorite)
             }
             if(state.studySettings.showPhonetic) Text(w.phonetic,color=MaterialTheme.colorScheme.onSurfaceVariant)
             Text(w.meaning,style=MaterialTheme.typography.bodyLarge)
@@ -123,6 +130,8 @@ fun UpgradeStudy(state: AppUiState, vm: AppViewModel, ai: (VocabWord) -> Unit, r
             Button(onClick={ vm.startSession() },enabled=state.loaded,modifier=Modifier.fillMaxWidth()) {
                 Text(if(state.studySession?.finished==false) "继续上次学习" else "开始今日学习")
             }
+            if(state.studySession?.finished!=false && state.plan.ids.any { it !in state.plan.completed })
+                OutlinedButton(onClick={ vm.startSession("quick") },enabled=state.loaded,modifier=Modifier.fillMaxWidth()) { Text("先学 5 词") }
             HorizontalDivider()
             Text("专项练习",style=MaterialTheme.typography.titleMedium)
             TextButton(onClick={ vm.startSession("review") }) { Text("到期复习 · ${state.words.count { it.due }}") }
@@ -140,7 +149,8 @@ fun UpgradeWords(state: AppUiState, vm: AppViewModel) {
     var query by rememberSaveable { mutableStateOf("") }
     var filter by rememberSaveable { mutableStateOf("全部") }
     var importance by rememberSaveable { mutableStateOf("全部级别") }
-    val words = remember(state.words,query,filter,importance) { state.words.filter { w ->
+    val words by produceState(initialValue=emptyList<VocabWord>(),state.words,query,filter,importance) {
+        value=withContext(Dispatchers.Default) { state.words.filter { w ->
         (query.isBlank() || w.word.contains(query.trim(),true) || w.meaning.contains(query.trim())) &&
         when(filter) {
             "未学习" -> w.state==WordState.NEW
@@ -151,7 +161,7 @@ fun UpgradeWords(state: AppUiState, vm: AppViewModel) {
             "收藏" -> w.favorite
             else -> true
         } && when(importance) { "核心" -> w.importance==1; "高频" -> w.importance==2; "普通" -> w.importance==3; else -> true }
-    } }
+    } } }
     Column(Modifier.fillMaxSize()) {
         OutlinedTextField(value=query,onValueChange={ query=it },label={ Text("搜索英文或中文释义") },singleLine=true,modifier=Modifier.fillMaxWidth().padding(horizontal=18.dp).testTag("word-search"))
         Row(Modifier.horizontalScroll(rememberScrollState()).padding(horizontal=18.dp),horizontalArrangement=Arrangement.spacedBy(8.dp)) {

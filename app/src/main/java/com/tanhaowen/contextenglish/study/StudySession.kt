@@ -3,9 +3,8 @@ package com.tanhaowen.contextenglish.study
 import com.tanhaowen.contextenglish.data.VocabWord
 import com.tanhaowen.contextenglish.data.WordState
 import java.util.UUID
-import kotlin.random.Random
 
-enum class TaskKind { MEANING, SPELLING, CONTEXT }
+enum class TaskKind { MEANING, SPELLING, CONTEXT, LEARN }
 data class StudyTask(val key: String, val wordId: Long, val kind: TaskKind = TaskKind.MEANING,
     val repeat: Int = 0, val prompt: String = "")
 data class StudyFeedback(val selected: Int = -1, val typed: String = "", val correct: Boolean,
@@ -26,7 +25,7 @@ data class CoachNote(val wordId: Long, val tip: String, val example: String, val
 
 /** Local-only, deterministic questions; no API request is needed to grade or move forward. */
 object StudyEngine {
-    fun create(words: List<VocabWord>, mode: String, day: String): StudySession {
+    fun create(words: List<VocabWord>, mode: String, day: String, learnFirst: Boolean = true): StudySession {
         val id = UUID.randomUUID().toString()
         val original = words.distinctBy { it.id }
         val fresh=original.filter { it.state==WordState.NEW }.toMutableList()
@@ -37,7 +36,19 @@ object StudyEngine {
                 if(fresh.isNotEmpty()) add(fresh.removeAt(0))
             }
         }
-        return StudySession(id, day, mode, distinct.mapIndexed { i,w -> StudyTask("$id:$i", w.id) },
+        val tasks = distinct.mapIndexed { i,w ->
+            val cloze = if(w.state != WordState.NEW && w.reviewCount > 0) LocalCloze.prompt(w) else null
+            StudyTask("$id:$i",w.id,when {
+                learnFirst && w.state == WordState.NEW -> TaskKind.LEARN
+                cloze != null -> TaskKind.CONTEXT
+                else -> TaskKind.MEANING
+            },prompt=cloze.orEmpty())
+        }.toMutableList()
+        if(learnFirst) tasks.filter { it.kind == TaskKind.LEARN }.forEach { learn ->
+            val at = (tasks.indexOf(learn)+4).coerceAtMost(tasks.size)
+            tasks.add(at,StudyTask("${learn.key}:recall",learn.wordId))
+        }
+        return StudySession(id, day, mode, tasks,
             newIds = distinct.filter { it.state == WordState.NEW }.map { it.id }.toSet(),
             originalIds = distinct.map { it.id }.toSet())
     }
@@ -45,30 +56,16 @@ object StudyEngine {
     fun meaning(word: VocabWord): String = word.meaning.lineSequence().firstOrNull { it.isNotBlank() }
         ?.trim().orEmpty().ifBlank { word.contextMeaning.trim() }
 
-    private fun atoms(text: String) = text.replace(Regex("[A-Za-z.()（）]"), "")
-        .split(Regex("[；;，,、\\s]+" )).filter { it.length >= 2 }.toSet()
+    fun question(session: StudySession, words: List<VocabWord>): StudyQuestion? = StudyQuestionBank(words).prepare(session)
 
-    fun question(session: StudySession, words: List<VocabWord>): StudyQuestion? {
-        val task = session.task ?: return null
-        val word = words.find { it.id == task.wordId } ?: return null
-        if (task.kind == TaskKind.SPELLING) return StudyQuestion(word, task, emptyList(), -1)
-        val answerText = if (task.kind == TaskKind.CONTEXT) word.word else meaning(word)
-        val meanings = atoms(meaning(word))
-        val random = Random((session.id + task.key).hashCode())
-        val candidates = words.filter { other ->
-            other.id != word.id && meaning(other).isNotBlank() &&
-                atoms(meaning(other)).intersect(meanings).isEmpty()
-        }.shuffled(random).sortedBy { if (it.partOfSpeech == word.partOfSpeech) 0 else 1 }
-            .map { if (task.kind == TaskKind.CONTEXT) it.word else meaning(it) }
-            .filter { it != answerText }.distinct().take(3)
-        if (candidates.size < 3) return null // Never manufacture an ambiguous or incomplete question.
-        val options = (candidates + answerText).shuffled(random)
-        return StudyQuestion(word, task, options, options.indexOf(answerText))
-    }
+    /** Exposure is saved for resume, but earns no answer, correctness or mastery credit. */
+    fun finishLearning(session: StudySession): StudySession =
+        if(session.task?.kind != TaskKind.LEARN || session.feedback != null) session
+        else session.copy(index=session.index+1,hinted=false)
 
     fun answer(session: StudySession, question: StudyQuestion, selected: Int = -1,
         typed: String = "", unknown: Boolean = false): StudySession {
-        if (session.feedback != null || session.task?.key != question.task.key) return session
+        if (session.feedback != null || session.task != question.task || question.task.kind == TaskKind.LEARN) return session
         val right = !unknown && if (question.task.kind == TaskKind.SPELLING)
             typed.trim().equals(question.word.word.trim(), ignoreCase = true)
         else selected == question.answer

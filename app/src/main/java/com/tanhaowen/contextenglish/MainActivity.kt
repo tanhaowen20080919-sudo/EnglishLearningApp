@@ -1,8 +1,6 @@
 package com.tanhaowen.contextenglish
 
 import android.os.Bundle
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.tween
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.lifecycle.Lifecycle
@@ -83,7 +81,6 @@ import com.tanhaowen.contextenglish.data.VocabWord
 import com.tanhaowen.contextenglish.data.WordState
 import com.tanhaowen.contextenglish.data.builtInReading
 import com.tanhaowen.contextenglish.ui.theme.ContextEnglishTheme
-import com.tanhaowen.contextenglish.ui.theme.Forest
 import com.tanhaowen.contextenglish.ui.theme.Mint
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -95,10 +92,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val app = application as ContextEnglishApp
         setContent {
-            ContextEnglishTheme {
-                val appViewModel: AppViewModel = viewModel(
-                    factory = AppViewModelFactory(app.repository, app.settingsStore, app.studySettingsStore)
-                )
+            val appViewModel: AppViewModel = viewModel(
+                factory = AppViewModelFactory(app.repository, app.settingsStore, app.studySettingsStore)
+            )
+            val state by appViewModel.uiState.collectAsStateWithLifecycle()
+            ContextEnglishTheme(state.studySettings.palette) {
                 ContextEnglishRoot(appViewModel)
             }
         }
@@ -198,8 +196,7 @@ private fun ContextEnglishRoot(viewModel: AppViewModel) {
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            Crossfade(targetState = if (showSettings) "SETTINGS" else selectedTab,
-                animationSpec = tween(160), label = "pageTransition") { route ->
+            val route = if(showSettings) "SETTINGS" else selectedTab
                 pageStates.SaveableStateProvider(route) {
                     when (route) {
                         "SETTINGS" -> AiSettingsScreen(state, viewModel) { showSettings = false }
@@ -216,7 +213,6 @@ private fun ContextEnglishRoot(viewModel: AppViewModel) {
                         AppTab.ME.name -> UpgradeMe(state, viewModel, { showSettings = true })
                     }
                 }
-            }
         }
     }
 }
@@ -322,8 +318,9 @@ private fun StudyScreen(
     val targetWords = remember(state.words) {
         state.words.filter { it.word in builtInReading.targetWords }.associateBy { it.word.lowercase() }
     }
-    val annotatedPassage = remember(targetWords) {
-        buildPassage(builtInReading.passage, targetWords.keys)
+    val highlightColor=MaterialTheme.colorScheme.primary
+    val annotatedPassage = remember(targetWords,highlightColor) {
+        buildPassage(builtInReading.passage, targetWords.keys,highlightColor)
     }
 
     LazyColumn(
@@ -332,7 +329,7 @@ private fun StudyScreen(
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         item {
-            Text("今日情境阅读", color = Forest, fontWeight = FontWeight.SemiBold)
+            Text("今日情境阅读", color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
             Text(
                 builtInReading.title,
                 style = MaterialTheme.typography.headlineSmall,
@@ -409,7 +406,7 @@ private fun StudyScreen(
     }
 }
 
-private fun buildPassage(passage: String, targets: Set<String>) = buildAnnotatedString {
+private fun buildPassage(passage: String, targets: Set<String>, highlightColor: Color) = buildAnnotatedString {
     val wordRegex = Regex("[A-Za-z]+")
     var cursor = 0
     wordRegex.findAll(passage).forEach { match ->
@@ -417,7 +414,7 @@ private fun buildPassage(passage: String, targets: Set<String>) = buildAnnotated
         val key = match.value.lowercase()
         if (key in targets) {
             pushStringAnnotation("WORD", key)
-            pushStyle(SpanStyle(color = Forest, fontWeight = FontWeight.Bold))
+            pushStyle(SpanStyle(color = highlightColor, fontWeight = FontWeight.Bold))
             append(match.value)
             pop()
             pop()
@@ -501,7 +498,7 @@ private fun QuestionCard(
                 Text(
                     if (selected == question.answerIndex) "回答正确 · ${question.logicLabel}"
                     else "正确答案 ${'A' + question.answerIndex} · ${question.logicLabel}",
-                    color = if (selected == question.answerIndex) Forest else MaterialTheme.colorScheme.error,
+                    color = if (selected == question.answerIndex) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error,
                     fontWeight = FontWeight.SemiBold
                 )
                 Text(question.explanation, modifier = Modifier.padding(top = 5.dp))
@@ -601,7 +598,7 @@ private fun WordListItem(
                         WordState.MASTERED -> "已掌握"
                     },
                     style = MaterialTheme.typography.labelMedium,
-                    color = Forest
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
             Text(
@@ -735,7 +732,7 @@ private fun AiScreen(
                             Text(reading.title, fontWeight = FontWeight.SemiBold)
                             Text(reading.model, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
-                        Text("打开", color = Forest)
+                        Text("打开", color = MaterialTheme.colorScheme.primary)
                     }
                 }
             }
