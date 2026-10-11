@@ -1,6 +1,6 @@
 # English Learning
 
-个人高考英语 Android App，本地学习，无需账号和服务器。源码版本 **0.5.0**（versionCode 6），applicationId 保持 `com.tanhaowen.contextenglish`，支持 Android 8.0 及以上。本次源码的完整 Android 构建尚未完成；当前可安装的已交付稳定包仍为 0.4.1。
+个人高考英语 Android App，本地学习，无需账号和服务器。版本 **0.5.0**（versionCode 6），applicationId 保持 `com.tanhaowen.contextenglish`，支持 Android 8.0 及以上。GitHub Actions 执行完整构建、单元测试、Lint 和 Android 模拟器检查；安装包经原证书本地签名与校验后交付。
 
 ## 0.5.0 学习流程
 
@@ -56,7 +56,7 @@ gradle :app:connectedDebugAndroidTest
 
 发布包关闭调试，沿用0.4.1的固定个人签名。流水线只生成未签名 release 包，不读取或上传签名私钥；下载后在本地使用原签名备份签署并核对证书，再交付可安装 APK。`-PunsignedRelease=true` 明确关闭 release 签名；省略此参数的本地构建会使用本机 `~/.android/debug.keystore`，需要自行确认其为原固定签名。签名私钥不进入源码或 APK。
 
-固定证书SHA-256：`99278f5e7fbe0bc2392a2fe3c2afa304f61a5fa438423b1ff3d670d26dcbb31a`。相同签名和应用ID的新包可覆盖0.4.1；本次尚未生成0.5.0安装包，勿把源码版本号当成已交付包。
+固定证书SHA-256：`99278f5e7fbe0bc2392a2fe3c2afa304f61a5fa438423b1ff3d670d26dcbb31a`。相同签名、相同应用ID且版本号更高的新包可覆盖0.4.1。Actions 的 unsigned APK 用于签名，不是最终可安装包；请安装已签名的交付包。
 
 旧版云端 Debug 证书未固定，不能保证直接覆盖安装。若 Android 提示签名不一致，务必先在旧 App 的“我的 → 导出数据”备份，再处理安装，随后恢复备份并重新填写密钥。不要卸载尚未备份的数据。
 
