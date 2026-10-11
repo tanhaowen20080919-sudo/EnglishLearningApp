@@ -82,6 +82,7 @@ jobs:
           cp "$ANDROID_HOME/build-tools/35.0.0/zipalign" signing-tools/
           cp "$ANDROID_HOME/build-tools/35.0.0/aapt" signing-tools/
           cp "$ANDROID_HOME/build-tools/35.0.0/NOTICE.txt" signing-tools/
+          if [ -d "$ANDROID_HOME/build-tools/35.0.0/lib64" ]; then cp -r "$ANDROID_HOME/build-tools/35.0.0/lib64" signing-tools/; fi
           cd signing-tools
           sha256sum lib/apksigner.jar zipalign aapt > SHA256SUMS
 
