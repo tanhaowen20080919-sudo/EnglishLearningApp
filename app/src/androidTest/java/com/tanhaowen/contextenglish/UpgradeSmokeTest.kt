@@ -71,7 +71,8 @@ class UpgradeSmokeTest {
         compose.waitUntil(5000) { compose.onAllNodesWithTag("continue-study").fetchSemanticsNodes().isNotEmpty() }
         compose.onNodeWithTag("immersive-study").assertIsDisplayed()
         compose.onNodeWithContentDescription("退出学习并保存进度").performClick()
-        compose.onNodeWithTag("start-study").performClick()
+        compose.onNodeWithText("单词学习").assertIsDisplayed()
+        compose.onNodeWithText("继续上次学习").performClick()
         compose.onNodeWithTag("continue-study").performScrollTo().assertIsDisplayed()
         compose.onNodeWithTag("continue-study").performClick()
         compose.waitForIdle()
