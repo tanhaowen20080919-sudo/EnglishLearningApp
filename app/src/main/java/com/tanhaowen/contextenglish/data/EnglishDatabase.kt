@@ -63,11 +63,13 @@ class EnglishDatabase(private val context: Context) :
         upgradeV2(db)
         importAssets(db)
         upgradeV3(db)
+        upgradeV4(db)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         if (oldVersion < 2) { upgradeV2(db); importAssets(db) }
         if (oldVersion < 3) upgradeV3(db)
+        if (oldVersion < 4) upgradeV4(db)
     }
 
     private fun upgradeV2(db: SQLiteDatabase) {
@@ -117,6 +119,18 @@ class EnglishDatabase(private val context: Context) :
         db.execSQL("CREATE INDEX ai_usage_time ON ai_usage(created_at)")
     }
 
+    private fun upgradeV4(db: SQLiteDatabase) {
+        db.execSQL("CREATE TABLE study_session (id INTEGER PRIMARY KEY CHECK(id=1), snapshot TEXT NOT NULL)")
+        db.execSQL("CREATE TABLE session_attempts (task_key TEXT PRIMARY KEY, session_id TEXT NOT NULL, word_id INTEGER NOT NULL, created_at INTEGER NOT NULL)")
+        db.execSQL("""CREATE TABLE auto_ai_jobs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT, scope TEXT NOT NULL, word_ids TEXT NOT NULL,
+            reason TEXT NOT NULL, status TEXT NOT NULL, model TEXT NOT NULL, currency TEXT NOT NULL,
+            reserved_cost REAL NOT NULL, actual_cost REAL, usage_known INTEGER NOT NULL DEFAULT 0,
+            usage_id INTEGER, result TEXT NOT NULL DEFAULT '', error TEXT NOT NULL DEFAULT '',
+            created_at INTEGER NOT NULL, finished_at INTEGER NOT NULL DEFAULT 0)""")
+        db.execSQL("CREATE INDEX auto_ai_time ON auto_ai_jobs(created_at)")
+    }
+
     private fun seedWords(db: SQLiteDatabase) {
         seedData.forEach { item ->
             val values = ContentValues().apply {
@@ -132,7 +146,7 @@ class EnglishDatabase(private val context: Context) :
 
     companion object {
         private const val DATABASE_NAME = "context_english.db"
-        private const val DATABASE_VERSION = 3
+        private const val DATABASE_VERSION = 4
 
         private val seedData = listOf(
             arrayOf("avoid", "/əˈvɔɪd/", "v. 避免；避开", "文中：逃避、不愿接触", "Try to avoid checking every unknown word."),

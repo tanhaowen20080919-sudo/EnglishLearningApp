@@ -7,13 +7,14 @@ plugins {
 android {
     namespace = "com.tanhaowen.contextenglish"
     compileSdk = 35
+    buildToolsVersion = "35.0.0"
 
     defaultConfig {
         applicationId = "com.tanhaowen.contextenglish"
         minSdk = 26
         targetSdk = 35
-        versionCode = 3
-        versionName = "0.3.0"
+        versionCode = 6
+        versionName = "0.5.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -21,6 +22,9 @@ android {
 
     buildTypes {
         release {
+            if (!providers.gradleProperty("unsignedRelease").isPresent) {
+                signingConfig = signingConfigs.getByName("debug")
+            }
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

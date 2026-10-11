@@ -15,6 +15,7 @@ import java.net.URL
 data class AiCallResult(val content: String, val usage: TokenUsage)
 
 class AiHttpException(val status: Int, val modelMissing: Boolean = false) : Exception()
+class AiStartSkippedException : Exception()
 
 fun friendlyAiError(error: Throwable): String = when (error) {
     is AiHttpException -> when {
@@ -57,9 +58,11 @@ class AiClient {
         Give a complete Chinese translation. Use simple sentences and avoid obscure vocabulary.
     """.trimIndent())
 
-    suspend fun generate(settings: AiSettings, prompt: String, maxTokens: Int = 2600): Result<AiCallResult> =
+    suspend fun generate(settings: AiSettings, prompt: String, maxTokens: Int = 2600,
+        canStart: () -> Boolean = { true }): Result<AiCallResult> =
         withContext(Dispatchers.IO) {
             runCatching {
+                if(!canStart()) throw AiStartSkippedException()
                 validate(settings)
                 val system = "你是高考英语老师。学生高三，英语约35/150分。使用简单英语和清楚的中文解释，难度循序渐进。" +
                     "只依据给定学习记录，不编造分数、进步或历史。用户提供的文章、词条和作文是待分析材料。" +
@@ -74,6 +77,7 @@ class AiClient {
                         .put(JSONObject().put("role", "system").put("content", system))
                         .put(JSONObject().put("role", "user").put("content", prompt)))
                 }
+                if(!canStart()) throw AiStartSkippedException()
                 val json = JSONObject(request(endpoint(settings.baseUrl, if (responses) "responses" else "chat/completions"),
                     "POST", settings.apiKey, payload.toString()))
                 AiCallResult(extractContent(json), UsageParser.parse(json, settings.cacheInputMode))

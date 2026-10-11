@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   build:
-    name: Build installable debug APK
+    name: Test and build unsigned release APK
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -29,21 +29,6 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
-
-      - name: Restore fixed debug signing key
-        env:
-          ANDROID_DEBUG_KEYSTORE_BASE64: ${{ secrets.ANDROID_DEBUG_KEYSTORE_BASE64 }}
-        run: |
-          python3 - <<'PYCODE'
-          import base64, os
-          from pathlib import Path
-          value = os.environ.get("ANDROID_DEBUG_KEYSTORE_BASE64", "")
-          if value:
-              target = Path.home() / ".android" / "debug.keystore"
-              target.parent.mkdir(parents=True, exist_ok=True)
-              target.write_bytes(base64.b64decode(value, validate=True))
-              target.chmod(0o600)
-          PYCODE
 
       - name: Prepare Android SDK 35
         run: |
@@ -62,18 +47,20 @@ jobs:
           python tools/verify_vocabulary.py
 
       - name: Test, lint and build APK
-        run: gradle :app:testDebugUnitTest :app:lintDebug :app:assembleDebug --stacktrace
+        run: gradle :app:testDebugUnitTest :app:lintDebug :app:assembleRelease -PunsignedRelease=true --stacktrace
 
       - name: Prepare artifact
         run: |
           mkdir -p output
-          cp app/build/outputs/apk/debug/app-debug.apk output/Context-English-v0.3.0-debug.apk
+          cp app/build/outputs/apk/release/app-release-unsigned.apk output/Context-English-v0.5.0-unsigned.apk
+          cd output
+          sha256sum Context-English-v0.5.0-unsigned.apk > SHA256SUMS
 
-      - name: Upload APK
+      - name: Upload unsigned APK for local signing
         uses: actions/upload-artifact@v4
         with:
-          name: Context-English-v0.3.0-debug-apk
-          path: output/Context-English-v0.3.0-debug.apk
+          name: Context-English-v0.5.0-unsigned-apk
+          path: output/
           if-no-files-found: error
           retention-days: 30
 
@@ -88,6 +75,24 @@ jobs:
           if-no-files-found: ignore
           retention-days: 30
 
+      - name: Prepare public Android signing utilities
+        run: |
+          mkdir -p signing-tools/lib
+          cp "$ANDROID_HOME/build-tools/35.0.0/lib/apksigner.jar" signing-tools/lib/
+          cp "$ANDROID_HOME/build-tools/35.0.0/zipalign" signing-tools/
+          cp "$ANDROID_HOME/build-tools/35.0.0/aapt" signing-tools/
+          cp "$ANDROID_HOME/build-tools/35.0.0/NOTICE.txt" signing-tools/
+          if [ -d "$ANDROID_HOME/build-tools/35.0.0/lib64" ]; then cp -r "$ANDROID_HOME/build-tools/35.0.0/lib64" signing-tools/; fi
+          cd signing-tools
+          sha256sum lib/apksigner.jar zipalign aapt > SHA256SUMS
+
+      - name: Upload public utilities for local signing
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-signing-utilities-35
+          path: signing-tools/
+          retention-days: 7
+
   ui-smoke:
     name: Check Android navigation and backup restore
     runs-on: ubuntu-latest
@@ -101,21 +106,6 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.9"
-      - name: Restore fixed debug signing key
-        env:
-          ANDROID_DEBUG_KEYSTORE_BASE64: ${{ secrets.ANDROID_DEBUG_KEYSTORE_BASE64 }}
-        run: |
-          python3 - <<'PYCODE'
-          import base64, os
-          from pathlib import Path
-          value = os.environ.get("ANDROID_DEBUG_KEYSTORE_BASE64", "")
-          if value:
-              target = Path.home() / ".android" / "debug.keystore"
-              target.parent.mkdir(parents=True, exist_ok=True)
-              target.write_bytes(base64.b64decode(value, validate=True))
-              target.chmod(0o600)
-          PYCODE
-
       - name: Enable emulator hardware acceleration
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -128,7 +118,8 @@ jobs:
           target: google_apis
           arch: x86_64
           disable-animations: true
-          script: gradle :app:connectedDebugAndroidTest --stacktrace
+          script: |
+            gradle :app:connectedDebugAndroidTest --stacktrace; test_status=$?; adb pull /sdcard/Android/data/com.tanhaowen.contextenglish/files/screenshots app/build/screenshots || true; exit "$test_status"
       - name: Upload Android test reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -137,5 +128,6 @@ jobs:
           path: |
             app/build/reports/androidTests/connected/
             app/build/outputs/androidTest-results/connected/
+            app/build/screenshots/
           if-no-files-found: ignore
           retention-days: 30
