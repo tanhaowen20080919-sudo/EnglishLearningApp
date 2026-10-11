@@ -87,7 +87,7 @@ private fun rememberSpeak(): (String) -> Unit {
 fun WordDetail(w: VocabWord, state: AppUiState, vm: AppViewModel, close: () -> Unit, ai: (VocabWord) -> Unit) {
     val speak = rememberSpeak()
     var requested by rememberSaveable(w.id) { mutableStateOf(false) }
-    ModalBottomSheet(onDismissRequest=close, sheetState=rememberModalBottomSheetState(skipPartiallyExpanded=false)) {
+    ModalBottomSheet(onDismissRequest=close, sheetState=rememberModalBottomSheetState(skipPartiallyExpanded=true)) {
         Column(Modifier.fillMaxWidth().heightIn(max=520.dp).verticalScroll(rememberScrollState())
             .padding(start=24.dp,end=24.dp,bottom=28.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
             Row(Modifier.fillMaxWidth(),verticalAlignment=androidx.compose.ui.Alignment.CenterVertically) {

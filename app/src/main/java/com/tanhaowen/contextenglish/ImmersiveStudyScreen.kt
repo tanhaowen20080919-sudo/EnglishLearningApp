@@ -86,7 +86,9 @@ fun StudyIconButton(icon: StudyIcon, label: String, onClick: () -> Unit, enabled
 
 @Composable
 fun ImmersiveStudyScreen(state: AppUiState, vm: AppViewModel) {
-    BackHandler { vm.pauseStudy() }
+    BackHandler {
+        if(state.selectedWord != null) vm.selectWord(null) else vm.pauseStudy()
+    }
     val session=state.studySession ?: return
     val app=LocalContext.current.applicationContext as ContextEnglishApp
     val view=LocalView.current

@@ -4,6 +4,7 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.espresso.Espresso.pressBack
 import com.tanhaowen.contextenglish.data.*
 import org.json.JSONObject
 import org.junit.Assert.*
@@ -65,8 +66,10 @@ class UpgradeSmokeTest {
         compose.onNodeWithTag("study-detail").performScrollTo().performClick()
         compose.onNodeWithText("需要更多？AI讲解").assertExists()
         // Dismiss the native sheet; the question is still graded and remains on screen.
-        compose.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
+        pressBack()
+        compose.waitUntil(5000) { compose.onAllNodesWithText("需要更多？AI讲解").fetchSemanticsNodes().isEmpty() }
         compose.waitUntil(5000) { compose.onAllNodesWithTag("continue-study").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithTag("immersive-study").assertIsDisplayed()
         compose.onNodeWithContentDescription("退出学习并保存进度").performClick()
         compose.onNodeWithTag("start-study").performClick()
         compose.onNodeWithTag("continue-study").performScrollTo().assertIsDisplayed()

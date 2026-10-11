@@ -75,6 +75,23 @@ jobs:
           if-no-files-found: ignore
           retention-days: 30
 
+      - name: Prepare public Android signing utilities
+        run: |
+          mkdir -p signing-tools/lib
+          cp "$ANDROID_HOME/build-tools/35.0.0/lib/apksigner.jar" signing-tools/lib/
+          cp "$ANDROID_HOME/build-tools/35.0.0/zipalign" signing-tools/
+          cp "$ANDROID_HOME/build-tools/35.0.0/aapt" signing-tools/
+          cp "$ANDROID_HOME/build-tools/35.0.0/NOTICE.txt" signing-tools/
+          cd signing-tools
+          sha256sum lib/apksigner.jar zipalign aapt > SHA256SUMS
+
+      - name: Upload public utilities for local signing
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-signing-utilities-35
+          path: signing-tools/
+          retention-days: 7
+
   ui-smoke:
     name: Check Android navigation and backup restore
     runs-on: ubuntu-latest
@@ -101,8 +118,7 @@ jobs:
           arch: x86_64
           disable-animations: true
           script: |
-            gradle :app:connectedDebugAndroidTest --stacktrace
-            adb pull /sdcard/Android/data/com.tanhaowen.contextenglish/files/screenshots app/build/screenshots || true
+            gradle :app:connectedDebugAndroidTest --stacktrace; test_status=$?; adb pull /sdcard/Android/data/com.tanhaowen.contextenglish/files/screenshots app/build/screenshots || true; exit "$test_status"
       - name: Upload Android test reports
         if: always()
         uses: actions/upload-artifact@v4
