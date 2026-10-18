@@ -1,6 +1,15 @@
 # English Learning
 
-个人高考英语 Android App，本地学习，无需账号和服务器。版本 **0.5.0**（versionCode 6），applicationId 保持 `com.tanhaowen.contextenglish`，支持 Android 8.0 及以上。GitHub Actions 执行完整构建、单元测试、Lint 和 Android 模拟器检查；安装包经原证书本地签名与校验后交付。
+个人高考英语 Android App，本地学习，无需账号和服务器。版本 **0.6.0**（versionCode 7），applicationId 保持 `com.tanhaowen.contextenglish`，支持 Android 8.0 及以上。本次在本地构建、测试和验证，安装包沿用原证书签名；未上传 GitHub。
+
+## 0.6.0 离线单词发音
+
+- 全部1,640词内置 Heart 美式女声 MP3，与选定的 A 试听采用相同模型、声音和合成参数；安装后离线播放，不调用 API。
+- 学习卡片自动读两遍，间隔400毫秒；点击单词或喇叭手动读一遍。换词、退出、进入后台取消旧播放和第二遍。
+- 自动进入下一题会等朗读结束；语境填空在揭晓答案后才自动读。
+- 首次更新开启自动两遍，之后用户关闭会持续保留。试听支持当前滑块语速。
+- 原词库、音标、释义、例句、数据库版本和学习记录保留，应用ID和签名沿用原版。
+- 本次仅本地构建、验证、签名，未上传 GitHub。下面保留旧版历史说明。
 
 ## 0.5.0 学习流程
 

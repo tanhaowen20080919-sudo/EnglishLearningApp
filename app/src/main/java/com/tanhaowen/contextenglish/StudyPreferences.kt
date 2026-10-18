@@ -55,11 +55,11 @@ fun StudyPreferences(state: AppUiState,vm: AppViewModel,close: ()->Unit) {
         }
         item { HorizontalDivider();Text("发音",style=MaterialTheme.typography.titleMedium) }
         item {
-            ToggleRow("显示音标",phonetic) { phonetic=it };ToggleRow("自动朗读单词",autoSpeak) { autoSpeak=it }
+            ToggleRow("显示音标",phonetic) { phonetic=it };ToggleRow("自动朗读两遍",autoSpeak) { autoSpeak=it }
             Text("语速 ${String.format(Locale.ROOT,"%.1f",rate)}×")
             Slider(value=rate,onValueChange={ rate=it },valueRange=0.6f..1.2f,steps=5)
-            TextButton(onClick={ app.speech.speak("available") }) { Text("试听当前已保存的声音") }
-            Text("当前使用本机美式英语TTS；高质量发音包以后再导入。",style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+            TextButton(onClick={ app.speech.speak("available", repetitions=2, rate=rate) }) { Text("试听两遍") }
+            Text("Heart 美式女声 · 1,640词离线音频。进入单词时自动读两遍，点击单词或喇叭可重播一遍。",style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
         }
         item { HorizontalDivider();Text("后台AI",style=MaterialTheme.typography.titleMedium) }
         item {

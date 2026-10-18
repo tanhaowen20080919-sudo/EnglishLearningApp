@@ -1,85 +1,201 @@
 package com.tanhaowen.contextenglish
 
 import android.content.Context
-import android.speech.tts.TextToSpeech
-import android.widget.Toast
-import java.util.Locale
-import android.media.MediaPlayer
 import android.media.AudioAttributes
+import android.media.MediaPlayer
+import android.media.PlaybackParams
+import android.os.Handler
+import android.os.Looper
+import android.speech.tts.TextToSpeech
+import android.speech.tts.UtteranceProgressListener
+import android.widget.Toast
 import com.tanhaowen.contextenglish.data.StudySettingsStore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.io.File
+import java.util.Locale
 
-/** One lazily initialized engine for the application, reused across page changes. */
+/** One application player. A new request or stop invalidates every old callback. */
 class SpeechController(private val context: Context) {
-    private var engine: TextToSpeech? = null
-    private var ready = false
-    private var initialized = false
-    private var pending: String? = null
+    private data class Clip(val name: String, val external: Boolean = false)
+    private data class Request(val id: Long, val word: String, var remaining: Int,
+        val rate: Float, var ttsOnly: Boolean = false)
+
+    private val main = Handler(Looper.getMainLooper())
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+    private val settings = StudySettingsStore(context)
+    private val audioAttributes = AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA)
+        .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH).build()
+    private val filePattern = Regex("[A-Za-z0-9_.-]+\\.(mp3|wav|ogg)")
+    private val catalog = scope.async(Dispatchers.IO) {
+        val entries = mutableMapOf<String, Clip>()
+        fun read(json: String, external: Boolean) {
+            val array = JSONObject(json).getJSONArray("entries")
+            for (i in 0 until array.length()) {
+                val item = array.getJSONObject(i)
+                val name = item.getString("file")
+                if (filePattern.matches(name)) entries[item.getString("word").trim().lowercase(Locale.US)] = Clip(name, external)
+            }
+        }
+        runCatching { read(context.assets.open("pronunciation/manifest.json").bufferedReader().use { it.readText() }, false) }
+        val disk = File(context.filesDir, "pronunciation/manifest.json")
+        if (disk.isFile) runCatching { read(disk.readText(), true) }
+        entries.toMap()
+    }
+    private var serial = 0L
+    private var active: Request? = null
     private var player: MediaPlayer? = null
-    private val settings=StudySettingsStore(context)
-    private val manifest by lazy {
-        runCatching {
-            val j=JSONObject(context.assets.open("pronunciation/manifest.json").bufferedReader().use { it.readText() })
-            val entries=j.getJSONArray("entries")
-            (0 until entries.length()).associate { i -> val item=entries.getJSONObject(i)
-                item.getString("word").lowercase(Locale.US) to item.getString("file") }
-        }.getOrDefault(emptyMap())
+    private var replay: Runnable? = null
+    private var engine: TextToSpeech? = null
+    private var initialized = false
+    private var ready = false
+    private val mutableSpeaking = MutableStateFlow(false)
+    val isSpeaking: StateFlow<Boolean> = mutableSpeaking.asStateFlow()
+
+    /** Manual taps read once; automatic card playback explicitly requests twice. */
+    fun speak(word: String, repetitions: Int = 1, rate: Float? = null) {
+        if (word.isBlank()) return
+        stop()
+        val request = Request(serial, word.trim(), repetitions.coerceIn(1, 2),
+            (rate ?: settings.load().speechRate).let { if (it.isFinite()) it.coerceIn(0.6f, 1.2f) else 0.9f })
+        active = request
+        mutableSpeaking.value = true
+        scope.launch { play(request, catalog.await()[request.word.lowercase(Locale.US)]) }
     }
 
-    fun speak(word: String) {
-        if(word.isBlank()) return
-        player?.release();player=null
-        if(playLocal(word)) { engine?.stop();return }
-        if (engine == null) {
-            pending = word
-            engine = TextToSpeech(context) { status ->
-                initialized = true
-                ready = status == TextToSpeech.SUCCESS
-                if(ready) {
-                    val tts=engine
-                    ready=(tts?.setLanguage(Locale.US) ?: -1)>=0
-                    tts?.voices?.filter { it.locale.language=="en" && it.locale.country=="US" && !it.isNetworkConnectionRequired }
-                        ?.maxByOrNull { it.quality }?.let { tts.voice=it }
-                    tts?.setAudioAttributes(AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA)
-                        .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH).build())
-                }
-                val text = pending
-                pending = null
-                if (ready && text != null) speak(text) else unavailable()
+    private fun current(request: Request) = active === request && request.id == serial
+
+    private fun play(request: Request, clip: Clip?) {
+        if (!current(request)) return
+        if (request.ttsOnly || clip == null || !playLocal(request, clip)) {
+            request.ttsOnly = true
+            speakTts(request)
+        }
+    }
+
+    private fun playLocal(request: Request, clip: Clip): Boolean {
+        val audio = MediaPlayer()
+        return try {
+            audio.setAudioAttributes(audioAttributes)
+            if (clip.external) {
+                val folder = File(context.filesDir, "pronunciation").canonicalFile
+                val file = File(folder, clip.name).canonicalFile
+                require(file.parentFile == folder && file.isFile)
+                audio.setDataSource(file.path)
+            } else context.assets.openFd("pronunciation/${clip.name}").use {
+                audio.setDataSource(it.fileDescriptor, it.startOffset, it.length)
             }
+            audio.setOnPreparedListener {
+                if (!current(request) || player !== it) return@setOnPreparedListener
+                try {
+                    // The pack's synthesis speed is 0.95; preserve the saved speaking rate.
+                    it.playbackParams = PlaybackParams().setPitch(1f).setSpeed(request.rate / 0.95f)
+                    it.start()
+                } catch (_: Exception) { mediaFailed(request, it) }
+            }
+            audio.setOnCompletionListener {
+                if (!current(request) || player !== it) return@setOnCompletionListener
+                player = null
+                it.release()
+                completedOnce(request)
+            }
+            audio.setOnErrorListener { p, _, _ -> mediaFailed(request, p); true }
+            player = audio
+            audio.prepareAsync()
+            true
+        } catch (_: Exception) {
+            if (player === audio) player = null
+            audio.release()
+            false
+        }
+    }
+
+    private fun mediaFailed(request: Request, failed: MediaPlayer) {
+        if (!current(request) || player !== failed) return
+        player = null
+        failed.release()
+        request.ttsOnly = true
+        speakTts(request)
+    }
+
+    private fun completedOnce(request: Request) {
+        if (!current(request)) return
+        request.remaining--
+        if (request.remaining <= 0) finish(request) else {
+            replay = Runnable {
+                replay = null
+                if (current(request)) scope.launch {
+                    play(request, catalog.await()[request.word.lowercase(Locale.US)])
+                }
+            }.also { main.postDelayed(it, 400L) }
+        }
+    }
+
+    private fun speakTts(request: Request) {
+        if (!current(request)) return
+        if (engine == null) {
+            engine = TextToSpeech(context) { status -> main.post { initializeTts(status) } }
             return
         }
-        if (!ready) { if (initialized) unavailable() else pending = word; return }
+        if (!initialized) return
+        if (!ready) { unavailable(request); return }
         val tts = engine ?: return
-        tts.setSpeechRate(settings.load().speechRate)
-        tts.setPitch(1.0f)
-        tts.speak(word, TextToSpeech.QUEUE_FLUSH, null, word)
+        tts.setSpeechRate(request.rate)
+        tts.setPitch(1f)
+        if (tts.speak(request.word, TextToSpeech.QUEUE_FLUSH, null,
+                "${request.id}:${request.remaining}") == TextToSpeech.ERROR) unavailable(request)
     }
-    private fun playLocal(word: String): Boolean = runCatching {
-        // Future packages map words to stable files; reject path traversal and unsupported file types.
-        val external=File(context.filesDir,"pronunciation")
-        val disk=File(external,"manifest.json")
-        val file=if(disk.isFile) {
-            val a=JSONObject(disk.readText()).getJSONArray("entries")
-            (0 until a.length()).map { a.getJSONObject(it) }.firstOrNull { it.getString("word").equals(word,true) }?.getString("file")
-        } else null
-        val name=file ?: manifest[word.lowercase(Locale.US)] ?: return false
-        require(Regex("[A-Za-z0-9_.-]+\\.(mp3|wav|ogg)").matches(name))
-        val audio=MediaPlayer()
-        try {
-            audio.setAudioAttributes(AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA).setContentType(AudioAttributes.CONTENT_TYPE_SPEECH).build())
-            if(file!=null) audio.setDataSource(File(external,name).canonicalPath)
-            else context.assets.openFd("pronunciation/$name").use { audio.setDataSource(it.fileDescriptor,it.startOffset,it.length) }
-            audio.setOnPreparedListener { it.start() }
-            audio.setOnCompletionListener { if(player===it) player=null;it.release() }
-            audio.setOnErrorListener { p,_,_ -> if(player===p) player=null;p.release();speakTtsFallback(word);true }
-            player=audio;audio.prepareAsync();true
-        } catch(e: Exception) { audio.release();false }
-    }.getOrDefault(false)
-    private fun speakTtsFallback(word: String) {
-        if(ready) engine?.speak(word,TextToSpeech.QUEUE_FLUSH,null,word) else unavailable()
+
+    private fun initializeTts(status: Int) {
+        initialized = true
+        val tts = engine ?: return
+        ready = status == TextToSpeech.SUCCESS && tts.setLanguage(Locale.US) >= 0
+        if (ready) {
+            tts.voices?.filter { it.locale.language == "en" && it.locale.country == "US" && !it.isNetworkConnectionRequired }
+                ?.maxByOrNull { it.quality }?.let { tts.voice = it }
+            tts.setAudioAttributes(audioAttributes)
+            tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+                override fun onStart(utteranceId: String?) = Unit
+                override fun onDone(utteranceId: String?) { main.post {
+                    active?.takeIf { "${it.id}:${it.remaining}" == utteranceId }?.let(::completedOnce)
+                } }
+                @Deprecated("Android callback compatibility")
+                override fun onError(utteranceId: String?) { main.post {
+                    active?.takeIf { "${it.id}:${it.remaining}" == utteranceId }?.let(::unavailable)
+                } }
+            })
+        }
+        // Initialization may finish after the original word was cancelled.
+        active?.takeIf { it.ttsOnly }?.let { if (ready) speakTts(it) else unavailable(it) }
     }
-    fun stop() { pending=null;engine?.stop();player?.release();player=null }
-    private fun unavailable() = Toast.makeText(context, "系统英语语音未就绪，请安装英语语音包后重试", Toast.LENGTH_SHORT).show()
+
+    private fun finish(request: Request) {
+        if (!current(request)) return
+        active = null
+        mutableSpeaking.value = false
+    }
+
+    fun stop() {
+        serial++
+        active = null
+        replay?.let { main.removeCallbacks(it) }
+        replay = null
+        engine?.stop()
+        player?.release()
+        player = null
+        mutableSpeaking.value = false
+    }
+
+    private fun unavailable(request: Request) {
+        if (!current(request)) return
+        finish(request)
+        Toast.makeText(context, "暂时无法播放这个单词，请稍后重试", Toast.LENGTH_SHORT).show()
+    }
 }
