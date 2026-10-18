@@ -94,26 +94,31 @@ fun ImmersiveStudyScreen(state: AppUiState, vm: AppViewModel) {
     val view=LocalView.current
     val lifecycle by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
     val foreground=lifecycle.isAtLeast(Lifecycle.State.RESUMED)
+    val speaking by app.speech.isSpeaking.collectAsState()
     val question=state.studyQuestion?.takeIf { it.task==session.task }
     var lastSound by rememberSaveable(session.id) { mutableStateOf("") }
     DisposableEffect(app) { app.feedback.prepare(); onDispose { app.speech.stop(); app.feedback.stop() } }
     LaunchedEffect(session.task,question?.task,foreground) {
+        app.speech.stop()
         if(foreground && state.studySettings.autoSpeak && session.feedback==null && question!=null && question.task.kind!=TaskKind.CONTEXT)
-            app.speech.speak(question.word.word)
+            app.speech.speak(question.word.word, repetitions=2)
     }
-    LaunchedEffect(session.task?.key,session.feedback) {
+    LaunchedEffect(session.task?.key,session.feedback,foreground) {
         val f=session.feedback ?: return@LaunchedEffect
         if(!foreground || lastSound==session.task?.key) return@LaunchedEffect
         lastSound=session.task?.key.orEmpty()
-        app.speech.stop()
+        if(question?.task?.kind==TaskKind.CONTEXT) app.speech.stop()
         if(state.studySettings.sound) app.feedback.play(if(f.correct) FeedbackTone.CORRECT else FeedbackTone.WRONG)
         if(state.studySettings.haptics) view.performHapticFeedback(if(Build.VERSION.SDK_INT>=30)
             if(f.correct) HapticFeedbackConstants.CONFIRM else HapticFeedbackConstants.REJECT
             else if(f.correct) HapticFeedbackConstants.KEYBOARD_TAP else HapticFeedbackConstants.LONG_PRESS)
-        if(state.studySettings.autoSpeak && question!=null) { delay(200); app.speech.speak(question.word.word) }
+        // Other cards already read twice on entry; context answers are revealed here.
+        if(state.studySettings.autoSpeak && question?.task?.kind==TaskKind.CONTEXT) {
+            delay(200); app.speech.speak(question.word.word, repetitions=2)
+        }
     }
-    LaunchedEffect(session.task?.key,session.feedback,state.sessionBusy,state.selectedWord,foreground,state.studySettings.autoAdvance) {
-        if(foreground && session.feedback?.correct==true && !state.sessionBusy && state.selectedWord==null && state.studySettings.autoAdvance) {
+    LaunchedEffect(session.task?.key,session.feedback,state.sessionBusy,state.selectedWord,foreground,state.studySettings.autoAdvance,speaking) {
+        if(foreground && session.feedback?.correct==true && !state.sessionBusy && state.selectedWord==null && state.studySettings.autoAdvance && !speaking) {
             delay(1100); vm.nextStudy()
         }
     }

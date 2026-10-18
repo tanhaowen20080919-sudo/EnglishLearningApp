@@ -1,0 +1,10 @@
+Heart American English offline pronunciation pack
+
+All 1,640 clips synthesized locally using hexgrad/Kokoro-82M v1.0, voice af_heart, speed 0.95.
+These are AI-generated pronunciations, not human dictionary recordings.
+The application plays completed audio offline without an API or model on the phone.
+
+Model: https://huggingface.co/hexgrad/Kokoro-82M (Apache License, Version 2.0)
+Runtime: https://github.com/thewh1teagle/kokoro-onnx (MIT)
+
+Existing vocabulary, phonetics, meanings and example attributions remain unchanged.
