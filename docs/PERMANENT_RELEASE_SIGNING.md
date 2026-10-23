@@ -2,6 +2,10 @@
 
 用户已明确同意首次卸载旧版后全新安装 v1.0，不再延续此前丢失的旧签名。此后 **v1.1、v1.2、v2.0 等必须沿用本次私钥**，不得因换环境或密码遗失自动生成替代证书。
 
+## 当前正式构建
+
+严格审计修复后的 v1.0.0 / code 9 继续使用同一正式证书及 applicationId。139 项 JVM 测试和 5 项 Android UI 测试通过后，由既有 Secrets 构建并再次核验 APK。最新文件 SHA-256、下载及仍未完成的资源/真机验收项见 [本轮交付记录](V1_AUDIT_DELIVERY.md)。构建通过不代表原始规格已全部完成。
+
 ## 固定身份
 
 - applicationId：`com.tanhaowen.contextenglish`，不变。
@@ -13,14 +17,14 @@
 
 正式私钥在本次任务中一次性创建；仓库、Gradle 和工作流都不包含生成私钥的命令。正式 Release 不再使用 `signingConfigs.debug`，缺失凭据、alias 不符、私钥密码错误或证书指纹变化均停止。不要为了让错误消失而修改固定指纹或生成新的 keystore。
 
-## 本次正式构建结果（2026-10-23）
+## 首次正式构建历史（code 8，2026-10-23）
 
 - APK：`app/build/distributions/v1.0.0-permanent/EnglishLearning-v1.0.0-release.apk`，1.0.0 / code 8，包名及证书均与上述固定身份一致。
 - APK 文件 SHA-256：`726f24a2299e7bb4f1b54fe71333fc2bf9ae86b22bac6d0e8c362502bf965c82`。文件哈希与证书指纹用途不同；后续 APK 文件哈希会随版本改变。
 - `apksigner verify`、包名/版本/不可调试检查、APK ZIP 完整性、`zipalign` 均通过；包含 1,640 份离线音频。
 - 96 项 JVM/Robolectric 测试、6 项签名安全测试通过；Lint 0 错误（原有 12 警告）。本地正式 Release 构建及增量重建通过。
 - 备份 ZIP 解出同一份加密私钥，Base64、密码文件与固定公共证书一致；实际恢复脚本通过。缺失签名凭据的 Gradle 校验按预期拒绝继续，APK 校验器拒绝调试证书。
-- 没有连接用户手机，未执行卸载或真机安装。GitHub Secrets 的人工配置仍需按下文完成，不能将本地签名成功视作云端 Secrets 已保存。
+- 首次本地构建时尚未配置云端 Secrets；随后用户已配置，云端 code 8 和本轮 code 9 均验证可用。没有连接或卸载用户手机。
 
 ## 必须下载并长期备份的材料
 
@@ -44,7 +48,7 @@
 | `ANDROID_RELEASE_KEY_ALIAS` | `englishlearning-release` |
 | `ANDROID_RELEASE_KEY_PASSWORD` | 单独密码备份中同名 `=` 后的完整值，与 store 密码分开保存 |
 
-当前 GitHub 集成调用仓库 Secrets 公钥/写入所需接口返回 **403 Resource not accessible by integration**，因此本次无法自动把值存入 GitHub；不是已经配置成功。用户只需在 GitHub 页面填写，不需要在聊天中发送任何 Secret 或密码。
+GitHub 集成曾因 **403 Resource not accessible by integration** 无法自动写入；用户随后已在网页创建这四项 Secrets，既有云端 code 8 和本轮 code 9 正式构建均已验证可读取原证书。无需再次填写或向聊天发送密码。上述表格保留为将来恢复说明。
 
 有 Secrets 写入权限且已登录 `gh` 的电脑，也可用 Java 17 + Python 3 自动导入（使用现有备份，不生成新证书）：
 
@@ -59,7 +63,7 @@ python3 tools/upload_release_secrets.py \
 
 ## Actions 构建方式
 
-- main 推送及 PR：执行词库、迁移、签名安全测试、96 项 JVM/Robolectric 测试、Lint 和明确标注的验证构建；PR 和手动运行另外执行 Android 模拟器 UI 测试。PR 不接触正式签名 Secrets。
+- main 推送及 PR：执行词库、迁移、签名安全测试、139 项 JVM/Robolectric 测试、Lint 和明确标注的验证构建；PR 和手动运行另外执行 Android 模拟器 UI 测试。PR 不接触正式签名 Secrets。
 - **Build APK → Run workflow**（保持 `build_release` 勾选，默认开启）或推送 `v*` 标签：验证通过后，恢复上述四项 Secrets，核对固定指纹，再构建正式签名 Release。仅做云端验证时可取消勾选，不读取正式 Secrets。
 - 正式 job 不使用 Gradle 缓存或 configuration cache；keystore 只恢复到 runner 临时目录，任务结束清理，不进入 APK、源码或 artifact。
 - 下载 artifact：`EnglishLearning-permanent-signed-Release`，含正式 APK、`RELEASE.json`、`SHA256SUMS` 和公共证书。
@@ -76,6 +80,6 @@ python3 tools/verify_release_apk.py app/build/outputs/apk/release/app-release.ap
 
 ## 后续升级约束
 
-每次发布只递增 `versionName` 和 `versionCode`：例如 v1.1 code9、v1.2 code10、v2.0 使用更大的 code。applicationId、正式私钥和固定证书指纹保持相同；正常安装更新即可保留 v1.0 起的应用数据。数据格式变化仍需独立执行数据库迁移测试。
+每次发布只递增 `versionName` 和 `versionCode`：当前审计修复版 v1.0 为 code9，后续例如 v1.1 code10、v1.2 code11、v2.0 使用更大的 code。applicationId、正式私钥和固定证书指纹保持相同；正常安装更新即可保留 v1.0 起的应用数据。数据格式变化仍需独立执行数据库迁移测试。
 
 本次 v1.0 与旧签名不兼容，按用户选择由用户先卸载旧版再全新安装；开发环境没有连接手机，也未执行卸载。后续不要重复卸载或清空数据。

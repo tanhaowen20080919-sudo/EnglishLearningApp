@@ -1,0 +1,57 @@
+{
+  "source_commit": "6e7d952e41039a385c6fba92a95a95e4d873bc24",
+  "run_id": 40033105250,
+  "run_url": "https://github.com/tanhaowen20080919-sudo/EnglishLearningApp/actions/runs/40033105250",
+  "pr_url": "https://github.com/tanhaowen20080919-sudo/EnglishLearningApp/pull/4",
+  "ui": {
+    "tests": 5,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "api_level": 35,
+    "seconds": 21.258,
+    "p95_ms": 214,
+    "latency_ms": [
+      146,
+      214,
+      202,
+      91,
+      60
+    ],
+    "percentile_method": "empirical nearest rank; five-card sample, not a population latency claim",
+    "scope": "Android emulator, not physical-device touch latency",
+    "artifact_id": 12536430879,
+    "cases": [
+      "quickDayCanFinishOfflineAfterRecreationWithRealGradingAndTimingEvidence",
+      "activeRecallResumesWithoutDuplicateNavigation",
+      "sessionSnapshotAndAnswerAreAtomicAndBackupSafe",
+      "secondaryToolsPreserveDraftsAndSearchWithSingleNavigation",
+      "billingBackupRoundTripAndInvalidImportKeepLocalData"
+    ]
+  },
+  "jvm": {
+    "tests": 139,
+    "failures": 0,
+    "skipped": 0,
+    "artifact_id": 12536435192
+  },
+  "release_artifact_id": 12536485846,
+  "pr_ui_confirmation": {
+    "run_id": 40033110428,
+    "artifact_id": 12535534104,
+    "tests": 5,
+    "failures": 0,
+    "skipped": 0,
+    "latency_ms": [
+      421,
+      81,
+      51,
+      55,
+      43
+    ],
+    "p95_ms": 421,
+    "scope": "independent API35 emulator, same production source; small sample only"
+  },
+  "app_tree": "1ff046136b9af6012f32e882986d08841973fbf7",
+  "release_artifact_zip_sha256": "12664ebe066188a6f3cd784610bd3b459545263b5e229691985f8a41fd7f29c0"
+}

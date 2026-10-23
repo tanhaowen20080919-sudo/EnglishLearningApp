@@ -1,0 +1,10 @@
+{
+  "application_id": "com.tanhaowen.contextenglish",
+  "version_code": 9,
+  "version": "1.0.0",
+  "certificate_sha256": "e13229f272357c3d270ae903c1a93bf3b902138282cf24aabe9e8e172d87fbf1",
+  "apk_sha256": "86d97de3d7ba5496b2874fb7e0cdf762bba0a7dd5f74fc11785051d320c2f584",
+  "debuggable": false,
+  "offline_audio_files": 1640,
+  "signing_identity": "permanent-v1.0-and-later"
+}

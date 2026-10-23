@@ -1,4 +1,4 @@
-"""Format the human-reviewed requirement evidence. This does not decide implementation status."""
+"""Format the reviewer-assigned requirement evidence. This does not decide implementation status."""
 from pathlib import Path
 from collections import Counter
 import hashlib,json

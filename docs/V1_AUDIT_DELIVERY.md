@@ -33,7 +33,13 @@ SQLite 升级为 v6；保留 v1～v5 增量迁移路径。v6 补充阅读篇目�
 
 ## 测试与构建结果
 
-最终本地回归、云端 Android 界面测试和固定证书 Release 的真实执行数据在完成后写入此节和验收清单 `execution`。当前待完成的执行不得当作已通过结果。
+- 本地与云端均通过 139 项 JVM/Robolectric 测试，0 失败、0 跳过；6 项签名安全测试通过。逐例本地 XML 摘要见 [测试记录](audit/test-results.json)。
+- Lint：0 错误、12 警告、1 信息；Debug、明确未签名的 Release 验证包及 Android 测试 APK 构建通过。
+- Android API 35 模拟器实际执行 5 项 UI/数据测试，0 失败、0 跳过，包括完整快速日、Activity 重建、拼写/语境落库、自动次日计划、0 次 AI。原始 XML、截图及耗时文件保存在云端 artifact。
+- 显示本地释义的模拟器 P95：214 ms（5 词卡样本、经验最近秩；独立 PR 运行同样 5/5 通过，P95 为 421 ms）；原始样本 [146, 214, 202, 91, 60]。它是此动作的测试测量，不能替代全局真机触控指标。
+- 原 1640 词和 MP3 固定哈希、附加语境及署名、v1→v6 迁移保护、完整318项文档追踪均通过。
+- [正式构建与全部任务](https://github.com/tanhaowen20080919-sudo/EnglishLearningApp/actions/runs/40033105250)：全部成功。APK 的签名、包名、版本、不可调试、ZIP 完整性、1640 MP3 数量、zipalign 和文件 SHA-256 已在云端及下载后独立核验。
+- 本轮早期失败及真实修复原因保留在验收清单 `execution.android_ui_attempts`，没有跳过失败测试。外部中转站未做付费联调，真机未连接。
 
 复现命令：
 
@@ -50,6 +56,11 @@ python3 -m unittest discover -s tools/tests -v
 GitHub Actions → **Build APK** → **Run workflow** → `build_release=true`。Release 依赖 JVM/lint/资源检查和 Android UI 两组任务全部通过；从已有四个 Secrets 还原固定签名，核验证书，构建后验证 APK 并上传 `EnglishLearning-permanent-signed-Release`。任何缺失凭据都会失败，不回退为 debug 或临时签名。
 
 ## APK 与固定正式签名
+
+正式 APK：`EnglishLearning-v1.0.0-code9-release.apk`；[Actions 下载页](https://github.com/tanhaowen20080919-sudo/EnglishLearningApp/actions/runs/40033105250/artifacts/12536485846)。下载后的完整核验数据见 [release-code9.json](audit/release-code9.json)。
+
+APK 文件 SHA-256：`86d97de3d7ba5496b2874fb7e0cdf762bba0a7dd5f74fc11785051d320c2f584`。正式源码提交：`6e7d952e41039a385c6fba92a95a95e4d873bc24`；PR #4 合并，后续交付文档提交不改变受测应用代码。
+
 
 - applicationId：`com.tanhaowen.contextenglish`（未修改）。
 - versionName：`1.0.0`；versionCode：`9`，高于上一正式构建 code 8。
