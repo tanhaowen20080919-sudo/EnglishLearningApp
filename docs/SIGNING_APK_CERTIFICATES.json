@@ -1,0 +1,81 @@
+[
+  {
+    "artifact_id": 11566399357,
+    "label": "v0.4.0",
+    "apk_entry": "Context-English-v0.4.0-debug.apk",
+    "package": "package: name='com.tanhaowen.contextenglish' versionCode='4' versionName='0.4.0' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'",
+    "signed": true,
+    "certificate_sha256": "070dad6cd4a866ab74f867d04b6b55498e69f5280c6ea75c6376fab430c29a3a",
+    "debuggable": true,
+    "apk_sha256": "b6b5488750b2d2dbb748e94ffcdd497053f7dd966d3956701c43e826b493e7a8"
+  },
+  {
+    "artifact_id": 11088714523,
+    "label": "v0.2.0-labelled-v0.1",
+    "apk_entry": "Context-English-v0.1-debug.apk",
+    "package": "package: name='com.tanhaowen.contextenglish' versionCode='2' versionName='0.2.0' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'",
+    "signed": true,
+    "certificate_sha256": "2e00bcc1cec1dfe7f7bf854fead43d0c3e268905484279e0a323239a63a1f84e",
+    "debuggable": true,
+    "apk_sha256": "0a5f46848e55c11f804bae800eeca324bfb604c20399bdcecf2952e1f504b4a2"
+  },
+  {
+    "artifact_id": 11066005059,
+    "label": "v0.1.0-main",
+    "apk_entry": "Context-English-v0.1-debug.apk",
+    "package": "package: name='com.tanhaowen.contextenglish' versionCode='1' versionName='0.1.0' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'",
+    "signed": true,
+    "certificate_sha256": "bfc1c3fc519f63d6e5c299bc9c594d378025f31224a288c78240998a518dcf54",
+    "debuggable": true,
+    "apk_sha256": "1c9ad6dcdd21d25b1c95c3848ab12534ce7d49b035337f9047af3f2734cba4dd"
+  },
+  {
+    "artifact_id": 11049998098,
+    "label": "v0.1.0-bootstrap-fix",
+    "apk_entry": "Context-English-v0.1-debug.apk",
+    "package": "package: name='com.tanhaowen.contextenglish' versionCode='1' versionName='0.1.0' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'",
+    "signed": true,
+    "certificate_sha256": "af95e399c635de102af7f5479cfd1454fbe1e65cc03af0c58ccbad1bb44d8d01",
+    "debuggable": true,
+    "apk_sha256": "0020011596054c1941fd1124291de8ac6f9674c89e0b9645200b02f494811316"
+  },
+  {
+    "artifact_id": 11049419312,
+    "label": "v0.1.0-bootstrap",
+    "apk_entry": "Context-English-v0.1-debug.apk",
+    "package": "package: name='com.tanhaowen.contextenglish' versionCode='1' versionName='0.1.0' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'",
+    "signed": true,
+    "certificate_sha256": "6755863cb3f7aae2706074f5e3c2625803ec1e2c4605563d766a861f615f89dc",
+    "debuggable": true,
+    "apk_sha256": "2787d4dfa6364569229ed61533025fe8c2766364535c6a9fc8817286028f0c5a"
+  },
+  {
+    "artifact_id": 12140515065,
+    "label": "v0.6.0-unsigned-labelled-v0.5",
+    "apk_entry": "Context-English-v0.5.0-unsigned.apk",
+    "package": "package: name='com.tanhaowen.contextenglish' versionCode='7' versionName='0.6.0' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'",
+    "signed": false,
+    "certificate_sha256": null,
+    "debuggable": false,
+    "apk_sha256": "6a2f589052f506101f0c7a1e34025b84bd186524a858f15c587947cfdea60c4f"
+  },
+  {
+    "artifact_id": 11693427433,
+    "label": "v0.5.0-unsigned-main",
+    "apk_entry": "Context-English-v0.5.0-unsigned.apk",
+    "package": "package: name='com.tanhaowen.contextenglish' versionCode='6' versionName='0.5.0' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'",
+    "signed": false,
+    "certificate_sha256": null,
+    "debuggable": false,
+    "apk_sha256": "f028f2dd5718fbdf8b7ae41f29dbb2d18e1ce43728805fce8c826f3861bae09e"
+  },
+  {
+    "artifact_id": 11224976741,
+    "label": "v0.3.0",
+    "package": "package: name='com.tanhaowen.contextenglish' versionCode='3' versionName='0.3.0' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'",
+    "signed": true,
+    "certificate_sha256": "150c051b3cca5d8d7fa2af9fdf8c579eb840acaa7a958db00b94d7b60300270e",
+    "debuggable": true,
+    "apk_sha256": "dc5aa338a87f7e8461e1e694e75855f45cc476b1b4da6cb37eeaf23bfbae922f"
+  }
+]
