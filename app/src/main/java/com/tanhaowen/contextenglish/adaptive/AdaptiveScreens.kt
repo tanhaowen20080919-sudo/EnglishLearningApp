@@ -177,7 +177,7 @@ private fun WorkflowScreen(state: AdaptiveState,vm: AdaptiveViewModel,autoSpeak:
             LazyColumn(contentPadding=PaddingValues(24.dp),verticalArrangement=Arrangement.spacedBy(18.dp)) {
                 item { Text("今日学习完成",style=MaterialTheme.typography.headlineMedium,modifier=Modifier.testTag("daily-complete")) }
                 item { Text("词汇、阅读和小测结果已保存，后续任务会参考今天的表现。") }
-                state.tomorrow?.let { plan -> item { Text("明日本地计划已生成：新词 ${plan.newIds.size} · 到期复习 ${plan.reviewIds.size}。${plan.reason}") } }
+                state.tomorrow?.let { plan -> item { Text("明日本地计划已生成：新词 ${plan.newIds.size} · 到期复习 ${plan.reviewIds.size}。${plan.reason}",modifier=Modifier.testTag("tomorrow-plan-ready")) } }
                 state.results.forEach { result -> item { Text("${result.tag}：${result.correct}/${result.total} · ${(result.accuracy*100).toInt()}%") } }
                 item { Text("阅读记录生词 ${state.lookedUp.size} 个，其中 ${state.lookedUp.values.count { it }} 个影响理解。") }
                 item { PriorityList(state) }

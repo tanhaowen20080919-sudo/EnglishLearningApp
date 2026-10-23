@@ -49,6 +49,7 @@ class UpgradeSmokeTest {
         compose.onRoot().captureToImage().asAndroidBitmap().let { bitmap ->
             File(output,"$name.png").outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG,100,it) }
         }
+        publishUiEvidence()
     }
 
     @Test fun activeRecallResumesWithoutDuplicateNavigation() {

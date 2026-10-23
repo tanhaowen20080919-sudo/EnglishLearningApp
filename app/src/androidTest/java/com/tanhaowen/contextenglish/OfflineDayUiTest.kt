@@ -40,6 +40,7 @@ class OfflineDayUiTest {
                 compose.onRoot().captureToImage().asAndroidBitmap().compress(Bitmap.CompressFormat.PNG,100,it)
             }
         }
+        publishUiEvidence()
         scenario.close();app.repository.clearStudyRecords()
     }
     private fun exists(tag: String)=compose.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty()
@@ -91,6 +92,8 @@ class OfflineDayUiTest {
         assertTrue(recreated);assertTrue(snapshot().finished)
         assertEquals(5,snapshot().steps.count { it.phase=="综合小测" })
         assertEquals(0L,app.repository.aiUsageSummary().calls)
+        compose.waitUntil(15000) { exists("tomorrow-plan-ready") }
+        compose.onNodeWithTag("tomorrow-plan-ready").assertExists()
         assertNotNull(AdaptiveRepository(app.repository).load(LocalDate.now().plusDays(1).toString()))
         val db=app.repository.database.readableDatabase
         db.rawQuery("SELECT COUNT(*) FROM diagnostic_attempts WHERE form='spelling'",null).use { it.moveToFirst();assertTrue(it.getInt(0)>0) }

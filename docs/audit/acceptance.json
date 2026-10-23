@@ -15799,6 +15799,11 @@
         "run_id": 40027432941,
         "result": "failed: 2 entry-point timeouts, 3 passed",
         "diagnosis": "Expanded summary placed primary action outside initial small-screen LazyColumn composition; primary action moved above summary and UI test explicitly asserts visible. No tests skipped."
+      },
+      {
+        "run_id": 40028462226,
+        "result": "4/5 passed; full offline day finished, next-day assertion raced asynchronous save",
+        "diagnosis": "Await actual tomorrow-plan-ready semantics before checking SQLite; export test-only screenshots/latency to shared evidence directory before AGP uninstalls the app."
       }
     ]
   }
