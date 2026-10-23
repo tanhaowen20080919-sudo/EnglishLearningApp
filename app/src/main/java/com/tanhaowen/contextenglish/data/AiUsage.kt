@@ -47,7 +47,9 @@ data class AiUsageRecord(
     val outputPrice: Double = 0.0,
     val cacheCreationPrice: Double = 0.0,
     val cacheReadPrice: Double = 0.0,
-    val hasPriceSnapshot: Boolean = true
+    val hasPriceSnapshot: Boolean = true,
+    val elapsedMs: Long = 0,
+    val status: String = "OK"
 )
 
 data class RestoredBackup(val study: StudySettings, val ai: AiSettings? = null)

@@ -12,3 +12,16 @@ app/build/
 keystore.properties
 
 .kotlin/
+
+# Private release signing material belongs outside the checkout.
+*.p12
+*.pfx
+*.key
+*.env
+/dist/
+/private-signing/
+*release-passwords*
+*keystore-base64*
+*github-secrets.private*
+__pycache__/
+*.pyc

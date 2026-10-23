@@ -97,7 +97,7 @@ class MainActivity : ComponentActivity() {
             )
             val state by appViewModel.uiState.collectAsStateWithLifecycle()
             ContextEnglishTheme(state.studySettings.palette) {
-                ContextEnglishRoot(appViewModel)
+                com.tanhaowen.contextenglish.adaptive.AdaptiveApp(appViewModel)
             }
         }
     }

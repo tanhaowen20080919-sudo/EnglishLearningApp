@@ -8,6 +8,13 @@ import android.database.sqlite.SQLiteOpenHelper
 class EnglishDatabase(private val context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
+    override fun onConfigure(db: SQLiteDatabase) {
+        super.onConfigure(db)
+        if (db.version in 1 until DATABASE_VERSION) createRecoveryBackup(context, db)
+    }
+
+    internal fun backupNow(db: SQLiteDatabase) = createRecoveryBackup(context,db)
+
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
             """
@@ -64,12 +71,14 @@ class EnglishDatabase(private val context: Context) :
         importAssets(db)
         upgradeV3(db)
         upgradeV4(db)
+        upgradeV5(db)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         if (oldVersion < 2) { upgradeV2(db); importAssets(db) }
         if (oldVersion < 3) upgradeV3(db)
         if (oldVersion < 4) upgradeV4(db)
+        if (oldVersion < 5) upgradeV5(db)
     }
 
     private fun upgradeV2(db: SQLiteDatabase) {
@@ -131,6 +140,18 @@ class EnglishDatabase(private val context: Context) :
         db.execSQL("CREATE INDEX auto_ai_time ON auto_ai_jobs(created_at)")
     }
 
+    private fun upgradeV5(db: SQLiteDatabase) {
+        db.execSQL("CREATE TABLE word_memory (word_id INTEGER PRIMARY KEY, mastery REAL NOT NULL, stability REAL NOT NULL, difficulty REAL NOT NULL, lapses INTEGER NOT NULL, streak INTEGER NOT NULL, recent REAL NOT NULL, forms TEXT NOT NULL, contexts TEXT NOT NULL, last_at INTEGER NOT NULL)")
+        db.execSQL("INSERT INTO word_memory SELECT id, familiarity / 100.0, MAX(0.6,(next_review_at-last_review_at)/86400000.0),0.5,mistake_count,streak,CASE WHEN review_count>0 THEN MIN(1.0,correct_count*1.0/review_count) ELSE 0.5 END,'[]','[]',last_review_at FROM words WHERE state!='NEW'")
+        db.execSQL("CREATE TABLE learning_days (day TEXT PRIMARY KEY, snapshot TEXT NOT NULL, mode TEXT NOT NULL, planned INTEGER NOT NULL, completed INTEGER NOT NULL DEFAULT 0, active_ms INTEGER NOT NULL DEFAULT 0)")
+        db.execSQL("CREATE TABLE diagnostic_attempts (task_key TEXT PRIMARY KEY, day TEXT NOT NULL, phase TEXT NOT NULL, form TEXT NOT NULL, tag TEXT NOT NULL, word_id INTEGER NOT NULL, correct INTEGER NOT NULL, elapsed_ms INTEGER NOT NULL, context TEXT NOT NULL, created_at INTEGER NOT NULL, error_reason TEXT NOT NULL DEFAULT '')")
+        db.execSQL("CREATE INDEX diagnostic_day ON diagnostic_attempts(day,form,tag)")
+        db.execSQL("CREATE TABLE reading_words (day TEXT NOT NULL, reading_id TEXT NOT NULL, word TEXT NOT NULL, meaning TEXT NOT NULL, impacts INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(day,reading_id,word))")
+        db.execSQL("CREATE TABLE ai_tasks (task_key TEXT PRIMARY KEY, content_type TEXT NOT NULL, input_hash TEXT NOT NULL, model TEXT NOT NULL, version INTEGER NOT NULL, created_at INTEGER NOT NULL, expires_at INTEGER NOT NULL, status TEXT NOT NULL, content TEXT NOT NULL DEFAULT '', error TEXT NOT NULL DEFAULT '', usage_id INTEGER)")
+        db.execSQL("ALTER TABLE ai_usage ADD COLUMN elapsed_ms INTEGER NOT NULL DEFAULT 0")
+        db.execSQL("ALTER TABLE ai_usage ADD COLUMN request_status TEXT NOT NULL DEFAULT 'OK'")
+    }
+
     private fun seedWords(db: SQLiteDatabase) {
         seedData.forEach { item ->
             val values = ContentValues().apply {
@@ -146,7 +167,28 @@ class EnglishDatabase(private val context: Context) :
 
     companion object {
         private const val DATABASE_NAME = "context_english.db"
-        private const val DATABASE_VERSION = 4
+        const val DATABASE_VERSION = 5
+
+        /** Before the upgrade transaction: failure aborts migration without changing old data. */
+        fun createRecoveryBackup(context: Context, db: SQLiteDatabase): java.io.File {
+            check(!db.inTransaction()) { "备份必须在迁移事务前完成" }
+            db.rawQuery("PRAGMA wal_checkpoint(FULL)",null).use { c ->
+                if(c.moveToFirst()) check(c.getInt(0)==0) { "数据库忙，请重新启动后升级" }
+            }
+            val folder=java.io.File(context.filesDir,"recovery/v${db.version}-${System.currentTimeMillis()}")
+            check(folder.mkdirs()) { "无法建立升级备份，已停止迁移" }
+            try {
+                java.io.File(db.path).copyTo(java.io.File(folder,DATABASE_NAME))
+                SQLiteDatabase.openDatabase(java.io.File(folder,DATABASE_NAME).path,null,SQLiteDatabase.OPEN_READONLY).use { copy ->
+                    copy.rawQuery("PRAGMA integrity_check",null).use { check(it.moveToFirst() && it.getString(0)=="ok") }
+                }
+                val prefs=java.io.File(context.applicationInfo.dataDir,"shared_prefs")
+                if(prefs.exists()) check(prefs.copyRecursively(java.io.File(folder,"shared_prefs")))
+                java.io.File(folder,"README.txt").writeText("Pre-upgrade database v${db.version}. Stop the app before restoring context_english.db and shared_prefs. Keep the same application and Android keystore. Failed migrations roll back automatically.")
+                java.io.File(folder,"COMPLETE").writeText("ok")
+                return folder
+            } catch(e: Exception) { folder.deleteRecursively(); throw java.io.IOException("升级备份失败，旧数据未迁移",e) }
+        }
 
         private val seedData = listOf(
             arrayOf("avoid", "/əˈvɔɪd/", "v. 避免；避开", "文中：逃避、不愿接触", "Try to avoid checking every unknown word."),

@@ -163,7 +163,7 @@ enum class AppPalette { BLUE, GREEN }
 data class StudySettings(val newWords: Int = 20, val dailyGoal: Int = 30,
     val showPhonetic: Boolean = true, val autoSpeak: Boolean = false,
     val sound: Boolean = true, val haptics: Boolean = true, val autoAdvance: Boolean = true,
-    val autoAi: Boolean = true, val autoAiBudget: Double = 0.10, val speechRate: Float = 0.9f,
+    val autoAi: Boolean = false, val autoAiBudget: Double = 0.10, val speechRate: Float = 0.9f,
     val palette: AppPalette = AppPalette.BLUE) {
     fun normalized() = copy(newWords = newWords.coerceIn(1,100), dailyGoal = dailyGoal.coerceIn(1,500),
         autoAiBudget = if(autoAiBudget.isFinite()) autoAiBudget.coerceIn(0.0,100.0) else 0.10,

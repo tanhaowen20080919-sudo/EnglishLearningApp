@@ -8,7 +8,7 @@ import org.json.JSONObject
 import org.json.JSONArray
 import com.tanhaowen.contextenglish.study.*
 
-class EnglishRepository(private val database: EnglishDatabase) {
+class EnglishRepository(internal val database: EnglishDatabase) {
 
     fun loadWord(id: Long): VocabWord? = database.readableDatabase.query("words",null,
         "id=?",arrayOf(id.toString()),null,null,null).use { if(it.moveToFirst()) it.toWord() else null }
@@ -103,7 +103,7 @@ class EnglishRepository(private val database: EnglishDatabase) {
         return result
     }
 
-    fun recordAiUsage(model: String, usage: TokenUsage, settings: AiSettings): AiUsageRecord {
+    fun recordAiUsage(model: String, usage: TokenUsage, settings: AiSettings, elapsed: Long = 0, status: String = "OK", existingId: Long? = null): AiUsageRecord {
         val cost = AiCostCalculator.calculate(usage, settings)
         val now = System.currentTimeMillis()
         val values = ContentValues().apply {
@@ -115,12 +115,13 @@ class EnglishRepository(private val database: EnglishDatabase) {
             put("estimated_cost", cost.total); put("currency", settings.currency); put("created_at", now)
             put("input_price", settings.inputPricePerMillion); put("output_price", settings.outputPricePerMillion)
             put("cache_creation_price", settings.cacheCreationPricePerMillion); put("cache_read_price", settings.cacheReadPricePerMillion)
-            put("price_snapshot", 1)
+            put("price_snapshot", 1); put("elapsed_ms",elapsed); put("request_status",status)
         }
-        val id = database.writableDatabase.insertOrThrow("ai_usage", null, values)
+        val id = if(existingId==null) database.writableDatabase.insertOrThrow("ai_usage", null, values)
+        else { values.remove("created_at"); database.writableDatabase.update("ai_usage",values,"id=?",arrayOf(existingId.toString())); existingId }
         return AiUsageRecord(id, model, usage, cost, cost.total, settings.currency, now,
             settings.inputPricePerMillion, settings.outputPricePerMillion,
-            settings.cacheCreationPricePerMillion, settings.cacheReadPricePerMillion)
+            settings.cacheCreationPricePerMillion, settings.cacheReadPricePerMillion, elapsedMs=elapsed, status=status)
     }
 
     fun aiUsageSummary(today: Boolean = false): AiUsageSummary {
@@ -170,34 +171,15 @@ class EnglishRepository(private val database: EnglishDatabase) {
                 n("cache_creation_tokens"), n("cache_read_tokens"), n("total_tokens"), n("usage_known") == 1L),
             AiCost(d("input_cost"), d("output_cost"), d("cache_creation_cost"), d("cache_read_cost")),
             d("estimated_cost"), getString(getColumnIndexOrThrow("currency")), n("created_at"),
-            d("input_price"), d("output_price"), d("cache_creation_price"), d("cache_read_price"), n("price_snapshot") == 1L)
+            d("input_price"), d("output_price"), d("cache_creation_price"), d("cache_read_price"), n("price_snapshot") == 1L, n("elapsed_ms"),getString(getColumnIndexOrThrow("request_status")))
     }
 
     fun reviewWord(id: Long, rating: Int) {
-        require(rating in 0..2)
-        val db = database.writableDatabase
+        val db=database.writableDatabase
         db.beginTransaction()
         try {
-            val w = requireNotNull(loadWord(id))
-            val now = System.currentTimeMillis()
-            val spaced = w.streak == 0 || now - w.lastReviewTime >= 12 * 60 * 60_000L
-            val streak = if (rating == 2) w.streak + (if(spaced) 1 else 0) else 0
-            val days = listOf(1, 3, 7, 14, 30)[(streak - 1).coerceIn(0, 4)]
-            val values = ContentValues().apply {
-                put("seen_count", w.seenCount + 1); put("review_count", w.reviewCount + 1)
-                put("correct_count", w.correctCount + if (rating == 2) 1 else 0)
-                put("mistake_count", w.mistakeCount + if (rating == 0) 1 else 0)
-                put("streak", streak); put("last_review_at", now); put("updated_at", now)
-                put("familiarity", (w.familiarity + when(rating) { 2 -> if(spaced) 20 else 0; 1 -> -5; else -> -25 }).coerceIn(0, 100))
-                put("weak", if (rating == 0 || (w.weak && streak < 3)) 1 else 0)
-                put("state", if (streak >= 4) "MASTERED" else "LEARNING")
-                put("next_review_at", now + when(rating) { 0 -> 5 * 60_000L; 1 -> 4 * 60 * 60_000L; else -> days * 86_400_000L })
-            }
-            db.update("words", values, "id = ?", arrayOf(id.toString()))
-            db.insertOrThrow("study_events", null, ContentValues().apply {
-                put("event_type", "word_review"); put("word_id", id)
-                put("correct", if (rating == 2) 1 else 0); put("created_at", now)
-            })
+            com.tanhaowen.contextenglish.adaptive.AdaptiveRepository(this).applyEvidence(id,
+                com.tanhaowen.contextenglish.adaptive.Evidence(rating,"meaning","legacy:meaning"))
             db.setTransactionSuccessful()
         } finally { db.endTransaction() }
     }
@@ -209,6 +191,11 @@ class EnglishRepository(private val database: EnglishDatabase) {
     fun dailyPlan(settings: StudySettings, knownWords: List<VocabWord>? = null): DailyPlan {
         val day = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.ROOT).format(java.util.Date())
         val db = database.writableDatabase
+        com.tanhaowen.contextenglish.adaptive.AdaptiveRepository(this).load(day)?.let { workflow ->
+            val ids=workflow.reviewIds+workflow.newIds
+            val completed=workflow.steps.take(workflow.index).filter { it.phase=="新词" || it.phase=="复习" }.map { it.wordId }.toSet()
+            return DailyPlan(ids,completed,workflow.newIds.size,workflow.reviewIds.size,0)
+        }
         var ids = mutableListOf<Long>()
         db.rawQuery("SELECT word_id FROM daily_plan WHERE day = ? ORDER BY rowid", arrayOf(day)).use { c -> while(c.moveToNext()) ids.add(c.getLong(0)) }
         if(ids.isEmpty()) {
@@ -265,14 +252,15 @@ class EnglishRepository(private val database: EnglishDatabase) {
         try {
             db.execSQL("UPDATE words SET state='NEW', weak=0, seen_count=0, correct_count=0, mistake_count=0, review_count=0, familiarity=0, streak=0, last_review_at=0, next_review_at=0")
             db.delete("study_events", null, null); db.delete("daily_plan", null, null)
+            listOf("word_memory","learning_days","diagnostic_attempts","reading_words").forEach { db.delete(it,null,null) }
             db.delete("study_session", null, null); db.delete("session_attempts", null, null)
             db.setTransactionSuccessful()
         } finally { db.endTransaction() }
     }
 
     fun exportData(settings: StudySettings, ai: AiSettings): String {
-        val root = JSONObject().put("format", "context-english").put("version", 4)
-        listOf("words", "study_events", "daily_plan", "ai_cache", "ai_usage", "study_session", "session_attempts", "auto_ai_jobs").forEach { table ->
+        val root = JSONObject().put("format", "context-english").put("version", 5)
+        listOf("words", "study_events", "daily_plan", "ai_cache", "ai_usage", "study_session", "session_attempts", "auto_ai_jobs", "word_memory", "learning_days", "diagnostic_attempts", "reading_words", "ai_tasks").forEach { table ->
             val rows = JSONArray()
             database.readableDatabase.query(table, null, null, null, null, null, null).use { c ->
                 while(c.moveToNext()) {
@@ -299,22 +287,25 @@ class EnglishRepository(private val database: EnglishDatabase) {
 
     fun importData(text: String, currentAi: AiSettings): RestoredBackup {
         val root = JSONObject(text)
-        require(root.getString("format") == "context-english" && root.getInt("version") in 2..4) { "备份格式不兼容" }
+        require(root.getString("format") == "context-english" && root.getInt("version") in 2..5) { "备份格式不兼容" }
         val version = root.getInt("version")
         val restoredAi = if (version >= 3) aiSettingsFromBackup(root.getJSONObject("ai_settings"), currentAi) else null
         val tables = listOf("words", "study_events", "daily_plan", "ai_cache") +
             (if(version>=3) listOf("ai_usage") else emptyList()) +
-            (if(version>=4) listOf("study_session", "session_attempts", "auto_ai_jobs") else emptyList())
+            (if(version>=4) listOf("study_session", "session_attempts", "auto_ai_jobs") else emptyList()) +
+            (if(version>=5) listOf("word_memory", "learning_days", "diagnostic_attempts", "reading_words", "ai_tasks") else emptyList())
         val config = root.getJSONObject("settings")
         val settings = StudySettings(config.getInt("newWords"), config.getInt("dailyGoal"), config.getBoolean("showPhonetic"), config.getBoolean("autoSpeak"),
             config.optBoolean("sound",true),config.optBoolean("haptics",true),config.optBoolean("autoAdvance",true),
-            config.optBoolean("autoAi",true),config.optDouble("autoAiBudget",0.10),config.optDouble("speechRate",0.9).toFloat(),
+            false,config.optDouble("autoAiBudget",0.10),config.optDouble("speechRate",0.9).toFloat(),
             runCatching { AppPalette.valueOf(config.optString("palette","BLUE")) }.getOrDefault(AppPalette.BLUE))
         require(settings.newWords in 1..100 && settings.dailyGoal in 1..500)
         require(settings.autoAiBudget.isFinite() && settings.autoAiBudget in 0.0..100.0 && settings.speechRate in 0.6f..1.2f)
         val db = database.writableDatabase
+        database.backupNow(db)
         db.beginTransaction()
         try {
+            listOf("word_memory","learning_days","diagnostic_attempts","reading_words","ai_tasks").forEach { db.delete(it,null,null) }
             db.delete("study_session",null,null); db.delete("session_attempts",null,null)
             // Keep the spending ledger when restoring old backups: usage reset must not reset safety limits.
             tables.asReversed().forEach { db.delete(it, null, null) }
@@ -327,6 +318,7 @@ class EnglishRepository(private val database: EnglishDatabase) {
                     require(row.keys().asSequence().all { it in allowed })
                     if(table == "words") { WordState.valueOf(row.getString("state")); require(row.getString("word").isNotBlank()) }
                     if(table == "study_session") StudyCodec.decode(row.getString("snapshot"))
+                    if(table == "learning_days") com.tanhaowen.contextenglish.adaptive.WorkflowCodec.decode(row.getString("snapshot"))
                     val values = ContentValues()
                     row.keys().forEach { key ->
                         when(val value = row.get(key)) {
@@ -405,6 +397,8 @@ class EnglishRepository(private val database: EnglishDatabase) {
     }
 
     fun recoverAutoAiJobs() {
+        database.writableDatabase.execSQL("UPDATE ai_tasks SET status='INTERRUPTED',error='上次请求中断，请手动重试' WHERE status='RUNNING'")
+        database.writableDatabase.execSQL("UPDATE ai_usage SET request_status='INTERRUPTED_USAGE_UNKNOWN' WHERE request_status='RUNNING'")
         database.writableDatabase.execSQL("UPDATE auto_ai_jobs SET status='FAILED',error='上次请求被中断，用量未知；不会自动重复扣费' WHERE status='RUNNING'")
     }
 
@@ -438,15 +432,6 @@ class EnglishRepository(private val database: EnglishDatabase) {
             cursor.moveToFirst()
             cursor.getInt(0)
         }
-
-    private fun nextReviewTime(state: WordState): Long {
-        val days = when (state) {
-            WordState.NEW -> 0
-            WordState.LEARNING -> 1
-            WordState.MASTERED -> 7
-        }
-        return System.currentTimeMillis() + days * 24L * 60L * 60L * 1000L
-    }
 
     private fun startOfToday(): Long = Calendar.getInstance().apply {
         set(Calendar.HOUR_OF_DAY, 0)

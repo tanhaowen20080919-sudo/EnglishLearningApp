@@ -5,6 +5,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.espresso.Espresso.pressBack
+import androidx.test.espresso.Espresso.closeSoftKeyboard
 import com.tanhaowen.contextenglish.data.*
 import org.json.JSONObject
 import org.junit.Assert.*
@@ -20,20 +21,26 @@ import java.io.File
 class UpgradeSmokeTest {
     @get:Rule val compose = createAndroidComposeRule<MainActivity>()
 
-    @Test fun tabsHaveSingleLabelsAndPreserveDraftsAndSearch() {
-        listOf("今", "学", "词", "我").forEach { compose.onNodeWithText(it, substring = false).assertDoesNotExist() }
+    @Test fun secondaryToolsPreserveDraftsAndSearchWithSingleNavigation() {
+        compose.onNodeWithTag("nav-更多").performClick()
         compose.onNodeWithTag("tab-AI").performClick()
         compose.onNodeWithTag("learning-input").performTextInput("Explain a simple sentence")
+        closeSoftKeyboard()
+        pressBack()
+        compose.onNodeWithTag("nav-更多").performClick()
         compose.onNodeWithTag("tab-WORDS").performClick()
         compose.onNodeWithTag("word-search").performTextInput("avoid")
+        closeSoftKeyboard()
+        pressBack()
+        compose.onNodeWithTag("nav-更多").performClick()
         compose.onNodeWithTag("tab-AI").performClick()
         compose.onNodeWithTag("learning-input").assertTextContains("Explain a simple sentence")
+        closeSoftKeyboard()
+        pressBack()
+        compose.onNodeWithTag("nav-更多").performClick()
         compose.onNodeWithTag("tab-WORDS").performClick()
         compose.onNodeWithTag("word-search").assertTextContains("avoid")
-        compose.onNodeWithTag("tab-STUDY").performClick()
-        compose.onNodeWithText("单词学习").assertIsDisplayed()
-        compose.onNodeWithTag("tab-ME").performClick()
-        compose.onNodeWithText("学习设置").assertIsDisplayed()
+        compose.onNodeWithTag("nav-今日学习").assertDoesNotExist()
     }
 
     private fun screenshot(name: String) {
@@ -44,39 +51,24 @@ class UpgradeSmokeTest {
         }
     }
 
-    @Test fun immersiveLearningKeepsFeedbackAndResumesWithoutNavigation() {
+    @Test fun activeRecallResumesWithoutDuplicateNavigation() {
         compose.waitUntil(15000) { compose.onAllNodesWithTag("start-study").fetchSemanticsNodes().any {
             !it.config.contains(SemanticsProperties.Disabled)
         } }
-        compose.onNodeWithTag("start-study").performClick()
-        repeat(8) {
-            compose.waitUntil(15000) {
-                compose.onAllNodesWithTag("finish-learning").fetchSemanticsNodes().isNotEmpty() ||
-                    compose.onAllNodesWithTag("answer-0").fetchSemanticsNodes().isNotEmpty()
-            }
-            if(compose.onAllNodesWithTag("finish-learning").fetchSemanticsNodes().isNotEmpty())
-                compose.onNodeWithTag("finish-learning").performScrollTo().performClick()
-        }
-        compose.waitUntil(15000) { compose.onAllNodesWithTag("answer-0").fetchSemanticsNodes().isNotEmpty() }
-        compose.onNodeWithTag("tab-AI").assertDoesNotExist()
-        screenshot("01-immersive-question")
-        compose.onNodeWithTag("dont-know").performScrollTo().performClick()
-        compose.onNodeWithTag("continue-study").performScrollTo().assertIsDisplayed()
-        screenshot("02-wrong-feedback")
-        compose.onNodeWithTag("study-detail").performScrollTo().performClick()
-        compose.onNodeWithText("需要更多？AI讲解").assertExists()
-        // Dismiss the native sheet; the question is still graded and remains on screen.
-        pressBack()
-        compose.waitUntil(5000) { compose.onAllNodesWithText("需要更多？AI讲解").fetchSemanticsNodes().isEmpty() }
-        compose.waitUntil(5000) { compose.onAllNodesWithTag("continue-study").fetchSemanticsNodes().isNotEmpty() }
-        compose.onNodeWithTag("immersive-study").assertIsDisplayed()
-        compose.onNodeWithContentDescription("退出学习并保存进度").performClick()
-        compose.onNodeWithText("单词学习").assertIsDisplayed()
-        compose.onNodeWithText("继续上次学习").performClick()
-        compose.onNodeWithTag("continue-study").performScrollTo().assertIsDisplayed()
-        compose.onNodeWithTag("continue-study").performClick()
-        compose.waitForIdle()
-        compose.onNodeWithTag("answer-feedback").assertDoesNotExist()
+        compose.onNodeWithTag("start-study").performScrollTo().performClick()
+        compose.waitUntil(15000) { compose.onAllNodesWithTag("reveal-meaning").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithTag("learn-meaning").assertDoesNotExist()
+        compose.onNodeWithTag("nav-今日学习").assertDoesNotExist()
+        screenshot("01-active-recall")
+        compose.onNodeWithTag("reveal-meaning").performScrollTo().performClick()
+        compose.waitUntil(15000) { compose.onAllNodesWithTag("rating-2").fetchSemanticsNodes().any { !it.config.contains(SemanticsProperties.Disabled) } }
+        compose.onNodeWithTag("learn-meaning").assertExists()
+        screenshot("02-revealed-meaning")
+        compose.onNodeWithText("保存退出").performClick()
+        compose.onNodeWithTag("start-study").performScrollTo().performClick()
+        compose.waitUntil(15000) { compose.onAllNodesWithTag("rating-2").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithTag("learn-meaning").assertExists()
+        compose.onNodeWithTag("daily-workflow").assertIsDisplayed()
     }
 
     @Test fun sessionSnapshotAndAnswerAreAtomicAndBackupSafe() {

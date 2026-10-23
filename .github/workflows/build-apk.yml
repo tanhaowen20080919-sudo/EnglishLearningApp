@@ -3,9 +3,15 @@ name: Build APK
 on:
   push:
     branches: [main]
+    tags: ['v*']
   pull_request:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      build_release:
+        description: Build a permanently signed Release (requires the four Release Secrets)
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -15,55 +21,42 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
-    name: Test and build unsigned release APK
+  validate:
+    name: Test, lint and build validation APKs
     runs-on: ubuntu-latest
     timeout-minutes: 30
-
     steps:
-      - name: Check out source
-        uses: actions/checkout@v5
-
-      - name: Set up Java 17
-        uses: actions/setup-java@v5
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: "17"
-
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
       - name: Prepare Android SDK 35
         run: |
-          SDKMANAGER="/usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager"
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
           yes | "$SDKMANAGER" --licenses >/dev/null || true
           "$SDKMANAGER" "platforms;android-35" "build-tools;35.0.0"
-
-      - name: Set up Gradle 8.9
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: "8.9"
-
-      - name: Verify local data migrations and unchanged vocabulary
+      - name: Verify retained vocabulary and database migrations
         run: |
-          python tools/verify_migration.py
-          python tools/verify_vocabulary.py
-
-      - name: Test, lint and build APK
-        run: gradle :app:testDebugUnitTest :app:lintDebug :app:assembleRelease -PunsignedRelease=true --stacktrace
-
-      - name: Prepare artifact
-        run: |
-          mkdir -p output
-          cp app/build/outputs/apk/release/app-release-unsigned.apk output/Context-English-v0.5.0-unsigned.apk
-          cd output
-          sha256sum Context-English-v0.5.0-unsigned.apk > SHA256SUMS
-
-      - name: Upload unsigned APK for local signing
+          python3 tools/verify_vocabulary.py
+          python3 tools/verify_migration.py
+          python3 -m unittest discover -s tools/tests -v
+      - name: Test, lint and build explicitly unsigned Release for validation
+        run: ./gradlew --no-daemon --max-workers=2 :app:testDebugUnitTest :app:lintDebug :app:assembleDebug :app:assembleRelease -PunsignedRelease=true --stacktrace
+      - name: Upload validation builds (not permanent-signed releases)
         uses: actions/upload-artifact@v4
         with:
-          name: Context-English-v0.5.0-unsigned-apk
-          path: output/
+          name: validation-apks-not-for-release
+          path: |
+            app/build/outputs/apk/debug/app-debug.apk
+            app/build/outputs/apk/release/app-release-unsigned.apk
           if-no-files-found: error
-          retention-days: 30
-
+          retention-days: 14
       - name: Upload validation reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -75,37 +68,78 @@ jobs:
           if-no-files-found: ignore
           retention-days: 30
 
-      - name: Prepare public Android signing utilities
-        run: |
-          mkdir -p signing-tools/lib
-          cp "$ANDROID_HOME/build-tools/35.0.0/lib/apksigner.jar" signing-tools/lib/
-          cp "$ANDROID_HOME/build-tools/35.0.0/zipalign" signing-tools/
-          cp "$ANDROID_HOME/build-tools/35.0.0/aapt" signing-tools/
-          cp "$ANDROID_HOME/build-tools/35.0.0/NOTICE.txt" signing-tools/
-          if [ -d "$ANDROID_HOME/build-tools/35.0.0/lib64" ]; then cp -r "$ANDROID_HOME/build-tools/35.0.0/lib64" signing-tools/; fi
-          cd signing-tools
-          sha256sum lib/apksigner.jar zipalign aapt > SHA256SUMS
-
-      - name: Upload public utilities for local signing
-        uses: actions/upload-artifact@v4
-        with:
-          name: android-signing-utilities-35
-          path: signing-tools/
-          retention-days: 7
-
-  ui-smoke:
-    name: Check Android navigation and backup restore
+  release:
+    name: Build with the permanent v1.0+ Release certificate
+    needs: validate
+    if: (github.event_name == 'workflow_dispatch' && inputs.build_release) || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: "17"
+          java-version: '17'
       - uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: "8.9"
+          gradle-version: '8.9'
+          cache-disabled: true
+      - name: Restore the existing permanent key and verify its pinned certificate
+        id: signing_key
+        env:
+          ANDROID_RELEASE_KEYSTORE_BASE64: ${{ secrets.ANDROID_RELEASE_KEYSTORE_BASE64 }}
+          ANDROID_RELEASE_STORE_PASSWORD: ${{ secrets.ANDROID_RELEASE_STORE_PASSWORD }}
+          ANDROID_RELEASE_KEY_ALIAS: ${{ secrets.ANDROID_RELEASE_KEY_ALIAS }}
+          ANDROID_RELEASE_KEY_PASSWORD: ${{ secrets.ANDROID_RELEASE_KEY_PASSWORD }}
+        run: python3 tools/prepare_release_signing.py --output "$RUNNER_TEMP/englishlearning-permanent-release.jks" --github-env
+      - name: Prepare Android SDK 35
+        run: |
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          yes | "$SDKMANAGER" --licenses >/dev/null || true
+          "$SDKMANAGER" "platforms;android-35" "build-tools;35.0.0"
+      - name: Build the permanently signed Release (no debug-signing fallback)
+        env:
+          ANDROID_RELEASE_STORE_PASSWORD: ${{ secrets.ANDROID_RELEASE_STORE_PASSWORD }}
+          ANDROID_RELEASE_KEY_ALIAS: ${{ secrets.ANDROID_RELEASE_KEY_ALIAS }}
+          ANDROID_RELEASE_KEY_PASSWORD: ${{ secrets.ANDROID_RELEASE_KEY_PASSWORD }}
+        run: ./gradlew --no-daemon --max-workers=2 -Dorg.gradle.configuration-cache=false :app:assembleRelease --stacktrace
+      - name: Verify and package the permanent-signed APK
+        run: |
+          mkdir -p release-output
+          cp app/build/outputs/apk/release/app-release.apk release-output/EnglishLearning-release.apk
+          python3 tools/verify_release_apk.py release-output/EnglishLearning-release.apk --output release-output/RELEASE.json
+          cp config/release-certificate.pem release-output/
+          cd release-output
+          sha256sum EnglishLearning-release.apk > SHA256SUMS
+      - name: Remove only this job's restored temporary key
+        if: ${{ always() && steps.signing_key.outcome == 'success' }}
+        run: rm -f "$RUNNER_TEMP/englishlearning-permanent-release.jks"
+      - name: Upload permanently signed Release and public verification data
+        uses: actions/upload-artifact@v4
+        with:
+          name: EnglishLearning-permanent-signed-Release
+          path: release-output/
+          if-no-files-found: error
+          retention-days: 30
+
+  ui-smoke:
+    name: Check Android navigation and backup restore
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
       - name: Enable emulator hardware acceleration
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -119,7 +153,7 @@ jobs:
           arch: x86_64
           disable-animations: true
           script: |
-            gradle :app:connectedDebugAndroidTest --stacktrace; test_status=$?; adb pull /sdcard/Android/data/com.tanhaowen.contextenglish/files/screenshots app/build/screenshots || true; exit "$test_status"
+            ./gradlew :app:connectedDebugAndroidTest --stacktrace; test_status=$?; adb pull /sdcard/Android/data/com.tanhaowen.contextenglish/files/screenshots app/build/screenshots || true; exit "$test_status"
       - name: Upload Android test reports
         if: always()
         uses: actions/upload-artifact@v4
