@@ -1,6 +1,8 @@
 package com.tanhaowen.contextenglish
 
 import android.os.SystemClock
+import android.graphics.Bitmap
+import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
@@ -30,7 +32,16 @@ class OfflineDayUiTest {
         app.studySettingsStore.save(app.studySettingsStore.load().copy(autoSpeak=false))
         scenario=ActivityScenario.launch(MainActivity::class.java)
     }
-    @After fun cleanup() { scenario.close();app.repository.clearStudyRecords() }
+    @After fun cleanup() {
+        runCatching {
+            val output=File(app.getExternalFilesDir(null),"screenshots").apply { mkdirs() }
+            File(output,"offline-day-semantics.txt").writeText(compose.onRoot(useUnmergedTree=true).printToString())
+            File(output,"offline-day-final.png").outputStream().use {
+                compose.onRoot().captureToImage().asAndroidBitmap().compress(Bitmap.CompressFormat.PNG,100,it)
+            }
+        }
+        scenario.close();app.repository.clearStudyRecords()
+    }
     private fun exists(tag: String)=compose.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty()
     private fun ready() {
         compose.waitUntil(15000) { compose.onAllNodesWithTag("start-study").fetchSemanticsNodes().any { !it.config.contains(SemanticsProperties.Disabled) } }
@@ -38,7 +49,11 @@ class OfflineDayUiTest {
     private fun snapshot()=AdaptiveRepository(app.repository).load(LocalDate.now().toString())!!
     @Test fun quickDayCanFinishOfflineAfterRecreationWithRealGradingAndTimingEvidence() {
         ready()
-        compose.onNodeWithText("快速 15分").performScrollTo().performClick();ready()
+        compose.onNodeWithTag("start-study").assertIsDisplayed()
+        compose.onNodeWithTag("today-list").performScrollToNode(hasText("快速 15分"))
+        compose.onNodeWithText("快速 15分").performClick()
+        compose.onNodeWithTag("today-list").performScrollToIndex(0)
+        ready()
         compose.onNodeWithTag("start-study").performScrollTo().performClick()
         compose.waitUntil(15000) { exists("reveal-meaning") }
         var recreated=false;var steps=0

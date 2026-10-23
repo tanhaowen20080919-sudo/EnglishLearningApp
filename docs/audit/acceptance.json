@@ -15793,6 +15793,13 @@
       "Warning": 12,
       "Information": 1
     },
-    "local_build": "PASS debug APK, explicitly unsigned release APK and Android test APK; Gradle8.9/Java17/SDK35"
+    "local_build": "PASS debug APK, explicitly unsigned release APK and Android test APK; Gradle8.9/Java17/SDK35",
+    "android_ui_attempts": [
+      {
+        "run_id": 40027432941,
+        "result": "failed: 2 entry-point timeouts, 3 passed",
+        "diagnosis": "Expanded summary placed primary action outside initial small-screen LazyColumn composition; primary action moved above summary and UI test explicitly asserts visible. No tests skipped."
+      }
+    ]
   }
 }

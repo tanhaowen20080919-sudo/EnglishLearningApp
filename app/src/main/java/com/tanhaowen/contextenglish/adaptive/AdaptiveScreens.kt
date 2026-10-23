@@ -106,7 +106,7 @@ fun AdaptiveApp(legacy: AppViewModel) {
 private fun TodayScreen(state: AdaptiveState, vm: AdaptiveViewModel) {
     val w=state.workflow
     var minutes by rememberSaveable { mutableStateOf("30") }
-    LazyColumn(contentPadding=PaddingValues(24.dp),verticalArrangement=Arrangement.spacedBy(18.dp)) {
+    LazyColumn(modifier=Modifier.testTag("today-list"),contentPadding=PaddingValues(24.dp),verticalArrangement=Arrangement.spacedBy(18.dp)) {
         item {
             Text(w?.day.orEmpty(),color=MaterialTheme.colorScheme.onSurfaceVariant)
             Text("把今天学扎实",fontSize=30.sp,fontWeight=FontWeight.SemiBold,modifier=Modifier.padding(top=8.dp))
@@ -115,6 +115,9 @@ private fun TodayScreen(state: AdaptiveState, vm: AdaptiveViewModel) {
         if(w==null) item {
             if(state.busy) CircularProgressIndicator() else Button(onClick=vm::reload) { Text("重试加载本地数据") }
         } else {
+            item { Button(onClick=vm::start,enabled=!state.busy,modifier=Modifier.fillMaxWidth().height(56.dp).testTag("start-study")) {
+                Text(if(w.finished) "查看今日总结" else if(w.started) "继续今日学习" else "开始今日学习")
+            } }
             item { Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceContainerLow)) {
                 Column(Modifier.fillMaxWidth().padding(22.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
                     Text("预计 ${w.minutes} 分钟 · 预算 ${w.budgetMinutes} 分钟",style=MaterialTheme.typography.titleLarge)
@@ -125,9 +128,6 @@ private fun TodayScreen(state: AdaptiveState, vm: AdaptiveViewModel) {
                     LinearProgressIndicator(progress={ w.progress },modifier=Modifier.fillMaxWidth())
                     Text("完成 ${w.index} / ${w.steps.size}",style=MaterialTheme.typography.labelMedium)
                 }
-            } }
-            item { Button(onClick=vm::start,enabled=!state.busy,modifier=Modifier.fillMaxWidth().height(56.dp).testTag("start-study")) {
-                Text(if(w.finished) "查看今日总结" else if(w.started) "继续今日学习" else "开始今日学习")
             } }
             if(!w.finished) item {
                 Text("今天有多少时间？",style=MaterialTheme.typography.titleSmall)

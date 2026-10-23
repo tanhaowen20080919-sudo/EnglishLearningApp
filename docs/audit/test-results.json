@@ -1,0 +1,848 @@
+{
+  "source_commit": "66b59da16f10b63154e0da6bc172318c66e54916",
+  "kind": "local JUnit/Robolectric actual Gradle XML results; external AI transport fixtures do not imply real provider verification",
+  "tests": 139,
+  "failures": 0,
+  "errors": 0,
+  "suites": [
+    {
+      "suite": "com.tanhaowen.contextenglish.OfflineSpeechTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 6.702,
+      "cases": [
+        {
+          "name": "stopDuringTheGapPreventsAnyLaterPlayback",
+          "seconds": 6.017,
+          "status": "passed"
+        },
+        {
+          "name": "automaticRequestPlaysExactlyTwiceAndThenFinishes",
+          "seconds": 0.382,
+          "status": "passed"
+        },
+        {
+          "name": "upgradePreservesExplicitSpeechPreferenceAndNewInstallEnablesIt",
+          "seconds": 0.118,
+          "status": "passed"
+        },
+        {
+          "name": "tappingAnotherWordCancelsThePendingSecondReadAndReadsOnce",
+          "seconds": 0.185,
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "suite": "com.tanhaowen.contextenglish.adaptive.AdaptiveEngineTest",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 0.128,
+      "cases": [
+        {
+          "name": "weakPointRequiresEvidenceAndRanksByPriority",
+          "seconds": 0.089,
+          "status": "passed"
+        },
+        {
+          "name": "quickAndCustomRespectCapacity",
+          "seconds": 0.013,
+          "status": "passed"
+        },
+        {
+          "name": "intervalDependsOnHistoryAndVariety",
+          "seconds": 0.013,
+          "status": "passed"
+        },
+        {
+          "name": "lapseShrinksIntervalsAndRepeatedErrorsStayBounded",
+          "seconds": 0.003,
+          "status": "passed"
+        },
+        {
+          "name": "costIncludesFourRealUsageBuckets",
+          "seconds": 0.001,
+          "status": "passed"
+        },
+        {
+          "name": "meaningQuestionsCannotPretendToBeDifferentContexts",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "dailyNewLoadChangesWithRealPerformance",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "masteryRequiresFormsContextsAndSpacedSuccess",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "spacedObjectiveSuccessAfterSelfReportStillCounts",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "backlogReducesNewWordsWithoutDroppingReviews",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "invalidRatingsAreRejected",
+          "seconds": 0.001,
+          "status": "passed"
+        },
+        {
+          "name": "selfReportsCannotCreateStableMastery",
+          "seconds": 0.001,
+          "status": "passed"
+        },
+        {
+          "name": "rapidRepeatsDoNotInflateStabilityOrStreak",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "objectiveErrorOverridesOptimisticSelfReport",
+          "seconds": 0.0,
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "suite": "com.tanhaowen.contextenglish.adaptive.AiSchedulerTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 6.901,
+      "cases": [
+        {
+          "name": "invalidJsonNeverBecomesCacheAndUsageStillRecorded",
+          "seconds": 3.096,
+          "status": "passed"
+        },
+        {
+          "name": "missingConfigurationDoesNotCreateFictionalRequests",
+          "seconds": 0.778,
+          "status": "passed"
+        },
+        {
+          "name": "elapsedActualModelPriceSnapshotsAndTodayTotalsComeFromCompletedCalls",
+          "seconds": 0.904,
+          "status": "passed"
+        },
+        {
+          "name": "cancellationIsRecordedWithUnknownUsageAndCanRetryManually",
+          "seconds": 0.648,
+          "status": "passed"
+        },
+        {
+          "name": "changedInputModelAndExpiryInvalidateCache",
+          "seconds": 0.547,
+          "status": "passed"
+        },
+        {
+          "name": "disabledStartGuardPreventsRequestAndCharge",
+          "seconds": 0.235,
+          "status": "passed"
+        },
+        {
+          "name": "queueAndLocalStudyNeverInitiateRequests",
+          "seconds": 0.463,
+          "status": "passed"
+        },
+        {
+          "name": "cacheHitAvoidsNetworkAndDoesNotChargeAgain",
+          "seconds": 0.23,
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "suite": "com.tanhaowen.contextenglish.adaptive.AuditAlgorithmTest",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 0.564,
+      "cases": [
+        {
+          "name": "auditIsDeterministicallyRandomAndOnlyTargetsPositiveSelfReports",
+          "seconds": 0.415,
+          "status": "passed"
+        },
+        {
+          "name": "foregroundClockExcludesBackgroundAndFeedbackAndRestoresElapsedTime",
+          "seconds": 0.037,
+          "status": "passed"
+        },
+        {
+          "name": "shorteningStartedPlanPreservesReviewsAndProducesMixedMicroQuiz",
+          "seconds": 0.019,
+          "status": "passed"
+        },
+        {
+          "name": "historicalLapsesAndSpacedStreakIndependentlyAffectIntervals",
+          "seconds": 0.003,
+          "status": "passed"
+        },
+        {
+          "name": "spellingAndContextErrorsHaveRealMasteryAndDueDateConsequences",
+          "seconds": 0.001,
+          "status": "passed"
+        },
+        {
+          "name": "allExtendedReadingsHaveFiveTypesAndRealPassageLength",
+          "seconds": 0.002,
+          "status": "passed"
+        },
+        {
+          "name": "readingErrorCanInsertAnObjectiveGrammarDiagnosisOnlyOnce",
+          "seconds": 0.008,
+          "status": "passed"
+        },
+        {
+          "name": "highestPriorityMayBeVocabularyRatherThanOnlyReadingOrGrammar",
+          "seconds": 0.01,
+          "status": "passed"
+        },
+        {
+          "name": "eachRequiredPerformanceSignalIndependentlyChangesNewWordVolume",
+          "seconds": 0.001,
+          "status": "passed"
+        },
+        {
+          "name": "grammarQuestionsDoNotRepeatAndNonDueHistoryIsActuallyUsed",
+          "seconds": 0.005,
+          "status": "passed"
+        },
+        {
+          "name": "futureReadingFormatsCanRoundTripMoreThanFourOptions",
+          "seconds": 0.049,
+          "status": "passed"
+        },
+        {
+          "name": "shortCustomTimeUsesMicroFlowAndLongerModeCanRestoreRemainingContent",
+          "seconds": 0.013,
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "suite": "com.tanhaowen.contextenglish.adaptive.AuditPersistenceTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 5.115,
+      "cases": [
+        {
+          "name": "zeroSamplesAreNotDisplayedAsFictionalSeventyFivePercent",
+          "seconds": 0.609,
+          "status": "passed"
+        },
+        {
+          "name": "oldV5JsonIsRestoredAndInvalidMemoryRollsBackAtomically",
+          "seconds": 1.414,
+          "status": "passed"
+        },
+        {
+          "name": "adaptiveEvidenceSurvivesReopenAndEveryWordHasDifferentOfflineContexts",
+          "seconds": 0.648,
+          "status": "passed"
+        },
+        {
+          "name": "missingVsExplicitZeroCacheUsageRemainsDistinguishableAfterPersistence",
+          "seconds": 0.142,
+          "status": "passed"
+        },
+        {
+          "name": "lastSevenArticlesAndLifetimeAccuracyAreDifferentRealAggregations",
+          "seconds": 0.365,
+          "status": "passed"
+        },
+        {
+          "name": "newWordAccuracyUsesTheActualCohortNotTheQuizSlotName",
+          "seconds": 0.424,
+          "status": "passed"
+        },
+        {
+          "name": "secondSubmissionCannotReplaceAlreadyGradedFeedbackOrMastery",
+          "seconds": 0.411,
+          "status": "passed"
+        },
+        {
+          "name": "clockCheckpointCannotOverwriteNewerAnswerAndFeedback",
+          "seconds": 0.383,
+          "status": "passed"
+        },
+        {
+          "name": "repeatedLocalQuizPromptsTriggerOptionalSupplementOnlyAfterActualStudy",
+          "seconds": 0.497,
+          "status": "passed"
+        },
+        {
+          "name": "twoArticlesOnOneDayAreCountedSeparatelyAndLookupsAreArticleSpecific",
+          "seconds": 0.221,
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "suite": "com.tanhaowen.contextenglish.adaptive.AuditViewModelIntegrationTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 5.102,
+      "cases": [
+        {
+          "name": "actualViewModelCompletesOfflineAndAutomaticallyCreatesAdaptiveTomorrow",
+          "seconds": 1.953,
+          "status": "passed"
+        },
+        {
+          "name": "invalidAiResponseLeavesLocalPlanUsableAndCannotEnterCache",
+          "seconds": 0.44,
+          "status": "passed"
+        },
+        {
+          "name": "generatedQuestionsAreActuallyAnsweredPersistedAndChangeDiagnosis",
+          "seconds": 0.672,
+          "status": "passed"
+        },
+        {
+          "name": "processRecreationRestoresRevealedWordAndPreventsDoubleGrading",
+          "seconds": 0.39,
+          "status": "passed"
+        },
+        {
+          "name": "preparationIsManualDeduplicatedAndNextDayReadsCacheWithoutNetwork",
+          "seconds": 0.842,
+          "status": "passed"
+        },
+        {
+          "name": "wrongReadingChoiceAndReasonSurviveRestartAndReachTheAiPrompt",
+          "seconds": 0.546,
+          "status": "passed"
+        },
+        {
+          "name": "coreLearningKeepsWorkingDuringAnInFlightAiRequestAndCancellation",
+          "seconds": 0.259,
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "suite": "com.tanhaowen.contextenglish.adaptive.EnhancementContractTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 0.099,
+      "cases": [
+        {
+          "name": "robustJsonAcceptsFencesButRejectsWrongTypesAndTrailingObjects",
+          "seconds": 0.055,
+          "status": "passed"
+        },
+        {
+          "name": "contextualMeaningIsNotJustClozeAndDoesNotInflateContextVariety",
+          "seconds": 0.008,
+          "status": "passed"
+        },
+        {
+          "name": "readingSchemaRejectsHallucinatedQuotesAndMissingQuestionCoverage",
+          "seconds": 0.007,
+          "status": "passed"
+        },
+        {
+          "name": "contextMeaningMustGroundTheRequestedWordInItsActualSentence",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "generatedExamplesRequireTheTargetWordTranslationCollocationAndContrast",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "strongLocalEvidenceNeedsNoAutomaticAiPreparationTasks",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "cachedFullArticleDoesNotRevealUnattemptedAnswers",
+          "seconds": 0.001,
+          "status": "passed"
+        },
+        {
+          "name": "generatedPracticeIsBoundToTheRealWeaknessAndCannotInventIdsOrFractionalAnswers",
+          "seconds": 0.013,
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "suite": "com.tanhaowen.contextenglish.adaptive.PersistenceTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 1.986,
+      "cases": [
+        {
+          "name": "failedMigrationRollsBackAndKeepsOldDatabase",
+          "seconds": 0.095,
+          "status": "passed"
+        },
+        {
+          "name": "directV5UpgradeKeepsItsSnapshotAndBacksUpBeforeAddingReadingIdentity",
+          "seconds": 0.094,
+          "status": "passed"
+        },
+        {
+          "name": "workflowCompletesOfflineAndQuizChangesLaterPlan",
+          "seconds": 0.417,
+          "status": "passed"
+        },
+        {
+          "name": "upgradePreservesCoreDataAndCreatesRestorableBackup",
+          "seconds": 0.097,
+          "status": "passed"
+        },
+        {
+          "name": "gradingAndProgressAreIdempotent",
+          "seconds": 0.232,
+          "status": "passed"
+        },
+        {
+          "name": "readingTracksLookupsImpactAndErrorReasons",
+          "seconds": 0.291,
+          "status": "passed"
+        },
+        {
+          "name": "v5ExportImportRestoresWorkflowAndInvalidImportIsAtomic",
+          "seconds": 0.41,
+          "status": "passed"
+        },
+        {
+          "name": "failedBackupPreventsAnyUpgrade",
+          "seconds": 0.085,
+          "status": "passed"
+        },
+        {
+          "name": "failedSnapshotWriteRollsBackWordEvidence",
+          "seconds": 0.265,
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "suite": "com.tanhaowen.contextenglish.adaptive.StartupTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 3.737,
+      "cases": [
+        {
+          "name": "mainActivityCanLaunchWithNoAiConfiguration",
+          "seconds": 3.737,
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "suite": "com.tanhaowen.contextenglish.adaptive.WorkflowTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 0.066,
+      "cases": [
+        {
+          "name": "unknownDoesNotTriggerRedundantCalibration",
+          "seconds": 0.002,
+          "status": "passed"
+        },
+        {
+          "name": "standardQuizHasRequestedComposition",
+          "seconds": 0.002,
+          "status": "passed"
+        },
+        {
+          "name": "readingWeaknessesDoNotHideGrammarIntervention",
+          "seconds": 0.002,
+          "status": "passed"
+        },
+        {
+          "name": "allReadingTypesAreAvailableOffline",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "selfKnownTriggersAuditWithoutDuplicateQuestions",
+          "seconds": 0.002,
+          "status": "passed"
+        },
+        {
+          "name": "distractorsAndQuestionOrderAreDeterministic",
+          "seconds": 0.003,
+          "status": "passed"
+        },
+        {
+          "name": "weakerGrammarAddsTargetedTraining",
+          "seconds": 0.039,
+          "status": "passed"
+        },
+        {
+          "name": "corruptIndexIsRejected",
+          "seconds": 0.007,
+          "status": "passed"
+        },
+        {
+          "name": "workflowSnapshotPreservesExactQuestionAndFeedback",
+          "seconds": 0.008,
+          "status": "passed"
+        },
+        {
+          "name": "dueReviewsSurviveSmallTimeBudget",
+          "seconds": 0.0,
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "suite": "com.tanhaowen.contextenglish.ai.AiTransportContractTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 0.028,
+      "cases": [
+        {
+          "name": "chatPayloadAndActualReturnedModelAndUsageAreParsedTogether",
+          "seconds": 0.025,
+          "status": "passed"
+        },
+        {
+          "name": "startGuardPreventsTransportAndMissingConfigurationIsNotANetworkCall",
+          "seconds": 0.002,
+          "status": "passed"
+        },
+        {
+          "name": "responsesApiUsesItsOwnPayloadAndOutputFormat",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "omittedActualModelIsReportedAsUnknownRatherThanInvented",
+          "seconds": 0.0,
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "suite": "com.tanhaowen.contextenglish.ai.UsageAndCompatibilityTest",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 0.008,
+      "cases": [
+        {
+          "name": "proxyCanExplicitlyDeclareInclusiveInput",
+          "seconds": 0.001,
+          "status": "passed"
+        },
+        {
+          "name": "negativeAndMalformedTokensAreSafe",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "zeroPricesAreAllowed",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "largeCountsUseLongs",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "responseTextSupportsChatAndResponses",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "httpErrorsAreDistinguishableAndDoNotExposeResponses",
+          "seconds": 0.001,
+          "status": "passed"
+        },
+        {
+          "name": "missingCacheFieldsDefaultToZero",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "endpointDoesNotDuplicateAlreadyCompletePaths",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "noUsageDoesNotCrashOrPretendUsageWasKnown",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "backupExcludesKeyAndRestorePreservesDeviceKey",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "backupRejectsInvalidPrices",
+          "seconds": 0.001,
+          "status": "passed"
+        },
+        {
+          "name": "separateGatewayCountsIncludeBothCachesOnce",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "responsesReadsAndWritesAreInputPartitions",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "deepSeekCanDeriveInputWhenPromptIsOmitted",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "openAiCachedInputIsNotBilledTwice",
+          "seconds": 0.001,
+          "status": "passed"
+        },
+        {
+          "name": "deepSeekHitAndMissAreNotAddedToPromptTwice",
+          "seconds": 0.002,
+          "status": "passed"
+        },
+        {
+          "name": "proxyCanExplicitlyDeclareSeparateInput",
+          "seconds": 0.0,
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "suite": "com.tanhaowen.contextenglish.study.AutoAiPolicyTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 0.002,
+      "cases": [
+        {
+          "name": "paletteDefaultsAndCorruptSettingsAreNormalized",
+          "seconds": 0.001,
+          "status": "passed"
+        },
+        {
+          "name": "skippedJobDoesNotSpendBudgetOrBlockLaterCalls",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "disablingOrZeroBudgetDisallowsAutoCalls",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "uncertainUsagePausesTheWholeDay",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "reserveAccountsForCacheWritingAndUnicode",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "budgetAndCallLimitStopQueue",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "allowOnlyWithKnownBudget",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "missingKeyAndPricesNeverMakePaidCalls",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "noApiKeyInCacheScope",
+          "seconds": 0.0,
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "suite": "com.tanhaowen.contextenglish.study.ForegroundGuardTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 0.001,
+      "cases": [
+        {
+          "name": "backgroundGuardStopsBeforeAnyNetworkRequest",
+          "seconds": 0.001,
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "suite": "com.tanhaowen.contextenglish.study.LearningFlowTest",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 0.01,
+      "cases": [
+        {
+          "name": "preparedQuestionsKeepTheirOptionsAfterProgressChanges",
+          "seconds": 0.005,
+          "status": "passed"
+        },
+        {
+          "name": "newWordsWithExamplesStillLearnBeforeTesting",
+          "seconds": 0.001,
+          "status": "passed"
+        },
+        {
+          "name": "repeatedWordMorphologyAndLeakedTranslationsFallBackToMeaning",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "exposureCheckpointSurvivesResumeAndOldSnapshotStillLoads",
+          "seconds": 0.002,
+          "status": "passed"
+        },
+        {
+          "name": "everyNewWordIsLearnedOnceBeforeItsRecall",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "fiveWordGroupMixesNewAndReviewWithoutDuplicates",
+          "seconds": 0.001,
+          "status": "passed"
+        },
+        {
+          "name": "delayedRetryDoesNotRecreateLearningStageAndRemainsBounded",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "clozeKeepsAttributionExampleAndDoesNotLeakAnswer",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "viewingNewWordDoesNotCountAsAnswerOrMastery",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "changedKindCannotGradeWithAStaleQuestion",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "repeatedContinueCannotSkipAnUngradedRecall",
+          "seconds": 0.0,
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "suite": "com.tanhaowen.contextenglish.study.StudyEngineTest",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 0.003,
+      "cases": [
+        {
+          "name": "deterministicDistinctFourOptions",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "newAndReviewWordsAreInterleaved",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "spellingIsTrimmedAndCaseInsensitive",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "ungradedNextDoesNothing",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "codecRoundTripIncludesWrongFeedbackAndQueue",
+          "seconds": 0.001,
+          "status": "passed"
+        },
+        {
+          "name": "identicalAndOverlappingMeaningsAreNotDistractors",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "repeatedTapCannotDoubleCount",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "wrongAddsDelayedRetryAndKeepsFeedbackUntilNext",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "hintsDoNotCreditGuessingOrHideWrongWord",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "retriesAreBounded",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "invalidCoachJsonAndUnknownIdsAreRejected",
+          "seconds": 0.001,
+          "status": "passed"
+        },
+        {
+          "name": "correctDoesNotAutomaticallyBecomeMastered",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "coachDoesNotReplaceCurrentQuestionOrDuplicate",
+          "seconds": 0.0,
+          "status": "passed"
+        },
+        {
+          "name": "codecRejectsOutOfRangeIndex",
+          "seconds": 0.0,
+          "status": "passed"
+        }
+      ]
+    }
+  ]
+}
