@@ -6274,6 +6274,16 @@
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
           "symbol": "fun resize(",
           "logic": "WorkflowFactory.resize 保留完成前缀/当前题/全部到期复习，重新构造阅读、专项和小测；QUICK/短自定义5题，标准/强化15题，增大预算能补回未完成内容。"
+        },
+        {
+          "file": "app/src/main/java/com/tanhaowen/contextenglish/UpgradeScreens.kt",
+          "symbol": "fun UpgradeMe(",
+          "logic": "移除二级设置中旧版重复的连续学习天数/旧统计块，旧首页也不显示可因断签归零的连续天数；保留全部数据，学习统计统一由真实诊断页提供。"
+        },
+        {
+          "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveEngine.kt",
+          "symbol": "fun update(",
+          "logic": "间隔按实际遗忘与客观作答更新，不因日历断签清空进度；streak仅是有间隔的客观正确证据，不是每日签到奖励。"
         }
       ],
       "tests": [

@@ -66,7 +66,7 @@ fun UpgradeHome(state: AppUiState, start: (String) -> Unit, words: () -> Unit) {
         item {
             HorizontalDivider()
             Text("已学 ${state.stats.seen} · 已掌握 ${state.stats.mastered}", modifier = Modifier.padding(top=18.dp))
-            Text("薄弱 ${state.stats.weak} · 连续学习 ${state.streak} 天", modifier = Modifier.padding(top=8.dp))
+            Text("薄弱 ${state.stats.weak} 词", modifier = Modifier.padding(top=8.dp))
             Text("每组最多 ${state.studySettings.dailyGoal} 词 · 今日已作答 ${state.stats.todayAnswered} 次", modifier = Modifier.padding(top=8.dp))
         }
         item {
@@ -222,7 +222,6 @@ fun UpgradeMe(state: AppUiState, vm: AppViewModel, aiSettings: () -> Unit) {
         item { TextButton(onClick={ preferences=true }) { Text("学习设置") } }
         item { AiUsageOverview(state, vm) }
         item { AutoAiHistory(state) }
-        item { HorizontalDivider(); Text("学习统计",style=MaterialTheme.typography.titleLarge,modifier=Modifier.padding(top=14.dp)); Text("词库 ${state.stats.total} · 已学 ${state.stats.seen} · 已掌握 ${state.stats.mastered}\n薄弱 ${state.stats.weak} · 今日正确率 ${state.stats.todayAccuracy}%\n连续学习 ${state.streak} 天") }
         item {
             TextButton(onClick={ export.launch("EnglishLearning-backup.json") },enabled=!backupBusy) { Text("导出数据") }
             TextButton(onClick={ import.launch(arrayOf("application/json","text/plain","application/octet-stream")) },enabled=!backupBusy) { Text("导入数据") }
