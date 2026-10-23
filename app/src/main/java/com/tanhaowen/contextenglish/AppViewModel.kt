@@ -372,7 +372,7 @@ class AppViewModel(
     fun retryAi() { lastAi?.invoke() }
     fun saveStudySettings(s: StudySettings) {
         val saved=s.copy(autoAi=false).normalized()
-        _uiState.update { it.copy(studySettings=saved,aiMessage="设置已保存；每日新词数量从明天生效") }
+        _uiState.update { it.copy(studySettings=saved,aiMessage="参考新词目标已保存；实际数量由本地表现和时间预算决定。已开始的任务不被重置。") }
         viewModelScope.launch { settingsMutex.withLock { withContext(Dispatchers.IO) { studyStore.save(saved) } } }
         if(!s.autoAi) pendingCoach.clear() else pumpCoach()
     }
@@ -598,7 +598,7 @@ class AppViewModel(
             val taskWords = if(kind == "错词诊断") withContext(Dispatchers.IO) { repository.recentMistakes() } else dataWords
             val data = taskWords.joinToString("\n") { "id=${it.id}; ${it.word}: ${it.meaning.take(120)}; 错误=${it.mistakeCount}; 正确=${it.correctCount}/${it.reviewCount}; 掌握度=${it.familiarity}" }
             val instruction = when(kind) {
-                "今日建议" -> "生成简短今日建议：复习优先顺序、新词建议量、重点词、学习还是复习。"
+                "今日建议" -> "解释给定本地计划、复习优先顺序和重点词。不得决定或重算新词数量，不修改本地计划。"
                 "薄弱分析" -> "分析薄弱词、可能的易混词、主题和词根关系，明确推测，给出优先顺序。"
                 "单词讲解" -> "讲解核心义、高考常见义、搭配、一词多义、熟词生义、易混词、简单记忆方法，给英文例句及中文翻译。"
                 "例句" -> "对每个目标词生成一个简单自然的英文例句及中文翻译。"

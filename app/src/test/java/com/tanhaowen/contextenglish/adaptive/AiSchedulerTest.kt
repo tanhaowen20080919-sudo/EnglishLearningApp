@@ -85,4 +85,25 @@ class AiSchedulerTest {
         assertTrue(result.exceptionOrNull() is AiStartSkippedException)
         assertEquals(0,calls);assertEquals(0,repo.aiUsageSummary().calls)
     }
+    @Test fun elapsedActualModelPriceSnapshotsAndTodayTotalsComeFromCompletedCalls()=runBlocking {
+        val delayed=object: AiClient() {
+            override suspend fun generate(settings: AiSettings,prompt: String,maxTokens: Int,canStart: ()->Boolean): Result<AiCallResult> {
+                delay(30)
+                return Result.success(AiCallResult("已有真实响应结构的内容",TokenUsage(1000,200,100,600,1200,true,true,true),"returned-model"))
+            }
+        }
+        val rates=settings.copy(cacheCreationPricePerMillion=3.0,cacheReadPricePerMillion=.2)
+        val scheduler=AiTaskScheduler(repo,delayed)
+        val first=scheduler.generate(rates,"first").getOrThrow()
+        val cached=scheduler.generate(rates,"first").getOrThrow()
+        scheduler.generate(rates.copy(inputPricePerMillion=4.0),"second").getOrThrow()
+        val record=repo.aiUsageRecord(first.usageId!!)!!
+        assertTrue(record.elapsedMs>=30);assertEquals("returned-model",record.model)
+        assertTrue(cached.fromCache);assertEquals("returned-model",cached.model)
+        assertEquals(2.0,record.inputPrice,0.0);assertEquals(3.0,record.cacheCreationPrice,0.0)
+        assertEquals(.00262,record.totalCost,1e-12)
+        assertEquals(2L,repo.aiUsageSummary().calls)
+        assertEquals(repo.aiUsageSummary().estimatedCost,repo.aiUsageSummary(today=true).estimatedCost,1e-12)
+        assertEquals(.00584,repo.aiUsageSummary().estimatedCost,1e-12)
+    }
 }

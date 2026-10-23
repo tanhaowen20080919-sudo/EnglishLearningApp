@@ -6,7 +6,9 @@ data class TokenUsage(
     val cacheCreationTokens: Long = 0,
     val cacheReadTokens: Long = 0,
     val totalTokens: Long = 0,
-    val known: Boolean = false
+    val known: Boolean = false,
+    val cacheCreationKnown: Boolean = false,
+    val cacheReadKnown: Boolean = false
 ) {
     val normalInputTokens: Long
         get() = (promptTokens - cacheCreationTokens - cacheReadTokens).coerceAtLeast(0)

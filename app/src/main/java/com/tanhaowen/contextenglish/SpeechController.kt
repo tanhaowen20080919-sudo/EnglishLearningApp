@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.io.File
 import java.util.Locale
@@ -72,7 +73,7 @@ class SpeechController(private val context: Context) {
 
     private fun current(request: Request) = active === request && request.id == serial
 
-    private fun play(request: Request, clip: Clip?) {
+    private suspend fun play(request: Request, clip: Clip?) {
         if (!current(request)) return
         if (request.ttsOnly || clip == null || !playLocal(request, clip)) {
             request.ttsOnly = true
@@ -80,18 +81,19 @@ class SpeechController(private val context: Context) {
         }
     }
 
-    private fun playLocal(request: Request, clip: Clip): Boolean {
+    private suspend fun playLocal(request: Request, clip: Clip): Boolean {
         val audio = MediaPlayer()
         return try {
             audio.setAudioAttributes(audioAttributes)
-            if (clip.external) {
+            withContext(Dispatchers.IO) { if (clip.external) {
                 val folder = File(context.filesDir, "pronunciation").canonicalFile
                 val file = File(folder, clip.name).canonicalFile
                 require(file.parentFile == folder && file.isFile)
                 audio.setDataSource(file.path)
             } else context.assets.openFd("pronunciation/${clip.name}").use {
                 audio.setDataSource(it.fileDescriptor, it.startOffset, it.length)
-            }
+            } }
+            if(!current(request)) { audio.release();return true }
             audio.setOnPreparedListener {
                 if (!current(request) || player !== it) return@setOnPreparedListener
                 try {

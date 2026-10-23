@@ -51,7 +51,7 @@ assert db.execute("SELECT COUNT(*) FROM words").fetchone()[0]==1640
 print('PASS: v3 -> v4 retains all words/learning/AI data; session answers are idempotent')
 
 # Exercise v4 -> v5 from the actual checked-in migration statements.
-v5=text[text.index('private fun upgradeV5'):text.index('private fun seedWords')]
+v5=text[text.index('private fun upgradeV5'):text.index('private fun upgradeV6')]
 for sql in re.findall(r'db.execSQL\("([^"$]+)"\)',v5): db.execute(sql)
 assert db.execute("SELECT state,correct_count,phonetic FROM words WHERE word='avoid'").fetchone()==('LEARNING',3,'x')
 assert db.execute("SELECT mastery,lapses FROM word_memory WHERE word_id=(SELECT id FROM words WHERE word='avoid')").fetchone()==(0.3,0)
@@ -59,3 +59,11 @@ assert db.execute("SELECT elapsed_ms,request_status FROM ai_usage WHERE model='o
 assert db.execute("SELECT content FROM ai_cache").fetchone()==('keep me',)
 assert db.execute('PRAGMA integrity_check').fetchone()==('ok',)
 print('PASS: v4 -> v5 preserves vocabulary, IPA, learning, AI usage and cached replies; adaptive schema is valid')
+
+# Schema 6 preserves all evidence and adds explicit reading identity/cache-field availability.
+v6=text[text.index('private fun upgradeV6'):text.index('private fun seedWords')]
+for sql in re.findall(r'db.execSQL\("([^"$]+)"\)',v6): db.execute(sql)
+assert db.execute("SELECT cache_creation_known,cache_read_known FROM ai_usage WHERE model='old-model'").fetchone()==(0,0)
+assert db.execute("SELECT correct_count FROM words WHERE word='avoid'").fetchone()==(3,)
+assert db.execute('PRAGMA integrity_check').fetchone()==('ok',)
+print('PASS: v5 -> v6 preserves all learning/AI data; adds reading identity and honest cache-token availability')

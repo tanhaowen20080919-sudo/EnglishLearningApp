@@ -71,13 +71,15 @@ class OfflineSpeechTest {
         assertEquals(1, players.size)
     }
 
-    @Test fun upgradeEnablesAutoSpeechOnlyOnceAndKeepsPhoneticPreference() {
+    @Test fun upgradePreservesExplicitSpeechPreferenceAndNewInstallEnablesIt() {
         val context = RuntimeEnvironment.getApplication()
         val prefs = context.getSharedPreferences("study_settings", Context.MODE_PRIVATE)
         prefs.edit().clear().putBoolean("speak", false).putBoolean("phonetic", false).commit()
         val store = StudySettingsStore(context)
-        assertTrue(store.load().autoSpeak)
+        assertFalse(store.load().autoSpeak)
         assertFalse(store.load().showPhonetic)
+        prefs.edit().clear().commit()
+        assertTrue(StudySettingsStore(context).load().autoSpeak)
         store.save(store.load().copy(autoSpeak = false))
         assertFalse(StudySettingsStore(context).load().autoSpeak)
     }

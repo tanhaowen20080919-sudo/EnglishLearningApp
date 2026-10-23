@@ -109,6 +109,8 @@ class EnglishRepository(internal val database: EnglishDatabase) {
         val values = ContentValues().apply {
             put("model", model); put("prompt_tokens", usage.promptTokens); put("completion_tokens", usage.completionTokens)
             put("cache_creation_tokens", usage.cacheCreationTokens); put("cache_read_tokens", usage.cacheReadTokens)
+            put("cache_creation_known",if(usage.cacheCreationKnown || usage.cacheCreationTokens>0) 1 else 0)
+            put("cache_read_known",if(usage.cacheReadKnown || usage.cacheReadTokens>0) 1 else 0)
             put("total_tokens", usage.totalTokens); put("usage_known", if (usage.known) 1 else 0)
             put("input_cost", cost.input); put("output_cost", cost.output)
             put("cache_creation_cost", cost.cacheCreation); put("cache_read_cost", cost.cacheRead)
@@ -159,6 +161,7 @@ class EnglishRepository(internal val database: EnglishDatabase) {
         try {
             db.delete("ai_usage", null, null)
             db.execSQL("UPDATE ai_cache SET usage_id = NULL")
+            db.execSQL("UPDATE ai_tasks SET usage_id = NULL")
             db.setTransactionSuccessful()
         } finally { db.endTransaction() }
     }
@@ -168,7 +171,8 @@ class EnglishRepository(internal val database: EnglishDatabase) {
         fun d(key: String) = getDouble(getColumnIndexOrThrow(key))
         return AiUsageRecord(n("id"), getString(getColumnIndexOrThrow("model")),
             TokenUsage(n("prompt_tokens").coerceAtLeast(0), n("completion_tokens").coerceAtLeast(0),
-                n("cache_creation_tokens"), n("cache_read_tokens"), n("total_tokens"), n("usage_known") == 1L),
+                n("cache_creation_tokens"), n("cache_read_tokens"), n("total_tokens"), n("usage_known") == 1L,
+                n("cache_creation_known")==1L,n("cache_read_known")==1L),
             AiCost(d("input_cost"), d("output_cost"), d("cache_creation_cost"), d("cache_read_cost")),
             d("estimated_cost"), getString(getColumnIndexOrThrow("currency")), n("created_at"),
             d("input_price"), d("output_price"), d("cache_creation_price"), d("cache_read_price"), n("price_snapshot") == 1L, n("elapsed_ms"),getString(getColumnIndexOrThrow("request_status")))
@@ -259,7 +263,7 @@ class EnglishRepository(internal val database: EnglishDatabase) {
     }
 
     fun exportData(settings: StudySettings, ai: AiSettings): String {
-        val root = JSONObject().put("format", "context-english").put("version", 5)
+        val root = JSONObject().put("format", "context-english").put("version", 6)
         listOf("words", "study_events", "daily_plan", "ai_cache", "ai_usage", "study_session", "session_attempts", "auto_ai_jobs", "word_memory", "learning_days", "diagnostic_attempts", "reading_words", "ai_tasks").forEach { table ->
             val rows = JSONArray()
             database.readableDatabase.query(table, null, null, null, null, null, null).use { c ->
@@ -287,7 +291,7 @@ class EnglishRepository(internal val database: EnglishDatabase) {
 
     fun importData(text: String, currentAi: AiSettings): RestoredBackup {
         val root = JSONObject(text)
-        require(root.getString("format") == "context-english" && root.getInt("version") in 2..5) { "备份格式不兼容" }
+        require(root.getString("format") == "context-english" && root.getInt("version") in 2..6) { "备份格式不兼容" }
         val version = root.getInt("version")
         val restoredAi = if (version >= 3) aiSettingsFromBackup(root.getJSONObject("ai_settings"), currentAi) else null
         val tables = listOf("words", "study_events", "daily_plan", "ai_cache") +
@@ -318,7 +322,23 @@ class EnglishRepository(internal val database: EnglishDatabase) {
                     require(row.keys().asSequence().all { it in allowed })
                     if(table == "words") { WordState.valueOf(row.getString("state")); require(row.getString("word").isNotBlank()) }
                     if(table == "study_session") StudyCodec.decode(row.getString("snapshot"))
-                    if(table == "learning_days") com.tanhaowen.contextenglish.adaptive.WorkflowCodec.decode(row.getString("snapshot"))
+                    if(table == "learning_days") {
+                        val w=com.tanhaowen.contextenglish.adaptive.WorkflowCodec.decode(row.getString("snapshot"))
+                        require(row.getString("day")==w.day && row.getInt("planned")==w.steps.size && row.getInt("completed")==w.index)
+                    }
+                    if(table == "word_memory") {
+                        require(row.getDouble("mastery") in 0.0..1.0 && row.getDouble("difficulty") in 0.0..1.0)
+                        require(row.getDouble("stability")>0 && row.getDouble("stability").isFinite())
+                        require(row.getInt("lapses")>=0 && row.getInt("streak")>=0 && row.getDouble("recent") in 0.0..1.0)
+                        listOf("forms","contexts").forEach { column ->
+                            val a=JSONArray(row.getString(column));require(a.length()<=10000)
+                            repeat(a.length()) { require(a.get(it) is String) }
+                        }
+                    }
+                    if(table == "diagnostic_attempts") {
+                        require(row.getString("form") in setOf("self","meaning","context","spelling","grammar","reading"))
+                        require(row.getInt("correct") in 0..1 && row.getLong("elapsed_ms")>=0)
+                    }
                     val values = ContentValues()
                     row.keys().forEach { key ->
                         when(val value = row.get(key)) {
@@ -332,6 +352,12 @@ class EnglishRepository(internal val database: EnglishDatabase) {
                     db.insertOrThrow(table, null, values)
                 }
             }
+            if(version<6) {
+                db.execSQL("UPDATE diagnostic_attempts SET reading_id=CASE WHEN instr(context,':')>0 THEN substr(context,1,instr(context,':')-1) ELSE context END WHERE form='reading' AND reading_id=''")
+                db.execSQL("UPDATE ai_usage SET cache_creation_known=(cache_creation_tokens>0),cache_read_known=(cache_read_tokens>0)")
+                EnglishDatabase.backfillNewCohort(db)
+            }
+            require(db.singleInt("SELECT COUNT(*) FROM word_memory m LEFT JOIN words w ON m.word_id=w.id WHERE w.id IS NULL")==0)
             require(db.singleInt("SELECT COUNT(*) FROM words") > 0)
             db.setTransactionSuccessful()
         } finally { db.endTransaction() }

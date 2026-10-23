@@ -72,6 +72,7 @@ class EnglishDatabase(private val context: Context) :
         upgradeV3(db)
         upgradeV4(db)
         upgradeV5(db)
+        upgradeV6(db)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -79,6 +80,7 @@ class EnglishDatabase(private val context: Context) :
         if (oldVersion < 3) upgradeV3(db)
         if (oldVersion < 4) upgradeV4(db)
         if (oldVersion < 5) upgradeV5(db)
+        if (oldVersion < 6) upgradeV6(db)
     }
 
     private fun upgradeV2(db: SQLiteDatabase) {
@@ -152,6 +154,18 @@ class EnglishDatabase(private val context: Context) :
         db.execSQL("ALTER TABLE ai_usage ADD COLUMN request_status TEXT NOT NULL DEFAULT 'OK'")
     }
 
+    private fun upgradeV6(db: SQLiteDatabase) {
+        db.execSQL("ALTER TABLE diagnostic_attempts ADD COLUMN reading_id TEXT NOT NULL DEFAULT ''")
+        db.execSQL("UPDATE diagnostic_attempts SET reading_id=CASE WHEN instr(context,':')>0 THEN substr(context,1,instr(context,':')-1) ELSE context END WHERE form='reading'")
+        db.execSQL("CREATE INDEX diagnostic_reading ON diagnostic_attempts(form,day,reading_id,created_at)")
+        db.execSQL("ALTER TABLE ai_usage ADD COLUMN cache_creation_known INTEGER NOT NULL DEFAULT 0")
+        db.execSQL("ALTER TABLE ai_usage ADD COLUMN cache_read_known INTEGER NOT NULL DEFAULT 0")
+        db.execSQL("UPDATE ai_usage SET cache_creation_known=(cache_creation_tokens>0),cache_read_known=(cache_read_tokens>0)")
+        db.execSQL("ALTER TABLE diagnostic_attempts ADD COLUMN new_cohort INTEGER NOT NULL DEFAULT 0")
+        db.execSQL("ALTER TABLE diagnostic_attempts ADD COLUMN selected_answer TEXT NOT NULL DEFAULT ''")
+        backfillNewCohort(db)
+    }
+
     private fun seedWords(db: SQLiteDatabase) {
         seedData.forEach { item ->
             val values = ContentValues().apply {
@@ -167,7 +181,16 @@ class EnglishDatabase(private val context: Context) :
 
     companion object {
         private const val DATABASE_NAME = "context_english.db"
-        const val DATABASE_VERSION = 5
+        const val DATABASE_VERSION = 6
+
+        internal fun backfillNewCohort(db: SQLiteDatabase) {
+            db.rawQuery("SELECT day,snapshot FROM learning_days",null).use { cursor ->
+                while(cursor.moveToNext()) {
+                    val plan=com.tanhaowen.contextenglish.adaptive.WorkflowCodec.decode(cursor.getString(1))
+                    plan.newIds.forEach { id -> db.execSQL("UPDATE diagnostic_attempts SET new_cohort=1 WHERE day=? AND word_id=?",arrayOf(cursor.getString(0),id)) }
+                }
+            }
+        }
 
         /** Before the upgrade transaction: failure aborts migration without changing old data. */
         fun createRecoveryBackup(context: Context, db: SQLiteDatabase): java.io.File {

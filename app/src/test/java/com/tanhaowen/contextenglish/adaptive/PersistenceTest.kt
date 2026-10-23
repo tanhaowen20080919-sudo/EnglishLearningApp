@@ -51,6 +51,26 @@ class PersistenceTest {
         assertThrows(IllegalStateException::class.java) { repository().loadWords() }
         SQLiteDatabase.openDatabase(context.getDatabasePath("context_english.db").path,null,SQLiteDatabase.OPEN_READONLY).use { assertEquals(4,it.version) }
     }
+    @Test fun directV5UpgradeKeepsItsSnapshotAndBacksUpBeforeAddingReadingIdentity() {
+        v4()
+        val lesson=LocalContent.readings.first()
+        val day=LocalDate.now().toString()
+        val steps=lesson.questions.map { LearningStep("$day:${it.id}","阅读",question=it) }
+        val old=DailyWorkflow(day,Intensity.STANDARD,45,"v5",emptyList(),emptyList(),lesson.id,"",steps,feedback="已评分",correct=true,started=true)
+        val snapshot=org.json.JSONObject(WorkflowCodec.encode(old)).apply { remove("budgetMinutes");remove("stepElapsedMs") }
+        SQLiteDatabase.openDatabase(context.getDatabasePath("context_english.db").path,null,SQLiteDatabase.OPEN_READWRITE).use { db ->
+            javaClass.getResourceAsStream("/schema-v5-extra.sql")!!.bufferedReader().readText().split(';').filter { it.isNotBlank() }.forEach { db.execSQL(it) }
+            db.execSQL("INSERT INTO learning_days(day,snapshot,mode,planned,completed) VALUES(?,?,'STANDARD',?,0)",arrayOf(day,snapshot.toString(),steps.size))
+            db.execSQL("INSERT INTO diagnostic_attempts(task_key,day,phase,form,tag,word_id,correct,elapsed_ms,context,created_at) VALUES(?,?,'阅读','reading','细节题',0,1,2000,?,1)",arrayOf(steps.first().key,day,lesson.questions.first().context))
+            db.version=5
+        }
+        val repo=repository();val restored=AdaptiveRepository(repo).load(day)!!
+        assertEquals(old,restored);assertEquals(6,helper!!.readableDatabase.version)
+        helper!!.readableDatabase.rawQuery("SELECT reading_id FROM diagnostic_attempts",null).use { it.moveToFirst();assertEquals(lesson.id,it.getString(0)) }
+        val backups=File(context.filesDir,"recovery").listFiles()!!
+        assertTrue(backups.any { it.name.startsWith("v5-") && File(it,"COMPLETE").exists() })
+        assertEquals(7,repo.loadWords().single().correctCount)
+    }
     @Test fun failedMigrationRollsBackAndKeepsOldDatabase() {
         v4()
         SQLiteDatabase.openDatabase(context.getDatabasePath("context_english.db").path,null,SQLiteDatabase.OPEN_READWRITE).use { it.execSQL("CREATE TABLE word_memory(collision TEXT)") }
