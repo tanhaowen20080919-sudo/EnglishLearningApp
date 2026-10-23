@@ -81,7 +81,8 @@ open class AiClient {
                 if(!canStart()) throw AiStartSkippedException()
                 val json = JSONObject(request(endpoint(settings.baseUrl, if (responses) "responses" else "chat/completions"),
                     "POST", settings.apiKey, payload.toString()))
-                AiCallResult(extractContent(json), UsageParser.parse(json, settings.cacheInputMode),json.optString("model",settings.dailyModel))
+                AiCallResult(extractContent(json), UsageParser.parse(json, settings.cacheInputMode),
+                    json.optString("model","").ifBlank { "未返回（请求：${settings.dailyModel}）" })
             }
         }
 
@@ -118,7 +119,7 @@ open class AiClient {
             ?: part?.optString("refusal")?.takeIf { it.isNotBlank() }
     }.joinToString("\n").trim()
 
-    private suspend fun request(url: String, method: String, apiKey: String, body: String? = null): String =
+    internal open suspend fun request(url: String, method: String, apiKey: String, body: String? = null): String =
         kotlinx.coroutines.suspendCancellableCoroutine { continuation ->
         val connection = (URL(url).openConnection() as HttpURLConnection).apply {
             requestMethod = method

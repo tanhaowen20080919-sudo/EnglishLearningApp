@@ -15,9 +15,15 @@ data class ReadingLesson(val id: String, val title: String, val passage: String,
 data class GrammarLesson(val tag: String, val card: String, val example: String, val questions: List<LocalQuestion>)
 
 object LocalContent {
+    private val meaningAtoms=java.util.concurrent.ConcurrentHashMap<String,Set<String>>()
+    private val stripMeaning=Regex("\\[[^]]*]|[A-Za-z.()（）]")
+    private val splitMeaning=Regex("[；;，,、\\s]+")
+    private fun atoms(meaning: String): Set<String> = meaningAtoms.getOrPut(meaning) {
+        meaning.replace(stripMeaning,"").split(splitMeaning).filter { it.length>=2 }.toSet()
+    }
     private fun rq(id: String, prompt: String, options: List<String>, answer: Int, why: String, tag: String) =
         LocalQuestion(id,prompt,options,answer,why,"reading",tag,context=id)
-    val readings = listOf(
+    private val introductoryReadings = listOf(
         ReadingLesson("garden","A Garden That Brings People Together",
             "When a small library lost its gardener, the land behind it became dry and empty. Maya, a student, suggested turning it into a community garden. The library had little money, so she invited neighbours to bring seeds and share tools. At first, only three people came. Instead of giving up, they put a box of fresh vegetables near the entrance with a sign: ‘Take what you need; help when you can.’ Within a month, more than twenty families were taking part.\n\nAn older neighbour, Mr Lee, taught children how to save water. In return, they helped him carry heavy bags. ‘I came for the tomatoes,’ he said, ‘but I stay for the conversations.’ The library now holds a weekly meeting in the garden. Maya believes its greatest benefit is not the food it produces. It gives people a reason to meet and learn from one another.",
             mapOf("community" to "社区", "seeds" to "种子", "entrance" to "入口", "benefit" to "益处", "suggested" to "建议"),
@@ -47,39 +53,39 @@ object LocalContent {
                 rq("birds:5","What does ‘their’ in ‘their notes’ refer to?",listOf("The birds'","The students'","The drivers'","The teachers'"),1,"Ana 与同学共同记录，所以 their 指学生们。","指代题")))
     )
 
-    private fun grammar(tag: String, card: String, example: String, rows: List<Triple<String,List<String>,Int>>) =
-        GrammarLesson(tag,card,example,rows.mapIndexed { i,r -> LocalQuestion("$tag:$i",r.first,r.second,r.third,
-            "$card\n本题答案：${r.second[r.third]}","grammar",tag) })
-    val grammars = listOf(
-        grammar("定语从句","先找先行词，再看从句缺什么。指人的主语用 who；指物的主语或宾语可用 that/which。", "The student who helped me is kind.（who 在从句中作主语）",listOf(
-            Triple("The girl ____ won the race is my friend.",listOf("who","which","where","when"),0),
-            Triple("This is the book ____ changed my mind.",listOf("where","that","who","when"),1),
-            Triple("I know a teacher ____ speaks French.",listOf("which","when","who","where"),2),
-            Triple("The bike ____ is outside belongs to Tom.",listOf("who","where","when","which"),3))),
-        grammar("时态","看时间状语和语境：yesterday 用一般过去时；since 与持续到现在的动作常用现在完成时。", "She has lived here since 2020.（从过去持续到现在）",listOf(
-            Triple("He ____ to school yesterday.",listOf("goes","went","has gone","going"),1),
-            Triple("She ____ here since 2020.",listOf("lives","lived","has lived","living"),2),
-            Triple("Look! The children ____ in the park.",listOf("played","play","have played","are playing"),3),
-            Triple("Water ____ at 100°C at standard pressure.",listOf("boils","boiled","is boiling","has boiled"),0))),
-        grammar("非谓语","介词后常接动词 ing；want 后接 to do；避免 avoid 后接 doing。先判断句中是否已有谓语。", "She enjoys reading. / He wants to learn.",listOf(
-            Triple("She enjoys ____ English stories.",listOf("read","to read","reading","reads"),2),
-            Triple("He wants ____ a doctor.",listOf("become","becoming","became","to become"),3),
-            Triple("Avoid ____ the same mistake.",listOf("making","make","to make","made"),0),
-            Triple("Thank you for ____ me.",listOf("help","helping","to help","helped"),1)))
-    )
+    val readings = introductoryReadings + ReadingBank.extended
+    val grammars = GrammarBank.lessons
 
-    fun vocabulary(w: VocabWord, pool: List<VocabWord>, form: String, key: String): LocalQuestion {
-        val random = Random(key.hashCode())
+    fun contexts(w: VocabWord): List<String> {
         val note=WordNotes.entries[w.word.lowercase()]
-        val alternate=note?.takeIf { random.nextBoolean() }?.let {
+        val alternate=note?.let {
             it.alternate.replace(Regex("(?i)(?<![a-z])${Regex.escape(w.word)}(?![a-z])"),"____")+"\n"+it.translation
         }
-        val cloze = alternate ?: LocalCloze.prompt(w)
-        val actual = if(form=="context" && cloze==null) "meaning" else form
+        val token=Regex("(?i)(?<![a-z])${Regex.escape(w.word)}(?![a-z])")
+        val corpus=OfflineWordResources.get(w.word)?.examples.orEmpty().filter { token.findAll(it.text).count()==1 }.map {
+            token.replace(it.text,"____")+"\n"+it.translation.ifBlank { "词义提示："+StudyEngine.meaning(w) }
+        }
+        return (listOfNotNull(LocalCloze.prompt(w),alternate)+corpus).distinctBy { normalizeContext(it,w.word) }
+    }
+    private fun normalizeContext(cloze: String,word: String)=cloze.substringBefore('\n').replace("____",word).lowercase().replace(Regex("\\s+")," ").trim()
+    fun vocabulary(w: VocabWord, pool: List<VocabWord>, form: String, key: String): LocalQuestion {
+        val random = Random(key.hashCode())
+        val contexts=contexts(w)
+        if(form=="sense" && w.word.lowercase() in ContextSenseBank.meanings) {
+            val word=w.word.lowercase();val note=WordNotes.entries.getValue(word);val meaning=ContextSenseBank.meanings.getValue(word)
+            val options=(ContextSenseBank.contrasts[word] ?: (ContextSenseBank.meanings.values.filter { it!=meaning }.shuffled(random).take(3)+meaning)).shuffled(random)
+            val canonical=contexts.first { normalizeContext(it,w.word)==note.alternate.lowercase().replace(Regex("\\s+")," ").trim() }
+            return LocalQuestion(key,"${note.alternate}\n句中 ${w.word} 的意思是？",options,options.indexOf(meaning),
+                "${note.alternate}\n${note.translation}\n此处 ${w.word} 表示：$meaning。","context",wordId=w.id,context="example:${w.id}:${canonical.hashCode()}")
+        }
+        val cloze = contexts.takeIf { it.isNotEmpty() }?.let { it[random.nextInt(it.size)] }
+        val requested=if(form=="sense") "context" else form
+        val actual = if(requested=="context" && cloze==null) "meaning" else requested
         if(actual=="spelling") return LocalQuestion(key,StudyEngine.meaning(w),emptyList(),-1,
             "${w.word}：${w.meaning}",actual,wordId=w.id,spelling=w.word,context=key)
         val answer = if(actual=="context") w.word else StudyEngine.meaning(w)
-        val choices = pool.asSequence().filter { it.id!=w.id && it.meaning!=w.meaning }
+        val targetAtoms=atoms(w.meaning)
+        val choices = pool.asSequence().filter { it.id!=w.id && it.meaning!=w.meaning && atoms(it.meaning).intersect(targetAtoms).isEmpty() }
             .map { if(actual=="context") it.word else StudyEngine.meaning(it) }
             .filter { it.isNotBlank() && it!=answer }.distinct().toList().shuffled(random).take(3)
         require(choices.size==3) { "词库不足，无法组成可靠题目" }

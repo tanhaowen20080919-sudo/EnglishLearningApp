@@ -33,7 +33,8 @@ fun AiCallUsage(record: AiUsageRecord, title: String = "本次使用") {
         if (expanded) {
             val u = record.usage
             Text("输入（含缓存） ${u.promptTokens} · 输出 ${u.completionTokens}")
-            Text("普通输入 ${u.normalInputTokens} · 缓存写入 ${u.cacheCreationTokens} · 缓存读取 ${u.cacheReadTokens}")
+            Text("普通输入 ${u.normalInputTokens} · 缓存写入 ${if(u.cacheCreationKnown || u.cacheCreationTokens>0) u.cacheCreationTokens.toString() else "未返回"} · 缓存读取 ${if(u.cacheReadKnown || u.cacheReadTokens>0) u.cacheReadTokens.toString() else "未返回"}")
+            if(!u.cacheCreationKnown || !u.cacheReadKnown) Text("上游未完整提供缓存分项，费用按已知用量估算。",style=MaterialTheme.typography.bodySmall)
             Text("总 Tokens ${u.totalTokens}")
             if (record.hasPriceSnapshot) {
                 listOf(Triple("普通输入", record.cost.input, record.inputPrice),

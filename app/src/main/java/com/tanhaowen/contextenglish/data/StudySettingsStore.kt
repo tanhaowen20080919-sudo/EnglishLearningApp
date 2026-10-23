@@ -5,9 +5,12 @@ import android.content.Context
 class StudySettingsStore(context: Context) {
     private val prefs = context.getSharedPreferences("study_settings", Context.MODE_PRIVATE)
     init {
-        // Enable the requested behavior once; later user choices persist.
-        if (!prefs.getBoolean("heart_audio_v1", false)) prefs.edit()
-            .putBoolean("speak", true).putBoolean("heart_audio_v1", true).apply()
+        // Enable on a fresh install; upgrading must never overwrite an explicit user choice.
+        if (!prefs.getBoolean("heart_audio_v1", false)) {
+            val edit=prefs.edit().putBoolean("heart_audio_v1",true)
+            if(!prefs.contains("speak")) edit.putBoolean("speak",true)
+            edit.apply()
+        }
     }
     fun load() = StudySettings(prefs.getInt("new", 20), prefs.getInt("goal", 30),
         prefs.getBoolean("phonetic", true), prefs.getBoolean("speak", true),

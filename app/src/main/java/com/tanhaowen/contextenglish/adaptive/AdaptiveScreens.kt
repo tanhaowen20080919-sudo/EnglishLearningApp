@@ -1,6 +1,8 @@
 package com.tanhaowen.contextenglish.adaptive
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
@@ -53,7 +55,10 @@ fun AdaptiveApp(legacy: AppViewModel) {
         lifecycle.lifecycle.addObserver(observer)
         onDispose { lifecycle.lifecycle.removeObserver(observer) }
     }
-    LaunchedEffect(route) { if(route=="今日学习" || route=="学习诊断") vm.reload(); legacy.refresh() }
+    LaunchedEffect(route) {
+        if(route=="今日学习" || route=="学习诊断") vm.reload()
+        if(route in listOf("词库与错词","AI 学习助手","设置与备份")) legacy.refresh()
+    }
     LaunchedEffect(state.message,old.aiMessage) {
         (state.message ?: old.aiMessage)?.let { snack.showSnackbar(it); vm.clearMessage(); legacy.clearMessage() }
     }
@@ -71,9 +76,10 @@ fun AdaptiveApp(legacy: AppViewModel) {
                 icon={ Text(if(tab=="今日学习") "◉" else "☰") },label={ Text(tab) },modifier=Modifier.testTag("nav-$tab")) }
         } },snackbarHost={ SnackbarHost(snack) }
     ) { padding -> Box(Modifier.fillMaxSize().padding(padding)) {
-        if(state.active) WorkflowScreen(state,vm,old.studySettings.autoSpeak)
-        else pages.SaveableStateProvider(route) {
-            when(route) {
+        Crossfade(targetState=if(state.active) "__study__" else route,animationSpec=tween(90),label="page-transition") { page ->
+        if(page=="__study__") WorkflowScreen(state,vm,old.studySettings.autoSpeak)
+        else pages.SaveableStateProvider(page) {
+            when(page) {
                 "今日学习" -> TodayScreen(state,vm)
                 "更多" -> LazyColumn(contentPadding=PaddingValues(24.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
                     item { Text("工具与设置",style=MaterialTheme.typography.headlineSmall) }
@@ -92,6 +98,7 @@ fun AdaptiveApp(legacy: AppViewModel) {
                 "AI 设置" -> AiSettingsScreen(old,legacy) { route="设置与备份" }
             }
         }
+        }
     } }
 }
 
@@ -99,7 +106,7 @@ fun AdaptiveApp(legacy: AppViewModel) {
 private fun TodayScreen(state: AdaptiveState, vm: AdaptiveViewModel) {
     val w=state.workflow
     var minutes by rememberSaveable { mutableStateOf("30") }
-    LazyColumn(contentPadding=PaddingValues(24.dp),verticalArrangement=Arrangement.spacedBy(18.dp)) {
+    LazyColumn(modifier=Modifier.testTag("today-list"),contentPadding=PaddingValues(24.dp),verticalArrangement=Arrangement.spacedBy(18.dp)) {
         item {
             Text(w?.day.orEmpty(),color=MaterialTheme.colorScheme.onSurfaceVariant)
             Text("把今天学扎实",fontSize=30.sp,fontWeight=FontWeight.SemiBold,modifier=Modifier.padding(top=8.dp))
@@ -108,19 +115,19 @@ private fun TodayScreen(state: AdaptiveState, vm: AdaptiveViewModel) {
         if(w==null) item {
             if(state.busy) CircularProgressIndicator() else Button(onClick=vm::reload) { Text("重试加载本地数据") }
         } else {
+            item { Button(onClick=vm::start,enabled=!state.busy,modifier=Modifier.fillMaxWidth().height(56.dp).testTag("start-study")) {
+                Text(if(w.finished) "查看今日总结" else if(w.started) "继续今日学习" else "开始今日学习")
+            } }
             item { Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceContainerLow)) {
                 Column(Modifier.fillMaxWidth().padding(22.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
-                    Text("预计 ${w.minutes} 分钟",style=MaterialTheme.typography.titleLarge)
+                    Text("预计 ${w.minutes} 分钟 · 预算 ${w.budgetMinutes} 分钟",style=MaterialTheme.typography.titleLarge)
                     Text("新词 ${w.newIds.size}  ·  到期复习 ${w.reviewIds.size}")
-                    Text("阅读 ${if(w.mode==Intensity.QUICK) "微型训练" else "1 篇 · 五类题型"}")
-                    Text(if(w.grammarTag.isBlank()) "语法：小测持续诊断" else "弱项专项：${w.grammarTag}")
-                    Text("综合小测 ${w.steps.count { it.phase=="综合小测" }} 题")
+                    Text("阅读 ${if(w.steps.count { it.phase=="阅读" }<=2) "微型训练" else "1 篇 · 五类题型"}")
+                    Text(if(w.grammarTag.isBlank()) "语法：小测持续诊断" else "${if(w.grammarFromWeakness) "弱项专项" else "语法加练"}：${w.grammarTag}")
+                    Text("综合小测 ${w.steps.count { it.phase=="综合小测" }} 题 · 约 ${if(LearningParameters.shortSession(w.mode,w.budgetMinutes)) 3 else 8} 分钟")
                     LinearProgressIndicator(progress={ w.progress },modifier=Modifier.fillMaxWidth())
                     Text("完成 ${w.index} / ${w.steps.size}",style=MaterialTheme.typography.labelMedium)
                 }
-            } }
-            item { Button(onClick=vm::start,enabled=!state.busy,modifier=Modifier.fillMaxWidth().height(56.dp).testTag("start-study")) {
-                Text(if(w.finished) "查看今日总结" else if(w.started) "继续今日学习" else "开始今日学习")
             } }
             if(!w.finished) item {
                 Text("今天有多少时间？",style=MaterialTheme.typography.titleSmall)
@@ -138,6 +145,10 @@ private fun TodayScreen(state: AdaptiveState, vm: AdaptiveViewModel) {
             item { HorizontalDivider(); Text("准备明日内容",style=MaterialTheme.typography.titleMedium,modifier=Modifier.padding(top=18.dp))
                 Text("明日任务由本地计算；手动准备可提前缓存阅读解析和弱项讲解。",style=MaterialTheme.typography.bodySmall,modifier=Modifier.padding(vertical=8.dp))
                 OutlinedButton(onClick={ vm.prepareTomorrow() },enabled=!state.aiBusy,modifier=Modifier.fillMaxWidth()) { Text("准备明日内容 · AI") }
+                state.tomorrow?.let { Text("明日本地预测：新词 ${it.newIds.size} · 复习 ${it.reviewIds.size}；开始学习时按实际到期情况核对。",style=MaterialTheme.typography.bodySmall) }
+                TextButton(onClick={ vm.enhance("practice") },enabled=!state.aiBusy && WeaknessDetector.priorities(state.skills).isNotEmpty()) { Text("按诊断生成针对性练习 · AI") }
+                TextButton(onClick={ vm.enhance("supplement") },enabled=!state.aiBusy && state.quizRepeatRatio>=LearningParameters.LOCAL_QUIZ_REPEAT_THRESHOLD) { Text(if(state.quizRepeatRatio>=LearningParameters.LOCAL_QUIZ_REPEAT_THRESHOLD) "同类题目重复较多，补充练习 · AI" else "本地题库当前够用") }
+                if(state.materialTasks.any { it.practice && state.materials.containsKey(it.type) }) OutlinedButton(onClick=vm::useCachedPractice,enabled=!state.busy && !state.aiBusy) { Text("加入已缓存专项 · 离线可用") }
                 AiPanel(state,vm)
             }
         }
@@ -166,6 +177,7 @@ private fun WorkflowScreen(state: AdaptiveState,vm: AdaptiveViewModel,autoSpeak:
             LazyColumn(contentPadding=PaddingValues(24.dp),verticalArrangement=Arrangement.spacedBy(18.dp)) {
                 item { Text("今日学习完成",style=MaterialTheme.typography.headlineMedium,modifier=Modifier.testTag("daily-complete")) }
                 item { Text("词汇、阅读和小测结果已保存，后续任务会参考今天的表现。") }
+                state.tomorrow?.let { plan -> item { Text("明日本地计划已生成：新词 ${plan.newIds.size} · 到期复习 ${plan.reviewIds.size}。${plan.reason}",modifier=Modifier.testTag("tomorrow-plan-ready")) } }
                 state.results.forEach { result -> item { Text("${result.tag}：${result.correct}/${result.total} · ${(result.accuracy*100).toInt()}%") } }
                 item { Text("阅读记录生词 ${state.lookedUp.size} 个，其中 ${state.lookedUp.values.count { it }} 个影响理解。") }
                 item { PriorityList(state) }
@@ -185,7 +197,7 @@ private fun WorkflowScreen(state: AdaptiveState,vm: AdaptiveViewModel,autoSpeak:
                     Text("先在脑中回忆词义，再翻开答案。",color=MaterialTheme.colorScheme.onSurfaceVariant)
                     if(!w.revealed) Button(onClick=vm::reveal,enabled=!state.busy,modifier=Modifier.fillMaxWidth().heightIn(min=50.dp).testTag("reveal-meaning")) { Text("显示释义") }
                     else {
-                        Text(word.meaning,style=MaterialTheme.typography.titleLarge,modifier=Modifier.testTag("learn-meaning"))
+                        Text(com.tanhaowen.contextenglish.study.StudyEngine.meaning(word),style=MaterialTheme.typography.titleLarge,modifier=Modifier.testTag("learn-meaning"))
                         if(word.contextMeaning.isNotBlank() && word.contextMeaning!=word.meaning) Text(word.contextMeaning)
                         Text(word.example,style=MaterialTheme.typography.bodyLarge)
                         Text(word.exampleTranslation,color=MaterialTheme.colorScheme.onSurfaceVariant)
@@ -194,13 +206,27 @@ private fun WorkflowScreen(state: AdaptiveState,vm: AdaptiveViewModel,autoSpeak:
                         listOf("不认识","模糊","认识").forEachIndexed { i,label ->
                             OutlinedButton(onClick={ vm.rate(i) },enabled=!state.busy,modifier=Modifier.fillMaxWidth().heightIn(min=50.dp).testTag("rating-$i")) { Text(label) }
                         }
+                        var full by rememberSaveable { mutableStateOf(false) }
+                        TextButton(onClick={ full=!full }) { Text("展开完整词义与更多补充") }
+                        if (full) {
+                            Text(word.meaning)
+                            OfflineWordResources.get(word.word)?.let { supplement ->
+                                if(supplement.forms.isNotBlank() && WordNotes.entries[word.word.lowercase()]==null) Text("词形：${supplement.forms}")
+                                var more by rememberSaveable { mutableStateOf(false) }
+                                TextButton(onClick={ more=!more }) { Text("更多语境 · 离线") }
+                                if(more) supplement.examples.forEach { e -> Text(e.text);if(e.translation.isNotBlank()) Text(e.translation) }
+                            }
+                            TextButton(onClick={ vm.enhance("context") },enabled=!state.aiBusy) { Text("AI 解释当前语境义") }
+                            TextButton(onClick={ vm.enhance("examples") },enabled=!state.aiBusy) { Text("AI 补充例句、搭配与易混辨析") }
+                            AiPanel(state,vm)
+                        }
                     }
                 } else step.question?.let { q ->
-                    if(step.phase=="阅读") ReadingBody(state,vm)
-                    if(step.phase=="语法专项") LocalContent.grammars.firstOrNull { it.tag==q.tag }?.let { g ->
+                    if(q.form=="reading") ReadingBody(state,vm)
+                    if(step.phase=="语法专项" || q.form=="grammar" && w.feedback.isNotBlank()) LocalContent.grammars.firstOrNull { it.tag==q.tag }?.let { g ->
                         Card { Column(Modifier.padding(18.dp),verticalArrangement=Arrangement.spacedBy(10.dp)) {
                             Text(g.tag,fontWeight=FontWeight.SemiBold); Text(g.card); Text(g.example)
-                            if(state.cachedGrammar.isNotBlank()) {
+                            if(state.cachedGrammar.isNotBlank() && q.tag==w.grammarTag) {
                                 var expanded by rememberSaveable { mutableStateOf(false) }
                                 TextButton(onClick={ expanded=!expanded }) { Text("已缓存 AI 讲解 · 离线可用") }
                                 if(expanded) Text(runCatching { AiTaskScheduler.parseObject(state.cachedGrammar).getString("explanation") }.getOrDefault("缓存无法解析，请使用本地知识卡。"))
@@ -220,21 +246,26 @@ private fun WorkflowScreen(state: AdaptiveState,vm: AdaptiveViewModel,autoSpeak:
                     }
                     if(w.feedback.isNotBlank()) {
                         Text(w.feedback,color=if(w.correct) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error,modifier=Modifier.testTag("answer-feedback"))
-                        if(!w.correct && step.phase=="阅读") {
+                        if(!w.correct && q.form=="reading") {
                             Text("主要卡在哪里？")
                             Row(Modifier.horizontalScroll(rememberScrollState())) {
                                 listOf("生词影响","证据定位","推断过度","句子结构").forEach { reason ->
                                     TextButton(onClick={ vm.errorReason(reason) }) { Text(reason) }
                                 }
                             }
+                            var diagnose by rememberSaveable { mutableStateOf(false) }
+                            TextButton(onClick={ diagnose=!diagnose }) { Text("句子结构不清楚？做一道语法验证题") }
+                            if(diagnose) Row(Modifier.horizontalScroll(rememberScrollState())) {
+                                LocalContent.grammars.forEach { g -> TextButton(onClick={ vm.diagnoseReadingGrammar(g.tag) },enabled=!state.busy) { Text(g.tag) } }
+                            }
                         }
                         Button(onClick=vm::next,enabled=!state.busy,modifier=Modifier.fillMaxWidth().heightIn(min=50.dp).testTag("continue-study")) { Text("继续") }
                         TextButton(onClick={ vm.explainCurrent() },enabled=!state.aiBusy) { Text("让 AI 给我讲明白") }
                     }
-                    if(step.phase=="阅读" && state.cachedExplanation.isNotBlank()) {
+                    if(step.phase=="阅读" && state.cachedExplanation.isNotBlank() && w.feedback.isNotBlank()) {
                         var show by rememberSaveable { mutableStateOf(false) }
                         TextButton(onClick={ show=!show }) { Text("查看已缓存解析 · 离线可用") }
-                        if(show) Text(runCatching { AiTaskScheduler.parseObject(state.cachedExplanation).getString("explanation") }.getOrDefault("缓存格式已变化，请使用本地解析。"))
+                        if(show) Text(runCatching { state.materialTasks.first { it.type=="reading-analysis-v2" }.let { com.tanhaowen.contextenglish.ai.LearningEnhancements.display(it,state.cachedExplanation,q.id) } }.getOrDefault("缓存格式已变化，请使用本地解析。"))
                     }
                     AiPanel(state,vm)
                 }
@@ -250,6 +281,8 @@ private fun ReadingBody(state: AdaptiveState,vm: AdaptiveViewModel) {
     val reading=LocalContent.readings.first { it.id==w.readingId }
     var search by rememberSaveable { mutableStateOf("") }
     Text(reading.title,style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.SemiBold)
+    val wordCount=remember(reading.id) { Regex("[A-Za-z]+(?:['-][A-Za-z]+)*").findAll(reading.passage).count() }
+    Text("原创${if(wordCount>=260) "高考题型篇章" else "基础过渡"}训练 · 约 $wordCount 词",style=MaterialTheme.typography.labelSmall)
     val color=MaterialTheme.colorScheme.primary
     val text=remember(reading.id,color) { buildAnnotatedString {
         append(reading.passage)
@@ -264,6 +297,16 @@ private fun ReadingBody(state: AdaptiveState,vm: AdaptiveViewModel) {
     Text("点击文中单词可查本地词义。",style=MaterialTheme.typography.bodySmall)
     OutlinedTextField(search,{ search=it.take(80) },label={ Text("记录文中生词") },singleLine=true,modifier=Modifier.fillMaxWidth())
     TextButton(onClick={ if(search.isNotBlank()) vm.lookup(search.trim()) },enabled=!state.busy) { Text("查词并记录") }
+    TextButton(onClick={ vm.enhance("sentence") },enabled=!state.aiBusy) { Text("AI 拆解本文长难句") }
+    TextButton(onClick={ vm.enhance("context") },enabled=!state.aiBusy) { Text("AI 解释刚查词的语境义") }
+    listOf("sentence-structure-v2","context-meaning-v2").forEach { type ->
+        state.materials[type]?.let { content ->
+            val task=state.materialTasks.first { it.type==type }
+            var show by rememberSaveable(type) { mutableStateOf(false) }
+            TextButton(onClick={ show=!show }) { Text("${task.title} · 已缓存，离线可用") }
+            if(show) Text(runCatching { com.tanhaowen.contextenglish.ai.LearningEnhancements.display(task,content) }.getOrDefault("缓存不可用，继续本地阅读。"))
+        }
+    }
     if(state.lookedUp.isNotEmpty()) {
         Text("本篇生词 ${state.lookedUp.size} · 影响理解 ${state.lookedUp.values.count { it }}",style=MaterialTheme.typography.labelMedium)
         Row(Modifier.horizontalScroll(rememberScrollState()),horizontalArrangement=Arrangement.spacedBy(8.dp)) {
@@ -282,6 +325,9 @@ private fun AiPanel(state: AdaptiveState,vm: AdaptiveViewModel) {
     }
     if(state.aiError.isNotBlank()) Text(state.aiError,color=MaterialTheme.colorScheme.error,style=MaterialTheme.typography.bodySmall)
     if(state.aiContent.isNotBlank()) SelectionContainer { Text(state.aiContent,style=MaterialTheme.typography.bodyMedium) }
+    if(state.aiCacheHit) Text("本次使用本地缓存，未发送新请求、未增加费用。",style=MaterialTheme.typography.bodySmall)
+    state.lastAiUsage?.let { AiCallUsage(it) }
+    if(state.pendingQuestions.isNotEmpty()) OutlinedButton(onClick=vm::addPractice,enabled=!state.busy && !state.aiBusy,modifier=Modifier.fillMaxWidth()) { Text("加入 ${state.pendingQuestions.size} 道练习，离线作答") }
 }
 
 @Composable
@@ -289,7 +335,7 @@ private fun PriorityList(state: AdaptiveState) {
     val priorities=WeaknessDetector.priorities(state.skills)
     Text("接下来优先练什么",style=MaterialTheme.typography.titleLarge)
     if(priorities.isEmpty()) Text("当前诊断样本较少，继续完成阅读和小测，积累至少 3 次同类作答后识别弱项。")
-    priorities.forEachIndexed { i,s -> Text("${i+1}. ${s.tag} · 正确 ${s.correct}/${s.total}，建议先复盘证据和错因。") }
+    priorities.forEachIndexed { i,s -> Text("${i+1}. ${s.tag} · 正确 ${s.correct}/${s.total}。${WeaknessDetector.recommendation(s.tag)}") }
 }
 
 @Composable
@@ -299,16 +345,23 @@ private fun DiagnosticScreen(state: AdaptiveState,vm: AdaptiveViewModel) {
         item { PriorityList(state) }
         item { HorizontalDivider(); Text("词汇",style=MaterialTheme.typography.titleLarge)
             report.optJSONObject("vocabulary")?.let { Text("稳定掌握 ${it.optInt("stable")} · 学习中 ${it.optInt("learning")} · 高频遗忘 ${it.optInt("frequentForgetting")}") }
-            Text("拼写正确率 ${(report.optDouble("spellingAccuracy",.75)*100).toInt()}%（无样本时用于排程的默认值为75%）")
+            Text(if(report.optInt("spellingSamples")==0) "拼写：暂无作答数据" else "拼写正确率 ${(report.optDouble("spellingAccuracy")*100).toInt()}% · ${report.optInt("spellingSamples")} 次")
         }
         item { Text("阅读与语法",style=MaterialTheme.typography.titleLarge)
-            Text("阅读 ${report.optInt("readingArticles")} 篇 · ${report.optInt("readingQuestions")} 题")
+            Text("参与阅读 ${report.optInt("readingArticles")} 篇（含未完成） · 已答 ${report.optInt("readingQuestions")} 题")
             Text("累计查词 ${report.optInt("unknownWords")} · 影响理解 ${report.optInt("impactWords")}")
+            Text("以下阅读诊断使用最近 7 篇文章，其他技能使用最近 30 天。",style=MaterialTheme.typography.bodySmall)
         }
         state.skills.forEach { s -> item {
             Text("${s.tag}：${s.correct}/${s.total} · ${(s.accuracy*100).toInt()}%")
             LinearProgressIndicator(progress={ s.accuracy.toFloat() },modifier=Modifier.fillMaxWidth().padding(top=8.dp))
             Text("平均每题 ${if(s.total==0) 0 else s.millis/s.total/1000} 秒",style=MaterialTheme.typography.bodySmall)
+        } }
+        report.optJSONArray("lifetimeSkills")?.let { lifetime -> item {
+            Text("长期累计诊断",style=MaterialTheme.typography.titleMedium)
+            repeat(lifetime.length()) { i -> val s=lifetime.getJSONObject(i)
+                Text("${s.getString("tag")}：${s.getInt("correct")}/${s.getInt("total")} · ${(s.getInt("correct")*100.0/s.getInt("total")).toInt()}%")
+            }
         } }
         item {
             val causes=report.optJSONObject("readingErrorReasons") ?: JSONObject()

@@ -4,8 +4,6 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.Espresso.closeSoftKeyboard
 import com.tanhaowen.contextenglish.data.*
 import org.json.JSONObject
 import org.junit.Assert.*
@@ -23,24 +21,29 @@ class UpgradeSmokeTest {
 
     @Test fun secondaryToolsPreserveDraftsAndSearchWithSingleNavigation() {
         compose.onNodeWithTag("nav-更多").performClick()
+        compose.onNodeWithTag("tab-WORDS").performClick()
+        pressTestBack()
+        compose.waitUntil(15000) { compose.onAllNodesWithTag("start-study").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithTag("nav-今日学习").assertIsSelected()
+        compose.onNodeWithTag("nav-更多").performClick()
         compose.onNodeWithTag("tab-AI").performClick()
         compose.onNodeWithTag("learning-input").performTextInput("Explain a simple sentence")
-        closeSoftKeyboard()
-        pressBack()
-        compose.onNodeWithTag("nav-更多").performClick()
+        returnToMore()
         compose.onNodeWithTag("tab-WORDS").performClick()
         compose.onNodeWithTag("word-search").performTextInput("avoid")
-        closeSoftKeyboard()
-        pressBack()
-        compose.onNodeWithTag("nav-更多").performClick()
+        returnToMore()
         compose.onNodeWithTag("tab-AI").performClick()
         compose.onNodeWithTag("learning-input").assertTextContains("Explain a simple sentence")
-        closeSoftKeyboard()
-        pressBack()
-        compose.onNodeWithTag("nav-更多").performClick()
+        returnToMore()
         compose.onNodeWithTag("tab-WORDS").performClick()
         compose.onNodeWithTag("word-search").assertTextContains("avoid")
         compose.onNodeWithTag("nav-今日学习").assertDoesNotExist()
+    }
+
+    private fun returnToMore() {
+        compose.onNodeWithText("返回").performClick()
+        compose.waitUntil(15000) { compose.onAllNodesWithTag("tab-AI").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithTag("nav-更多").assertExists()
     }
 
     private fun screenshot(name: String) {
@@ -49,6 +52,7 @@ class UpgradeSmokeTest {
         compose.onRoot().captureToImage().asAndroidBitmap().let { bitmap ->
             File(output,"$name.png").outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG,100,it) }
         }
+        publishUiEvidence()
     }
 
     @Test fun activeRecallResumesWithoutDuplicateNavigation() {

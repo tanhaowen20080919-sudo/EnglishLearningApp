@@ -15,8 +15,8 @@ object UsageParser {
         val details = usage.optJSONObject("prompt_tokens_details")
             ?: usage.optJSONObject("input_tokens_details") ?: JSONObject()
         fun number(obj: JSONObject, key: String): Long? = when (val value = obj.opt(key)) {
-            is Number -> value.toDouble().takeIf { it.isFinite() }?.toLong()?.coerceAtLeast(0)
-            is String -> value.toLongOrNull()?.coerceAtLeast(0)
+            is Number -> value.toDouble().takeIf { it.isFinite() && it>=0 && it==kotlin.math.floor(it) }?.toLong()
+            is String -> value.toLongOrNull()?.takeIf { it>=0 }
             else -> null
         }
         fun first(vararg values: Long?) = values.firstOrNull { it != null }
@@ -45,6 +45,10 @@ object UsageParser {
         }
         return TokenUsage(inclusive, output ?: 0L, write, read,
             (number(usage, "total_tokens") ?: 0L).coerceAtLeast(inclusive + (output ?: 0L)),
-            known = (input != null || miss != null) && output != null)
+            known = (input != null || miss != null) && output != null,
+            cacheCreationKnown = listOf("cache_write_tokens","cache_creation_tokens").any { number(details,it)!=null } ||
+                listOf("cache_creation_input_tokens","cache_creation_tokens","cache_write_tokens","prompt_cache_creation_tokens").any { number(usage,it)!=null },
+            cacheReadKnown = listOf("cached_tokens","cache_read_tokens").any { number(details,it)!=null } ||
+                listOf("prompt_cache_hit_tokens","cache_read_input_tokens","cache_read_tokens","cached_tokens").any { number(usage,it)!=null })
     }
 }

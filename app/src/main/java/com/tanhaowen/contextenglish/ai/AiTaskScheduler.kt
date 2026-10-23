@@ -17,19 +17,23 @@ class AiTaskScheduler(private val repository: EnglishRepository, private val cli
     private val db get()=repository.database.writableDatabase
     companion object {
         private val mutex=Mutex()
-        const val CACHE_VERSION=1
+        const val CACHE_VERSION=2
         fun hash(text: String)=MessageDigest.getInstance("SHA-256").digest(text.toByteArray()).joinToString("") { "%02x".format(it) }
         fun parseObject(text: String): JSONObject {
-            val cleaned=text.trim().removePrefix("```json").removePrefix("```").removeSuffix("```").trim()
+            var cleaned=text.trim().removePrefix("\uFEFF")
+            Regex("^```(?:json)?\\s*([\\s\\S]*?)\\s*```$",RegexOption.IGNORE_CASE).matchEntire(cleaned)?.let { cleaned=it.groupValues[1].trim() }
             require(cleaned.length<=100_000) { "AI 内容过长" }
-            return JSONObject(cleaned)
+            val tokener=org.json.JSONTokener(cleaned)
+            val value=tokener.nextValue()
+            require(value is JSONObject && tokener.nextClean()=='\u0000') { "AI 未返回单个完整 JSON 对象" }
+            return value
         }
         fun validateExplanation(text: String) {
             val j=parseObject(text)
-            require(j.getString("explanation").length in 10..12000) { "解析缺少有效 explanation 字段" }
+            require(j.opt("explanation") is String && j.getString("explanation").trim().length in 10..12000) { "解析缺少有效 explanation 字段" }
             val a=j.getJSONArray("suggestions")
             require(a.length() in 1..8)
-            repeat(a.length()) { require(a.getString(it).length in 1..1000) }
+            repeat(a.length()) { require(a.get(it) is String && a.getString(it).trim().length in 1..1000) }
         }
     }
     private fun key(settings: AiSettings, type: String, prompt: String) = hash(
@@ -56,7 +60,13 @@ class AiTaskScheduler(private val repository: EnglishRepository, private val cli
         if(!canStart()) return@withLock Result.failure(AiStartSkippedException())
         val key=queue(settings,type,prompt)
         cached(settings,type,prompt)?.let { content ->
-            try { validate(content); return@withLock Result.success(AiCallResult(content,TokenUsage(),settings.dailyModel,fromCache=true)) }
+            try {
+                validate(content)
+                val actualModel=withContext(Dispatchers.IO) {
+                    db.rawQuery("SELECT model FROM ai_tasks WHERE task_key=?",arrayOf(key)).use { if(it.moveToFirst()) it.getString(0) else settings.dailyModel }
+                }
+                return@withLock Result.success(AiCallResult(content,TokenUsage(),actualModel,fromCache=true))
+            }
             catch(_: Exception) { /* A prior schema is no longer usable. Regenerate only on this user action. */ }
         }
         // Local configuration errors are not network calls and must not enter the spending ledger.
@@ -66,24 +76,25 @@ class AiTaskScheduler(private val repository: EnglishRepository, private val cli
         var receivedUsage=false
         try {
             withContext(Dispatchers.IO) {
-                usageId=repository.recordAiUsage(settings.dailyModel,TokenUsage(),settings,status="RUNNING").id
+                usageId=repository.recordAiUsage("未返回（请求：${settings.dailyModel}）",TokenUsage(),settings,status="RUNNING").id
                 update(key,"RUNNING",usageId=usageId)
             }
             val result=client.generate(settings,prompt,maxTokens,canStart).getOrThrow()
             val record=withContext(Dispatchers.IO) {
-                repository.recordAiUsage(result.model.ifBlank { settings.dailyModel },result.usage,settings,
+                repository.recordAiUsage(result.model.ifBlank { "未返回（请求：${settings.dailyModel}）" },result.usage,settings,
                     (System.nanoTime()-started)/1_000_000,existingId=usageId)
             }
             usageId=record.id
             receivedUsage=true
             require(result.content.isNotBlank()) { "AI 未返回有效内容，可继续离线学习" }
             validate(result.content)
-            withContext(Dispatchers.IO) { update(key,"DONE",result.content,usageId=record.id,model=result.model.ifBlank { settings.dailyModel }) }
+            withContext(Dispatchers.IO) { update(key,"DONE",result.content,usageId=record.id,model=record.model) }
             Result.success(result.copy(usageId=record.id))
         } catch(e: Exception) {
             withContext(kotlinx.coroutines.NonCancellable+Dispatchers.IO) {
-                if(!receivedUsage && e !is AiStartSkippedException) repository.recordAiUsage(settings.dailyModel,TokenUsage(),settings,
+                if(!receivedUsage && e !is AiStartSkippedException) repository.recordAiUsage("未返回（请求：${settings.dailyModel}）",TokenUsage(),settings,
                     (System.nanoTime()-started)/1_000_000,if(e is CancellationException) "CANCELLED_USAGE_UNKNOWN" else "FAILED_USAGE_UNKNOWN",existingId=usageId)
+                if(receivedUsage) db.execSQL("UPDATE ai_usage SET request_status='INVALID_CONTENT' WHERE id=?",arrayOf(usageId))
                 update(key,if(e is CancellationException) "CANCELLED" else "FAILED",error=friendlyAiError(e),usageId=usageId)
             }
             if(e is CancellationException) throw e
