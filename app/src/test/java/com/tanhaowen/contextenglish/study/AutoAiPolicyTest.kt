@@ -6,7 +6,7 @@ import org.junit.Test
 
 class AutoAiPolicyTest {
     private val ai=AiSettings(apiKey="test-only",dailyModel="fixture",inputPricePerMillion=2.0,outputPricePerMillion=8.0)
-    private val study=StudySettings(autoAiBudget=0.1)
+    private val study=StudySettings(autoAi=true,autoAiBudget=0.1)
     private fun job(known: Boolean=true,cost: Double=0.01)=AutoAiJob(1,"scope",setOf(1),"repeat error","DONE","fixture","CNY",cost,cost,known,"","",1,2)
     @Test fun missingKeyAndPricesNeverMakePaidCalls() {
         assertNotNull(AutoAiPolicy.block(ai.copy(apiKey=""),study,emptyList(),0.01))

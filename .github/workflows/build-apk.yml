@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   build:
-    name: Test and build unsigned release APK
+    name: Test and build v1.0 Debug and Release APKs
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -47,19 +47,20 @@ jobs:
           python tools/verify_vocabulary.py
 
       - name: Test, lint and build APK
-        run: gradle :app:testDebugUnitTest :app:lintDebug :app:assembleRelease -PunsignedRelease=true --stacktrace
+        run: ./gradlew :app:testDebugUnitTest :app:lintDebug :app:assembleDebug :app:assembleRelease -PunsignedRelease=true --stacktrace
 
       - name: Prepare artifact
         run: |
           mkdir -p output
-          cp app/build/outputs/apk/release/app-release-unsigned.apk output/Context-English-v0.5.0-unsigned.apk
+          cp app/build/outputs/apk/release/app-release-unsigned.apk output/Context-English-v1.0.0-unsigned.apk
+          cp app/build/outputs/apk/debug/app-debug.apk output/Context-English-v1.0.0-debug.apk
           cd output
-          sha256sum Context-English-v0.5.0-unsigned.apk > SHA256SUMS
+          sha256sum *.apk > SHA256SUMS
 
       - name: Upload unsigned APK for local signing
         uses: actions/upload-artifact@v4
         with:
-          name: Context-English-v0.5.0-unsigned-apk
+          name: Context-English-v1.0.0-apks
           path: output/
           if-no-files-found: error
           retention-days: 30
@@ -119,7 +120,7 @@ jobs:
           arch: x86_64
           disable-animations: true
           script: |
-            gradle :app:connectedDebugAndroidTest --stacktrace; test_status=$?; adb pull /sdcard/Android/data/com.tanhaowen.contextenglish/files/screenshots app/build/screenshots || true; exit "$test_status"
+            ./gradlew :app:connectedDebugAndroidTest --stacktrace; test_status=$?; adb pull /sdcard/Android/data/com.tanhaowen.contextenglish/files/screenshots app/build/screenshots || true; exit "$test_status"
       - name: Upload Android test reports
         if: always()
         uses: actions/upload-artifact@v4

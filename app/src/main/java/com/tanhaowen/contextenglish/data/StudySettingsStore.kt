@@ -12,7 +12,7 @@ class StudySettingsStore(context: Context) {
     fun load() = StudySettings(prefs.getInt("new", 20), prefs.getInt("goal", 30),
         prefs.getBoolean("phonetic", true), prefs.getBoolean("speak", true),
         prefs.getBoolean("sound", true), prefs.getBoolean("haptics", true), prefs.getBoolean("advance", true),
-        prefs.getBoolean("auto_ai", true), prefs.getString("auto_budget", "0.10")?.toDoubleOrNull() ?: 0.10,
+        false, prefs.getString("auto_budget", "0.10")?.toDoubleOrNull() ?: 0.10,
         prefs.getFloat("speech_rate", 0.9f),
         runCatching { AppPalette.valueOf(prefs.getString("palette", "BLUE").orEmpty()) }.getOrDefault(AppPalette.BLUE)).normalized()
     fun save(s: StudySettings) { prefs.edit().putInt("new", s.newWords.coerceIn(1,100))

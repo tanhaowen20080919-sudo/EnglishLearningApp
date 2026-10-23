@@ -32,7 +32,7 @@ assert db.execute("SELECT content,usage_id FROM ai_cache").fetchone()==('keep me
 assert db.execute("SELECT correct_count FROM words WHERE word='avoid'").fetchone()[0]==3
 print('PASS: v2 usage costs, replies and word progress survive v3 migration; unknown tokens normalize to 0')
 
-v4=text[text.index('private fun upgradeV4'):text.index('private fun seedWords')]
+v4=text[text.index('private fun upgradeV4'):text.index('private fun upgradeV5')]
 simple=re.findall(r'db.execSQL\("([^"$]+)"\)',v4)
 for sql in simple:
     if not sql.startswith('CREATE INDEX'):db.execute(sql)
@@ -49,3 +49,13 @@ assert db.execute("SELECT correct_count FROM words WHERE word='avoid'").fetchone
 assert db.execute("SELECT content FROM ai_cache").fetchone()==('keep me',)
 assert db.execute("SELECT COUNT(*) FROM words").fetchone()[0]==1640
 print('PASS: v3 -> v4 retains all words/learning/AI data; session answers are idempotent')
+
+# Exercise v4 -> v5 from the actual checked-in migration statements.
+v5=text[text.index('private fun upgradeV5'):text.index('private fun seedWords')]
+for sql in re.findall(r'db.execSQL\("([^"$]+)"\)',v5): db.execute(sql)
+assert db.execute("SELECT state,correct_count,phonetic FROM words WHERE word='avoid'").fetchone()==('LEARNING',3,'x')
+assert db.execute("SELECT mastery,lapses FROM word_memory WHERE word_id=(SELECT id FROM words WHERE word='avoid')").fetchone()==(0.3,0)
+assert db.execute("SELECT elapsed_ms,request_status FROM ai_usage WHERE model='old-model'").fetchone()==(0,'OK')
+assert db.execute("SELECT content FROM ai_cache").fetchone()==('keep me',)
+assert db.execute('PRAGMA integrity_check').fetchone()==('ok',)
+print('PASS: v4 -> v5 preserves vocabulary, IPA, learning, AI usage and cached replies; adaptive schema is valid')

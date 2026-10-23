@@ -44,7 +44,7 @@ fun AiCallUsage(record: AiUsageRecord, title: String = "本次使用") {
                         style = MaterialTheme.typography.bodySmall)
                 }
             } else Text("旧版记录保留原有总费用，未保存当时的分项价格。", style = MaterialTheme.typography.bodySmall)
-            Text("模型 ${record.model}", style = MaterialTheme.typography.bodySmall)
+            Text("模型 ${record.model} · 耗时 ${record.elapsedMs} ms · ${record.status}", style = MaterialTheme.typography.bodySmall)
         }
     }
 }

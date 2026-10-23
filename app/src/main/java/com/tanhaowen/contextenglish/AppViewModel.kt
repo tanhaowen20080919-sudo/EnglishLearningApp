@@ -81,6 +81,8 @@ class AppViewModel(
     private val aiClient: AiClient = AiClient()
 ) : ViewModel() {
 
+    private val scheduler = com.tanhaowen.contextenglish.ai.AiTaskScheduler(repository, aiClient)
+    private var aiJob: Job? = null
     private val _uiState = MutableStateFlow(AppUiState())
     val uiState: StateFlow<AppUiState> = _uiState.asStateFlow()
 
@@ -99,8 +101,10 @@ class AppViewModel(
     private var loadedSession = false
 
     init { viewModelScope.launch {
+        try {
         val saved = withContext(Dispatchers.IO) { repository.recoverAutoAiJobs(); settingsStore.load() to studyStore.load() }
         _uiState.update { it.copy(settings=saved.first,studySettings=saved.second) }; refresh()
+        } catch(e: Exception) { _uiState.update { it.copy(aiMessage="本地数据库未能打开，旧数据与升级备份已保留。请重试加载。") } }
     } }
 
     fun refreshOnResume() {
@@ -110,6 +114,7 @@ class AppViewModel(
     fun refresh() {
         refreshJob?.cancel()
         refreshJob = viewModelScope.launch {
+            try {
             val data = withContext(Dispatchers.IO) {
                 val words = repository.loadWords()
                 RefreshData(
@@ -140,6 +145,8 @@ class AppViewModel(
             loadedSession = true
             restoreCoachNotes(data.jobs)
             _uiState.value.studySession?.let(::prepareQuestions)
+            } catch(e: kotlinx.coroutines.CancellationException) { throw e }
+            catch(e: Exception) { _uiState.update { it.copy(aiMessage="本地数据暂时无法读取，原数据已保留。请重新打开或恢复备份。") } }
         }
     }
 
@@ -215,7 +222,7 @@ class AppViewModel(
         lastAi = { testConnection() }
         prepareAiOutput()
         runAiAction { settings ->
-            aiClient.generate(settings, "仅回复 OK，确认接口和当前模型可用。", maxTokens = 32).fold(
+            scheduler.generate(settings, "仅回复 OK，确认接口和当前模型可用。", maxTokens = 32).fold(
                 onSuccess = { result ->
                     persistAiResult("接口测试", result, settings)
                     require(result.content.isNotBlank()) { "接口已响应但没有返回文字，请检查模型或接口类型" }
@@ -227,7 +234,7 @@ class AppViewModel(
     fun loadModels() {
         lastAi = { loadModels() }
         runAiAction { settings ->
-            aiClient.listModels(settings).fold(
+            scheduler.listModels(settings).fold(
                 onSuccess = { models ->
                     _uiState.update {
                         it.copy(
@@ -247,7 +254,7 @@ class AppViewModel(
         lastAi = { generateDailyReading() }
         prepareAiOutput()
         runAiAction { settings ->
-            aiClient.generateDailyReading(settings).fold(
+            scheduler.generateDailyReading(settings).fold(
                 onSuccess = { result ->
                     persistAiResult("AI 情境阅读", result, settings)
                     require(result.content.isNotBlank()) { "模型没有返回文字，请检查接口类型或手动重试" }
@@ -284,11 +291,15 @@ class AppViewModel(
     }
 
     private suspend fun persistAiResult(title: String, result: AiCallResult, settings: AiSettings) {
+        if(result.fromCache) {
+            _uiState.update { it.copy(lastUsage=null,aiResultTitle="$title · 本地缓存，本次未联网") }
+            return
+        }
         val record = withContext(Dispatchers.IO) {
-            repository.recordAiUsage(settings.dailyModel, result.usage, settings).also {
+            (result.usageId?.let(repository::aiUsageRecord) ?: AiUsageRecord(model=result.model,usage=result.usage,cost=AiCost(),currency=settings.currency)).also {
                 if (result.content.isNotBlank()) repository.cacheAiReading(
                     title + " · " + SimpleDateFormat("MM-dd HH:mm", Locale.getDefault()).format(Date()),
-                    result.content, settings.dailyModel, it.id)
+                    result.content, result.model.ifBlank { settings.dailyModel }, it.id.takeIf { id -> id>0 })
             }
         }
         _uiState.update { it.copy(lastUsage = record, aiResultTitle = title) }
@@ -349,7 +360,7 @@ class AppViewModel(
         prepareAiOutput()
         runAiAction { settings ->
             val prompt = "$instruction\n${if (topic.isNotBlank()) "作文题目：$topic\n" else ""}待分析材料：\n$text"
-            aiClient.generate(settings, prompt).fold(onSuccess = { result ->
+            scheduler.generate(settings, prompt).fold(onSuccess = { result ->
                 persistAiResult(if (action.isBlank()) kind else "$kind · $action", result, settings)
                 require(result.content.isNotBlank()) { "模型没有返回文字，请检查接口类型或手动重试" }
                 _uiState.update { it.copy(aiBusy = false, aiOutput = result.content, aiMessage = "结果已保存到本地历史") }
@@ -360,7 +371,7 @@ class AppViewModel(
     private var lastAi: (() -> Unit)? = null
     fun retryAi() { lastAi?.invoke() }
     fun saveStudySettings(s: StudySettings) {
-        val saved=s.normalized()
+        val saved=s.copy(autoAi=false).normalized()
         _uiState.update { it.copy(studySettings=saved,aiMessage="设置已保存；每日新词数量从明天生效") }
         viewModelScope.launch { settingsMutex.withLock { withContext(Dispatchers.IO) { studyStore.save(saved) } } }
         if(!s.autoAi) pendingCoach.clear() else pumpCoach()
@@ -505,71 +516,9 @@ class AppViewModel(
         }
     }
 
-    /** Foreground-owned queue: at most one request, batched, cached, never blocks local study. */
-    private fun pumpCoach() {
-        if(!appForeground || !_uiState.value.studyActive || coachJob?.isActive==true || pendingCoach.isEmpty()) return
-        coachJob=viewModelScope.launch {
-            delay(800)
-            try {
-                while(appForeground && _uiState.value.studyActive && pendingCoach.isNotEmpty()) {
-                    val state=_uiState.value
-                    if(!state.studySettings.autoAi) { pendingCoach.clear(); break }
-                    if(state.aiBusy) { delay(1000); continue }
-                    val scope=AutoAiPolicy.scope(state.settings)
-                    val attempted=withContext(Dispatchers.IO) { repository.autoAiJobs(today=true) }
-                    val blockedIds=attempted.filter { it.scope==scope && it.status!="SKIPPED" }.flatMap { it.wordIds }.toSet()
-                    val cached=pendingCoach.mapNotNull { state.coachNotes[it] }
-                    insertCoach(cached); pendingCoach.removeAll(cached.map { it.wordId }.toSet())
-                    pendingCoach.removeAll(blockedIds)
-                    val ids=pendingCoach.take(3).toSet()
-                    if(ids.isEmpty()) break
-                    val words=ids.mapNotNull { id -> state.words.find { it.id==id } }
-                    val prompt="""这些单词在学习中重复答错。仅说明可能的记忆难点，不断言具体错因。
-                        返回JSON {"items":[{"wordId":整数,"tip":"不超过80字中文记忆/辨析提示","example":"含目标单词原形的简单英文例句","translation":"例句中文翻译","cloze":"将例句中目标词替换为____，仅一个空格"}]}。
-                        每词一项，不输出Markdown，不生成选项，不在cloze泄露答案。
-                        词条：${words.joinToString("\n") { "${it.id}: ${it.word} / ${it.meaning.take(160)}" }}
-                    """.trimIndent()
-                    val reserve=AutoAiPolicy.reserve(state.settings,prompt)
-                    val reason=AutoAiPolicy.block(state.settings,state.studySettings,attempted,reserve)
-                    if(reason!=null) { _uiState.update { it.copy(autoAiStatus=reason) }; break }
-                    val jobId=withContext(Dispatchers.IO) { repository.beginAutoAi(state.settings,ids,"重复答错，生成记忆提示与语境强化",reserve) }
-                    pendingCoach.removeAll(ids)
-                    _uiState.update { it.copy(autoAiRunning=true,autoAiStatus="正在准备针对性练习，不影响当前学习") }
-                    var record: AiUsageRecord?=null
-                    try {
-                        val result=aiClient.generate(state.settings,prompt,AutoAiPolicy.MAX_OUTPUT_TOKENS) {
-                            appForeground && studyForeground && _uiState.value.studySettings.autoAi
-                        }.getOrThrow()
-                        val usageRecord=withContext(Dispatchers.IO) { repository.recordAiUsage(state.settings.dailyModel,result.usage,state.settings) }
-                        record=usageRecord
-                        val notes=withContext(Dispatchers.IO) { StudyCodec.notes(result.content,ids) }
-                        notes.forEach { n ->
-                            val w=words.first { it.id==n.wordId }
-                            val pattern=Regex("(?i)(?<![a-z])${Regex.escape(w.word)}(?![a-z])")
-                            require(pattern.containsMatchIn(n.example) && !pattern.containsMatchIn(n.cloze)) { "强化题格式未通过检查" }
-                        }
-                        withContext(Dispatchers.IO) {
-                            repository.finishAutoAi(jobId,"DONE",result.content,usage=usageRecord)
-                            repository.cacheAiReading("后台强化 · ${words.joinToString { it.word }}",result.content,state.settings.dailyModel,usageRecord.id)
-                        }
-                        _uiState.update { it.copy(coachNotes=it.coachNotes+notes.associateBy { n -> n.wordId },autoAiStatus="针对性练习已准备好") }
-                        insertCoach(notes)
-                    } catch(e: AiStartSkippedException) {
-                        pendingCoach.addAll(ids)
-                        withContext(Dispatchers.IO) { repository.finishAutoAi(jobId,"SKIPPED",error="未发送，等待前台学习") }
-                        _uiState.update { it.copy(autoAiStatus="未发送，等待前台学习") }
-                    } catch(e: kotlinx.coroutines.CancellationException) { throw e }
-                    catch(e: Exception) {
-                        withContext(Dispatchers.IO) { repository.finishAutoAi(jobId,"FAILED",error=friendlyAiError(e),usage=record) }
-                        _uiState.update { it.copy(autoAiStatus="强化生成未完成；继续使用本地题目") }
-                    } finally { _uiState.update { it.copy(autoAiRunning=false) } }
-                    refreshAiData()
-                    val jobs=withContext(Dispatchers.IO) { repository.autoAiJobs() }
-                    _uiState.update { it.copy(autoAiJobs=jobs) }
-                }
-            } finally { _uiState.update { it.copy(autoAiRunning=false) } }
-        }
-    }
+    /** v1.0: learning events never initiate network requests. */
+    private fun pumpCoach() { pendingCoach.clear() }
+
     fun moveSession(delta: Int) { _uiState.update { it.copy(sessionIndex = (it.sessionIndex + delta).coerceIn(0,it.sessionIds.size)) } }
     fun rateWord(w: VocabWord, rating: Int, advance: Boolean = false) {
         if(_uiState.value.sessionBusy) return
@@ -659,7 +608,9 @@ class AppViewModel(
                 else -> "生成最近${days}天学习报告：学词、掌握、错误、薄弱词、学习变化、下一步建议。没有历史对照时不要编造提升趋势。"
             }
             val prompt = "$instruction\n数据：$summary\n今日计划：新词${current.plan.newCount}，复习${current.plan.reviewCount}，薄弱${current.plan.weakCount}，完成${current.plan.completed.size}/${current.plan.ids.size}。\n目标词：\n$data"
-            aiClient.generate(settings, prompt).fold(onSuccess = { result ->
+            scheduler.request(settings,if(kind=="小测") "quiz" else "assistant",prompt,validate={ output ->
+                if(kind=="小测") { parseQuiz(output,taskWords); Unit }
+            }).fold(onSuccess = { result ->
                 persistAiResult(kind, result, settings)
                 require(result.content.isNotBlank()) { "模型没有返回文字，请手动重试" }
                 val quiz = if(kind == "小测") parseQuiz(result.content, taskWords) else emptyList()
@@ -676,7 +627,7 @@ class AppViewModel(
             val q = array.getJSONObject(i); val id = q.getLong("wordId")
             require(words.any { it.id == id }) { "小测包含未知单词，请重试" }
             val options = q.getJSONArray("options")
-            require(options.length() == 4 && q.getInt("answer") in 0..3) { "小测选项格式不符合要求，请重试" }
+            require(options.length() == 4 && (0..3).map { options.getString(it).trim() }.let { it.all(String::isNotBlank) && it.distinct().size==4 } && q.getInt("answer") in 0..3) { "小测选项格式不符合要求，请重试" }
             AiQuizQuestion(id, q.getString("prompt"), (0..3).map { options.getString(it) }, q.getInt("answer"), q.getString("explanation"))
         }
     }
@@ -702,12 +653,14 @@ class AppViewModel(
         if (_uiState.value.aiBusy) return
         val settings = _uiState.value.settings
         _uiState.update { it.copy(aiBusy = true, aiMessage = null, aiError = null) }
-        viewModelScope.launch {
+        aiJob = viewModelScope.launch {
             try { block(settings) }
             catch (e: kotlinx.coroutines.CancellationException) { throw e }
             catch (e: Exception) { showAiError(e) }
         }
     }
+
+    fun cancelAi() { aiJob?.cancel(); _uiState.update { it.copy(aiBusy=false,aiMessage="已取消；已发送请求的费用以服务商为准") } }
 
     private fun showAiError(error: Throwable) {
         _uiState.update {

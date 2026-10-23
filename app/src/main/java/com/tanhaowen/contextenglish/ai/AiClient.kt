@@ -12,7 +12,8 @@ import java.net.URI
 import java.net.URL
 
 // Each call returns its usage even when the model produces no usable text.
-data class AiCallResult(val content: String, val usage: TokenUsage)
+data class AiCallResult(val content: String, val usage: TokenUsage, val model: String = "",
+    val usageId: Long? = null, val fromCache: Boolean = false)
 
 class AiHttpException(val status: Int, val modelMissing: Boolean = false) : Exception()
 class AiStartSkippedException : Exception()
@@ -38,8 +39,8 @@ fun friendlyAiError(error: Throwable): String = when (error) {
     else -> "请求处理失败，请检查配置后手动重试"
 }
 
-class AiClient {
-    suspend fun listModels(settings: AiSettings): Result<List<String>> = withContext(Dispatchers.IO) {
+open class AiClient {
+    open suspend fun listModels(settings: AiSettings): Result<List<String>> = withContext(Dispatchers.IO) {
         runCatching {
             validate(settings, requireModel = false)
             val json = JSONObject(request(endpoint(settings.baseUrl, "models"), "GET", settings.apiKey))
@@ -58,7 +59,7 @@ class AiClient {
         Give a complete Chinese translation. Use simple sentences and avoid obscure vocabulary.
     """.trimIndent())
 
-    suspend fun generate(settings: AiSettings, prompt: String, maxTokens: Int = 2600,
+    open suspend fun generate(settings: AiSettings, prompt: String, maxTokens: Int = 2600,
         canStart: () -> Boolean = { true }): Result<AiCallResult> =
         withContext(Dispatchers.IO) {
             runCatching {
@@ -80,7 +81,7 @@ class AiClient {
                 if(!canStart()) throw AiStartSkippedException()
                 val json = JSONObject(request(endpoint(settings.baseUrl, if (responses) "responses" else "chat/completions"),
                     "POST", settings.apiKey, payload.toString()))
-                AiCallResult(extractContent(json), UsageParser.parse(json, settings.cacheInputMode))
+                AiCallResult(extractContent(json), UsageParser.parse(json, settings.cacheInputMode),json.optString("model",settings.dailyModel))
             }
         }
 
@@ -92,7 +93,7 @@ class AiClient {
         return "$prefix/$path"
     }
 
-    private fun validate(settings: AiSettings, requireModel: Boolean = true) {
+    internal fun validate(settings: AiSettings, requireModel: Boolean = true) {
         require(settings.apiKey.isNotBlank()) { "请先填写 API Key" }
         val uri = runCatching { URI(settings.baseUrl.trim()) }.getOrNull()
         require(uri != null && uri.scheme == "https" && !uri.host.isNullOrBlank() && uri.userInfo == null &&
@@ -117,7 +118,8 @@ class AiClient {
             ?: part?.optString("refusal")?.takeIf { it.isNotBlank() }
     }.joinToString("\n").trim()
 
-    private fun request(url: String, method: String, apiKey: String, body: String? = null): String {
+    private suspend fun request(url: String, method: String, apiKey: String, body: String? = null): String =
+        kotlinx.coroutines.suspendCancellableCoroutine { continuation ->
         val connection = (URL(url).openConnection() as HttpURLConnection).apply {
             requestMethod = method
             instanceFollowRedirects = false
@@ -126,6 +128,8 @@ class AiClient {
             setRequestProperty("Authorization", "Bearer ${apiKey.trim()}")
             setRequestProperty("Accept", "application/json")
         }
+        continuation.invokeOnCancellation { connection.disconnect() }
+        networkExecutor.execute {
         try {
             if (body != null) {
                 connection.doOutput = true
@@ -149,7 +153,11 @@ class AiClient {
                 val code = runCatching { JSONObject(text).optJSONObject("error")?.optString("code") }.getOrNull()
                 throw AiHttpException(status, code in setOf("model_not_found", "invalid_model", "model_not_available"))
             }
-            return text
+            if(continuation.isActive) continuation.resumeWith(Result.success(text))
+        } catch(e: Exception) {
+            if(continuation.isActive) continuation.resumeWith(Result.failure(e))
         } finally { connection.disconnect() }
+        }
     }
+    companion object { private val networkExecutor=java.util.concurrent.Executors.newFixedThreadPool(2) }
 }

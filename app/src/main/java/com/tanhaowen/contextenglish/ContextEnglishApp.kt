@@ -18,6 +18,7 @@ class ContextEnglishApp : Application() {
 
     val speech by lazy { SpeechController(this) }
     val feedback by lazy { FeedbackController(this) }
+    val aiScheduler by lazy { com.tanhaowen.contextenglish.ai.AiTaskScheduler(repository) }
 
     override fun onCreate() {
         super.onCreate()

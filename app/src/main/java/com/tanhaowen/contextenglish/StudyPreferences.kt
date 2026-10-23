@@ -61,21 +61,12 @@ fun StudyPreferences(state: AppUiState,vm: AppViewModel,close: ()->Unit) {
             TextButton(onClick={ app.speech.speak("available", repetitions=2, rate=rate) }) { Text("试听两遍") }
             Text("Heart 美式女声 · 1,640词离线音频。进入单词时自动读两遍，点击单词或喇叭可重播一遍。",style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
         }
-        item { HorizontalDivider();Text("后台AI",style=MaterialTheme.typography.titleMedium) }
-        item {
-            ToggleRow("允许按需自动调用",autoAi) { autoAi=it }
-            Text("仅学习期间，在重复答错时批量生成提示与语境练习。切到后台后不启动新请求，已发送的请求可完成并缓存。",style=MaterialTheme.typography.bodySmall)
-            OutlinedTextField(budget,{ budget=it.filter { c -> c.isDigit() || c=='.' } },
-                label={ Text("每日自动AI估算预算（${state.settings.currency}）") },singleLine=true,modifier=Modifier.fillMaxWidth().padding(top=12.dp))
-            Text("每天最多${AutoAiPolicy.MAX_DAILY_CALLS}次自动请求，失败不自动重发。输入和输出单价必须先在AI设置中填写。",style=MaterialTheme.typography.bodySmall,modifier=Modifier.padding(top=10.dp))
-            Text("预算基于Token与单价估算，不是服务商实际扣费硬上限。用量不明时暂停当天自动调用；手动AI不受此预算限制。",style=MaterialTheme.typography.bodySmall,
-                color=MaterialTheme.colorScheme.onSurfaceVariant,modifier=Modifier.padding(top=8.dp))
-        }
+        item { HorizontalDivider(); Text("AI 仅在手动点击时调用。今日计划、复习、阅读和小测均可离线使用。") }
         item {
             val valid=(newWords.toIntOrNull() ?: 0) in 1..100 && (goal.toIntOrNull() ?: 0) in 1..500 &&
                 budget.toDoubleOrNull()?.let { it.isFinite() && it in 0.0..100.0 }==true
             Button(onClick={ vm.saveStudySettings(saved.copy(newWords=newWords.toInt(),dailyGoal=goal.toInt(),showPhonetic=phonetic,
-                autoSpeak=autoSpeak,sound=sound,haptics=haptics,autoAdvance=advance,autoAi=autoAi,autoAiBudget=budget.toDouble(),speechRate=rate,
+                autoSpeak=autoSpeak,sound=sound,haptics=haptics,autoAdvance=advance,autoAi=false,autoAiBudget=budget.toDouble(),speechRate=rate,
                 palette=AppPalette.valueOf(palette)));close() },
                 enabled=valid,modifier=Modifier.fillMaxWidth()) { Text("保存设置") }
         }
