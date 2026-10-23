@@ -24,21 +24,27 @@ class UpgradeSmokeTest {
         compose.onNodeWithTag("tab-AI").performClick()
         compose.onNodeWithTag("learning-input").performTextInput("Explain a simple sentence")
         hideTestKeyboard(compose.activity)
-        pressTestBack()
+        backToHome()
         compose.onNodeWithTag("nav-更多").performClick()
         compose.onNodeWithTag("tab-WORDS").performClick()
         compose.onNodeWithTag("word-search").performTextInput("avoid")
         hideTestKeyboard(compose.activity)
-        pressTestBack()
+        backToHome()
         compose.onNodeWithTag("nav-更多").performClick()
         compose.onNodeWithTag("tab-AI").performClick()
         compose.onNodeWithTag("learning-input").assertTextContains("Explain a simple sentence")
         hideTestKeyboard(compose.activity)
-        pressTestBack()
+        backToHome()
         compose.onNodeWithTag("nav-更多").performClick()
         compose.onNodeWithTag("tab-WORDS").performClick()
         compose.onNodeWithTag("word-search").assertTextContains("avoid")
         compose.onNodeWithTag("nav-今日学习").assertDoesNotExist()
+    }
+
+    private fun backToHome() {
+        pressTestBack()
+        compose.waitUntil(15000) { compose.onAllNodesWithTag("nav-更多").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithTag("nav-更多").assertIsDisplayed()
     }
 
     private fun screenshot(name: String) {

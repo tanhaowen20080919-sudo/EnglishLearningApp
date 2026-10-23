@@ -98,9 +98,9 @@ class OfflineDayUiTest {
         db.rawQuery("SELECT COUNT(*) FROM diagnostic_attempts WHERE form='spelling'",null).use { it.moveToFirst();assertTrue(it.getInt(0)>0) }
         db.rawQuery("SELECT COUNT(*) FROM diagnostic_attempts WHERE form='context'",null).use { it.moveToFirst();assertTrue(it.getInt(0)>0) }
         val output=File(app.getExternalFilesDir(null),"screenshots").apply { mkdirs() }
-        val ordered=latencies.sorted();val p95=ordered[((ordered.size-1)*.95).toInt()]
+        val ordered=latencies.sorted();val p95=ordered[(kotlin.math.ceil(ordered.size*.95).toInt()-1).coerceIn(0,ordered.lastIndex)]
         File(output,"ui-responsiveness.json").writeText(JSONObject().put("action","reveal-meaning until visible")
-            .put("latencyMs",JSONArray(latencies)).put("p95Ms",p95).put("scope","Android emulator, not physical-device touch latency").toString(2))
+            .put("latencyMs",JSONArray(latencies)).put("p95Ms",p95).put("percentileMethod","empirical nearest rank; five-card sample, not a population latency claim").put("scope","Android emulator, not physical-device touch latency").toString(2))
         assertTrue("Revealing a locally stored meaning must remain responsive; p95=$p95 ms",p95<1500)
     }
 }

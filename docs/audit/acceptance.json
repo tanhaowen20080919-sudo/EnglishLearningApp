@@ -15814,6 +15814,11 @@
         "run_id": 40029417895,
         "result": "5/5 passed, zero skipped, same production source 4c9abbc",
         "evidence": "JUnit XML verified; separate timing file export was empty because UiAutomation does not expand shell operators; exporter now copies each real file and CI requires nonempty timing JSON."
+      },
+      {
+        "run_id": 40030338343,
+        "result": "4/5 passed; complete offline day and raw timing artifacts succeeded; secondary navigation raced native Back dispatch",
+        "diagnosis": "Await home navigation after actual Back dispatch; retain all draft/search/navigation assertions. Raw reveal latencies were 482,91,106,109,56 ms. Changed percentile calculation to empirical nearest rank (P95=482 for these five samples), avoiding a low floor-index estimate."
       }
     ]
   }
