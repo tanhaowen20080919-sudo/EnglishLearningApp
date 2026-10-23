@@ -15804,6 +15804,16 @@
         "run_id": 40028462226,
         "result": "4/5 passed; full offline day finished, next-day assertion raced asynchronous save",
         "diagnosis": "Await actual tomorrow-plan-ready semantics before checking SQLite; export test-only screenshots/latency to shared evidence directory before AGP uninstalls the app."
+      },
+      {
+        "run_id": 40029270358,
+        "result": "3/5 passed; two Espresso.closeSoftKeyboard RootViewWithoutFocusException failures",
+        "diagnosis": "Native Android IME close and actual Back key replace Espresso root picker; all learning/navigation/data assertions retained."
+      },
+      {
+        "run_id": 40029417895,
+        "result": "5/5 passed, zero skipped, same production source 4c9abbc",
+        "evidence": "JUnit XML verified; separate timing file export was empty because UiAutomation does not expand shell operators; exporter now copies each real file and CI requires nonempty timing JSON."
       }
     ]
   }

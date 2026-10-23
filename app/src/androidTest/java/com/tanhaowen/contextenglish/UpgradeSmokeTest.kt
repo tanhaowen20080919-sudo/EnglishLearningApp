@@ -4,8 +4,6 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.Espresso.closeSoftKeyboard
 import com.tanhaowen.contextenglish.data.*
 import org.json.JSONObject
 import org.junit.Assert.*
@@ -25,18 +23,18 @@ class UpgradeSmokeTest {
         compose.onNodeWithTag("nav-更多").performClick()
         compose.onNodeWithTag("tab-AI").performClick()
         compose.onNodeWithTag("learning-input").performTextInput("Explain a simple sentence")
-        closeSoftKeyboard()
-        pressBack()
+        hideTestKeyboard(compose.activity)
+        pressTestBack()
         compose.onNodeWithTag("nav-更多").performClick()
         compose.onNodeWithTag("tab-WORDS").performClick()
         compose.onNodeWithTag("word-search").performTextInput("avoid")
-        closeSoftKeyboard()
-        pressBack()
+        hideTestKeyboard(compose.activity)
+        pressTestBack()
         compose.onNodeWithTag("nav-更多").performClick()
         compose.onNodeWithTag("tab-AI").performClick()
         compose.onNodeWithTag("learning-input").assertTextContains("Explain a simple sentence")
-        closeSoftKeyboard()
-        pressBack()
+        hideTestKeyboard(compose.activity)
+        pressTestBack()
         compose.onNodeWithTag("nav-更多").performClick()
         compose.onNodeWithTag("tab-WORDS").performClick()
         compose.onNodeWithTag("word-search").assertTextContains("avoid")

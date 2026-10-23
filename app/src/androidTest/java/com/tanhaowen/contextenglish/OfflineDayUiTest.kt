@@ -7,7 +7,6 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.tanhaowen.contextenglish.adaptive.*
@@ -78,7 +77,7 @@ class OfflineDayUiTest {
                 val q=step.question!!
                 if(q.spelling.isNotBlank()) {
                     compose.onNodeWithTag("spelling-input").performScrollTo().performTextInput(q.spelling)
-                    closeSoftKeyboard()
+                    hideTestKeyboard(scenario)
                     compose.onNodeWithText("检查拼写").performScrollTo().performClick()
                 } else compose.onNodeWithTag("answer-${q.answer}").performScrollTo().performClick()
                 compose.waitUntil(15000) { exists("answer-feedback") }
