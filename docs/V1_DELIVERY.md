@@ -1,5 +1,7 @@
 # v1.0 交付报告
 
+> 历史记录：用户随后授权 v1.0 全新安装并建立新的固定正式证书。最新签名、备份及发布流程以 [PERMANENT_RELEASE_SIGNING.md](PERMANENT_RELEASE_SIGNING.md) 为准。
+
 日期：2026-10-23。工作分支：`feat/adaptive-v1`。回滚分支：`backup/pre-v1-upgrade-20261023`（原提交 `fb11df4`）。应用 ID 保持不变，版本 1.0.0 / code 8。
 
 ## 主要改动与架构

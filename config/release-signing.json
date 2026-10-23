@@ -1,0 +1,12 @@
+{
+  "format": 1,
+  "application_id": "com.tanhaowen.contextenglish",
+  "key_alias": "englishlearning-release",
+  "keystore_type": "JKS",
+  "certificate_sha256": "e13229f272357c3d270ae903c1a93bf3b902138282cf24aabe9e8e172d87fbf1",
+  "key_algorithm": "RSA",
+  "key_size": 4096,
+  "validity_days": 36500,
+  "first_version": "1.0.0",
+  "policy": "Permanent release certificate from v1.0. Never regenerate for later versions."
+}

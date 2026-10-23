@@ -44,15 +44,16 @@ python3 tools/verify_migration.py
 输出：
 
 - `app/build/outputs/apk/debug/app-debug.apk`：调试签名，可用于测试安装。
-- `app/build/outputs/apk/release/app-release-unsigned.apk`：正式构建，需用原安装证书签名后覆盖旧版。
+- `app/build/outputs/apk/release/app-release-unsigned.apk`：明确的未签名验证构建，不能直接安装。
+- `app/build/outputs/apk/release/app-release.apk`：配置正式凭据后构建的长期固定签名 Release。
 
-GitHub Actions 的 **Build APK** 在 main 推送、PR 或手动运行时执行检查、测试、Lint 和双版本构建。下载 `Context-English-v1.0.0-apks` artifact，含两个 APK 和 SHA256SUMS；模拟器 UI 测试单独运行并上传报告。
+GitHub Actions 的 **Build APK** 在 main/PR 上执行验证；手动运行或 `v*` 标签会使用固定正式证书构建 Release。正式 artifact 为 `EnglishLearning-permanent-signed-Release`；必须先配置四项 `ANDROID_RELEASE_*` Secrets。详见 [长期正式签名与 Secrets 配置](docs/PERMANENT_RELEASE_SIGNING.md)。
 
-更新旧安装必须使用相同证书；不要为解决签名冲突直接卸载未备份的应用。当前工作不访问或上传生产签名私钥。
+v1.0 起的正式证书指纹固定为 `e13229f272357c3d270ae903c1a93bf3b902138282cf24aabe9e8e172d87fbf1`。v1.0 起采用新建且长期固定的正式证书，首次按用户选择卸载旧版后全新安装，后续版本沿用同一证书覆盖更新。
 
 ## 验证与限制
 
-测试覆盖掌握度、自适应间隔、动态学习量、弱项排序、费用、离线闭环、缓存失效、取消、实际模型记录、v4 迁移备份及失败回滚、JSON 恢复事务和 Activity 启动。详细执行结果见 [v1.0 交付报告](docs/V1_DELIVERY.md)。
+测试覆盖掌握度、自适应间隔、动态学习量、弱项排序、费用、离线闭环、缓存失效、取消、实际模型记录、v4 迁移备份及失败回滚、JSON 恢复事务和 Activity 启动。功能验证见 [v1.0 交付报告](docs/V1_DELIVERY.md)；最新正式 APK、证书核验与备份结果见 [长期正式签名](docs/PERMANENT_RELEASE_SIGNING.md)。
 
 内置诊断阅读为 3 篇、语法为 3 个知识点 / 12 题的初始题库，按日期轮换；不是完整高考真题库。补充搭配/词形覆盖 20 个常见词，其余继续使用原卡片。算法参数集中、可测试，尚未经长期学习效果研究校准。真机触控、声音和系统退出行为需设备验收；真实中转 API 需配置后验收，开发测试使用模拟响应、不产生付费调用。
 

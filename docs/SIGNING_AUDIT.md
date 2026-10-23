@@ -1,5 +1,6 @@
 # 原签名调查与 v1.0 覆盖更新状态
 
+> 历史记录：用户随后授权 v1.0 全新安装并建立新的固定正式证书。最新签名、备份及发布流程以 [PERMANENT_RELEASE_SIGNING.md](PERMANENT_RELEASE_SIGNING.md) 为准。
 调查日期：2026-10-23。本次实际读取 GitHub 远端源码、历史提交、Actions 运行记录/日志及旧 APK。
 
 **当前尚未生成可确认覆盖原发布版的 v1.0 APK。** 原私钥未在当前环境找到，历史签名 Secret 在本次 Actions 中不可用。未卸载应用、修改应用 ID、生成新正式证书或更换 Gradle 签名设置。
