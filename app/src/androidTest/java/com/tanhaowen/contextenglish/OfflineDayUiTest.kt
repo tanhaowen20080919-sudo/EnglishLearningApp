@@ -77,7 +77,6 @@ class OfflineDayUiTest {
                 val q=step.question!!
                 if(q.spelling.isNotBlank()) {
                     compose.onNodeWithTag("spelling-input").performScrollTo().performTextInput(q.spelling)
-                    hideTestKeyboard(scenario)
                     compose.onNodeWithText("检查拼写").performScrollTo().performClick()
                 } else compose.onNodeWithTag("answer-${q.answer}").performScrollTo().performClick()
                 compose.waitUntil(15000) { exists("answer-feedback") }

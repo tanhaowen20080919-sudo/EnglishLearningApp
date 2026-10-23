@@ -15834,6 +15834,11 @@
         "run_id": 40031394156,
         "result": "4/5 passed; complete offline day and timing evidence pass; secondary Back remained at editor",
         "diagnosis": "Device IME log shows pending SHOW after hide request; first Back was consumed by IME. Move native focus outside editor and await both hidden IME and inactive input connection; send one actual Back and retain navigation/draft assertions."
+      },
+      {
+        "run_id": 40032240049,
+        "result": "3/5 passed; overstrict test IME-close helper failed, production grading/navigation assertions unchanged",
+        "diagnosis": "Correct Android interaction semantics: test one real Back on a non-editor screen; use visible App return controls while editing; submit spelling with keyboard open through actual scrollable UI. Remove artificial focus/IME shutdown and retain all draft, search, grading and persistence assertions."
       }
     ]
   }
