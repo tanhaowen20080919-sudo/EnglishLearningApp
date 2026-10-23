@@ -59,8 +59,8 @@ python3 tools/upload_release_secrets.py \
 
 ## Actions 构建方式
 
-- main 推送及 PR：执行词库、迁移、签名安全测试、96 项 JVM/Robolectric 测试、Lint 和明确标注的验证构建；PR 另外执行 Android 模拟器 UI 测试。PR 不接触正式签名 Secrets。
-- **Build APK → Run workflow** 或推送 `v*` 标签：验证通过后，恢复上述四项 Secrets，核对固定指纹，再构建正式签名 Release。
+- main 推送及 PR：执行词库、迁移、签名安全测试、96 项 JVM/Robolectric 测试、Lint 和明确标注的验证构建；PR 和手动运行另外执行 Android 模拟器 UI 测试。PR 不接触正式签名 Secrets。
+- **Build APK → Run workflow**（保持 `build_release` 勾选，默认开启）或推送 `v*` 标签：验证通过后，恢复上述四项 Secrets，核对固定指纹，再构建正式签名 Release。仅做云端验证时可取消勾选，不读取正式 Secrets。
 - 正式 job 不使用 Gradle 缓存或 configuration cache；keystore 只恢复到 runner 临时目录，任务结束清理，不进入 APK、源码或 artifact。
 - 下载 artifact：`EnglishLearning-permanent-signed-Release`，含正式 APK、`RELEASE.json`、`SHA256SUMS` 和公共证书。
 - Secret 未配置或证书不符时，正式 job 失败，不会用调试签名补位，也不会将 unsigned APK 冒充正式包。
