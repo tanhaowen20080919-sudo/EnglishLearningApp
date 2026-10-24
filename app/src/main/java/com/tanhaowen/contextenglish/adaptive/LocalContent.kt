@@ -8,7 +8,7 @@ import kotlin.random.Random
 data class LocalQuestion(val id: String, val prompt: String, val options: List<String>, val answer: Int,
     val explanation: String, val form: String, val tag: String = "", val wordId: Long = 0,
     val spelling: String = "", val context: String = "") {
-    fun correct(value: String) = if(spelling.isNotBlank()) value.trim().equals(spelling,true) else value.toIntOrNull()==answer
+    fun correct(value: String) = if(spelling.isNotBlank()) com.tanhaowen.contextenglish.study.SpellingAnswer.correct(spelling,value) else value.toIntOrNull()==answer
     val answerText get() = if(spelling.isNotBlank()) spelling else options[answer]
 }
 data class ReadingLesson(val id: String, val title: String, val passage: String, val glossary: Map<String,String>, val questions: List<LocalQuestion>)

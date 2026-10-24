@@ -3314,6 +3314,11 @@
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
           "symbol": "fun audit(",
           "logic": "WorkflowFactory.audit 仅对模糊/认识按45%概率插入词义、拼写或语境客观题，种子关联任务键，可复现但随任务变化。"
+        },
+        {
+          "file": "app/src/main/java/com/tanhaowen/contextenglish/study/SpellingAnswer.kt",
+          "symbol": "object SpellingAnswer",
+          "logic": "明确的14组同词英美拼写变体参与每日和旧流程判题；不进行模糊纠错，依词性/义项不同的词对不无条件接受。"
         }
       ],
       "tests": [
@@ -3331,6 +3336,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditPersistenceTest.kt",
           "symbol": "secondSubmissionCannotReplaceAlreadyGradedFeedbackOrMastery",
           "assertions": "同题已反馈后再次评分抛出异常；原反馈快照和完整单词记录保持第一次结果。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
+          "symbol": "standardSpellingVariantsEarnRealCreditWhileDifferentLexemesRemainWrong",
+          "assertions": "真实humour题接受humor且SQLite正确数/掌握度增加，错误数不增、原输入保存；advice题拒绝advise。"
         }
       ],
       "blockers": []
@@ -3621,6 +3631,11 @@
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
           "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
+        },
+        {
+          "file": "app/src/main/java/com/tanhaowen/contextenglish/study/SpellingAnswer.kt",
+          "symbol": "object SpellingAnswer",
+          "logic": "明确的14组同词英美拼写变体参与每日和旧流程判题；不进行模糊纠错，依词性/义项不同的词对不无条件接受。"
         }
       ],
       "tests": [
@@ -3643,6 +3658,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditAlgorithmTest.kt",
           "symbol": "spellingAndContextErrorsHaveRealMasteryAndDueDateConsequences",
           "assertions": "同一已熟悉词答错拼写或语境后，掌握度低于0.5、复习早于答对、遗忘数增加且不能保持稳定掌握。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
+          "symbol": "standardSpellingVariantsEarnRealCreditWhileDifferentLexemesRemainWrong",
+          "assertions": "真实humour题接受humor且SQLite正确数/掌握度增加，错误数不增、原输入保存；advice题拒绝advise。"
         }
       ],
       "blockers": []
@@ -5459,6 +5479,11 @@
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveViewModel.kt",
           "symbol": "private fun calculateTomorrow",
           "logic": "next 在当日最后一步后独立计算并保存明日计划；prepareTomorrow 重算未开始的未来计划，逐任务缓存并保留已成功项，失败不破坏本地计划。"
+        },
+        {
+          "file": "app/src/main/java/com/tanhaowen/contextenglish/study/SpellingAnswer.kt",
+          "symbol": "object SpellingAnswer",
+          "logic": "明确的14组同词英美拼写变体参与每日和旧流程判题；不进行模糊纠错，依词性/义项不同的词对不无条件接受。"
         }
       ],
       "tests": [
@@ -5476,6 +5501,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditPersistenceTest.kt",
           "symbol": "newWordAccuracyUsesTheActualCohortNotTheQuizSlotName",
           "assertions": "新词落在review槽位仍正确计入新词表现；v5 JSON恢复能从学习快照回填真实归属。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
+          "symbol": "standardSpellingVariantsEarnRealCreditWhileDifferentLexemesRemainWrong",
+          "assertions": "真实humour题接受humor且SQLite正确数/掌握度增加，错误数不增、原输入保存；advice题拒绝advise。"
         }
       ],
       "blockers": []
@@ -8872,6 +8902,11 @@
           "file": "app/src/main/java/com/tanhaowen/contextenglish/AiUsageScreens.kt",
           "symbol": "fun AiCallUsage",
           "logic": "AiCallUsage/UsageSummary 展示单次模型、耗时、Token、价格与费用、今日和累计；未返回的缓存分项显示“未返回”。"
+        },
+        {
+          "file": "app/src/main/java/com/tanhaowen/contextenglish/study/SpellingAnswer.kt",
+          "symbol": "object SpellingAnswer",
+          "logic": "明确的14组同词英美拼写变体参与每日和旧流程判题；不进行模糊纠错，依词性/义项不同的词对不无条件接受。"
         }
       ],
       "tests": [
@@ -8889,6 +8924,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/UsageAndCompatibilityTest.kt",
           "symbol": "overflowAndInconsistentCacheUsageCannotBecomeKnownBillableCounts",
           "assertions": "Long加法溢出、超范围浮点计数和缓存大于输入不标完整已知；合法100.0/2.0仍准确解析为102。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
+          "symbol": "standardSpellingVariantsEarnRealCreditWhileDifferentLexemesRemainWrong",
+          "assertions": "真实humour题接受humor且SQLite正确数/掌握度增加，错误数不增、原输入保存；advice题拒绝advise。"
         }
       ],
       "blockers": []
@@ -13353,6 +13393,11 @@
           "file": "app/src/main/java/com/tanhaowen/contextenglish/data/AiUsage.kt",
           "symbol": "fun calculate(",
           "logic": "AiCostCalculator 将普通输入（总输入减缓存分区）、输出、缓存写、缓存读分别乘请求时的每百万单价，保存总费用与分项。"
+        },
+        {
+          "file": "app/src/main/java/com/tanhaowen/contextenglish/study/SpellingAnswer.kt",
+          "symbol": "object SpellingAnswer",
+          "logic": "明确的14组同词英美拼写变体参与每日和旧流程判题；不进行模糊纠错，依词性/义项不同的词对不无条件接受。"
         }
       ],
       "tests": [
@@ -13365,6 +13410,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/UsageAndCompatibilityTest.kt",
           "symbol": "openAiCachedInputIsNotBilledTwice",
           "assertions": "核对OpenAI输入已包含缓存时的普通输入分区与费用，缓存读取不再重复收取普通输入费用。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
+          "symbol": "standardSpellingVariantsEarnRealCreditWhileDifferentLexemesRemainWrong",
+          "assertions": "真实humour题接受humor且SQLite正确数/掌握度增加，错误数不增、原输入保存；advice题拒绝advise。"
         }
       ],
       "blockers": []
@@ -16821,7 +16871,7 @@
     "content": "1640词各有独立常用义/搭配/原创双语例句和按词性义项筛选的词形。原资源固定哈希不变；全量实际评分、结构门禁、独立语法/词形交叉检查均有证据。仅少量同形异音资料终审属于外部验收；不宣称真题或独立教师认证。"
   },
   "execution": {
-    "jvm": "156 JVM tests passed locally, including3 real local HTTPS tests; final frozen-source cloud confirmation pending",
+    "jvm": "Final spelling-variant regression included; exact159-test cloud/local verification pending",
     "android_ui": "pending final code11 cloud run",
     "release": "pending final code11 fixed certificate build",
     "resources": {

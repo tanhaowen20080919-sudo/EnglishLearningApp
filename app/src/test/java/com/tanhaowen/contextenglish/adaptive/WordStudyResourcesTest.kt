@@ -76,6 +76,20 @@ class WordStudyResourcesTest {
         assertTrue(WordStudyResources.morphology("found")!!.text.contains("founded"))
         assertTrue(WordStudyResources.morphology("knowledge")!!.text.contains("不可数"))
     }
+    @Test fun standardSpellingVariantsEarnRealCreditWhileDifferentLexemesRemainWrong() {
+        val words=repo.loadWords();val word=words.first { it.word=="humour" }
+        val q=LocalContent.vocabulary(word,words,"spelling","variant-grade")
+        assertTrue(q.correct("  HUMOR  "));assertFalse(q.correct("humou"))
+        val adaptive=AdaptiveRepository(repo)
+        val w=DailyWorkflow(LocalDate.now().toString(),Intensity.QUICK,15,"",listOf(word.id),emptyList(),"garden","",listOf(LearningStep(q.id,"综合小测",word.id,q)))
+        adaptive.save(w);adaptive.answer(w,w.copy(feedback="已评分",correct=true),q.correct("humor"),1000,answerValue="humor")
+        val saved=repo.loadWord(word.id)!!
+        assertEquals(word.correctCount+1,saved.correctCount);assertEquals(word.mistakeCount,saved.mistakeCount)
+        assertTrue(adaptive.memory(saved).mastery>0)
+        assertEquals("humor",adaptive.attemptContext(q.id).getString("selectedAnswer"))
+        val advice=LocalContent.vocabulary(words.first { it.word=="advice" },words,"spelling","different-lexeme")
+        assertFalse(advice.correct("advise"))
+    }
     @Test fun actualGradingAndAiInputsUseTheSameReviewedSenseWithoutRewritingLegacyData() {
         val word=repo.loadWords().first { it.word=="automatic" };val original=word.meaning
         val pool=repo.loadWords();val q=LocalContent.vocabulary(word,pool,"meaning","reviewed-grading")
