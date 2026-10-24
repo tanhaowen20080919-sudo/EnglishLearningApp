@@ -4,7 +4,7 @@
 
 ## 当前构建跟进
 
-code10 已通过146项JVM、5项Android UI测试和正式签名校验，继续使用同一证书和四个已有 Secrets；最新词条修复与实际构建结果见 [词条跟进](V1_LEXICAL_UPDATE.md)。
+code11 继续使用同一正式证书和四个已有 Secrets；最终云端验证、下载及核验结果见 [Cloud补齐](V1_CLOUD_COMPLETION.md)。code10结果保留在[历史词条记录](V1_LEXICAL_UPDATE.md)。
 
 ## code9 正式构建历史
 
@@ -67,7 +67,7 @@ python3 tools/upload_release_secrets.py \
 
 ## Actions 构建方式
 
-- main 推送及 PR：执行词库、迁移、签名安全测试、146 项 JVM/Robolectric 测试、Lint 和明确标注的验证构建；PR 和手动运行另外执行 Android 模拟器 UI 测试。PR 不接触正式签名 Secrets。
+- main 推送及 PR：执行词库、迁移、签名安全测试、完整 JVM/Robolectric（含真实本地HTTPS）测试、Lint 和明确标注的验证构建；PR 和手动运行另外执行 Android 模拟器 UI 测试。PR 不接触正式签名 Secrets。
 - **Build APK → Run workflow**（保持 `build_release` 勾选，默认开启）或推送 `v*` 标签：验证通过后，恢复上述四项 Secrets，核对固定指纹，再构建正式签名 Release。仅做云端验证时可取消勾选，不读取正式 Secrets。
 - 正式 job 不使用 Gradle 缓存或 configuration cache；keystore 只恢复到 runner 临时目录，任务结束清理，不进入 APK、源码或 artifact。
 - 下载 artifact：`EnglishLearning-permanent-signed-Release`，含正式 APK、`RELEASE.json`、`SHA256SUMS` 和公共证书。
@@ -84,6 +84,6 @@ python3 tools/verify_release_apk.py app/build/outputs/apk/release/app-release.ap
 
 ## 后续升级约束
 
-每次发布只递增 `versionName` 和 `versionCode`：当前词条修复版 v1.0 为 code10，后续例如 v1.1 code11、v1.2 code12、v2.0 使用更大的 code。applicationId、正式私钥和固定证书指纹保持相同；正常安装更新即可保留 v1.0 起的应用数据。数据格式变化仍需独立执行数据库迁移测试。
+每次发布只递增 `versionName` 和 `versionCode`：当前完整补齐版 v1.0 为 code11，后续例如 v1.1 code12、v1.2 code13、v2.0 使用更大的 code。applicationId、正式私钥和固定证书指纹保持相同；正常安装更新即可保留 v1.0 起的应用数据。数据格式变化仍需独立执行数据库迁移测试。
 
 本次 v1.0 与旧签名不兼容，按用户选择由用户先卸载旧版再全新安装；开发环境没有连接手机，也未执行卸载。后续不要重复卸载或清空数据。

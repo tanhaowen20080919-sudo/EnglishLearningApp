@@ -6,7 +6,7 @@ import org.json.JSONObject
 import java.util.Locale
 
 data class StudyWordNote(val meaning: String,val collocation: String,val example: String,val translation: String,
-    val originalMeaning: String,val provenance: String)
+    val originalMeaning: String,val provenance: String,val pos: String = "")
 data class MorphologyNote(val text: String,val kind: String,val basis: String,val reference: String)
 
 /** Immutable assets, opened on the database's IO path. Never rewrites a word, its IPA, progress or audio. */
@@ -17,10 +17,10 @@ object WordStudyResources {
         if(snapshot!=null) return true
         return runCatching {
             val root=JSONObject(context.assets.open("word-study-notes.json").bufferedReader().use { it.readText() })
-            require(root.getInt("format")==1)
+            require(root.getInt("format") in 1..2)
             val cards=root.getJSONObject("studyCards");val forms=root.getJSONObject("morphology")
             val parsedCards=cards.keys().asSequence().associateWith { key -> val n=cards.getJSONObject(key)
-                StudyWordNote(n.getString("meaning"),n.getString("collocation"),n.getString("example"),n.getString("translation"),n.getString("originalMeaning"),n.getString("provenance")) }
+                StudyWordNote(n.getString("meaning"),n.getString("collocation"),n.getString("example"),n.getString("translation"),n.getString("originalMeaning"),n.getString("provenance"),n.optString("pos")) }
             val parsedForms=forms.keys().asSequence().associateWith { key -> val n=forms.getJSONObject(key)
                 MorphologyNote(n.getString("text"),n.getString("kind"),n.getString("basis"),n.getString("reference")) }
             require(parsedCards.values.all { it.meaning.isNotBlank() && it.collocation.isNotBlank() && it.example.isNotBlank() && it.translation.isNotBlank() })

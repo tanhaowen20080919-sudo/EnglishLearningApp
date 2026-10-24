@@ -1,0 +1,92 @@
+{
+  "tool": "LanguageTool 6.6, local CLI, default en-GB rules",
+  "download": "https://languagetool.org/download/LanguageTool-6.6.zip",
+  "tool_archive_sha256": "53600506b399bb5ffe1e4c8dec794fd378212f14aaf38ccef9b6f89314d11631",
+  "examples": 1640,
+  "corpus_sha256": "f020b730b0fd409b0d7f4c6847c38b14b955a8936f9dc8e397241da03ae5cdf0",
+  "command": "java -Xmx768m -jar languagetool-commandline.jar --json -b -l en-GB all-1640-examples.txt",
+  "before_findings": 20,
+  "after_findings": 13,
+  "unresolved_grammar_findings": 0,
+  "accepted_variant_findings": [
+    {
+      "word": "organisation",
+      "rule": "OXFORD_SPELLING_Z_NOT_S",
+      "message": "Would you like to use the Oxford spelling \"organization\"? The spelling 'organisation' is also correct.",
+      "decision": "Accepted British/American or Oxford spelling variant. Original dictionary headwords remain unchanged; independent learning cards are not a single continuous essay."
+    },
+    {
+      "word": "license",
+      "rule": "LICENCE_LICENSE_NOUN_SINGULAR",
+      "message": "license must be spelled with a \"c\" when used as a noun in British English. Use \"licence\".",
+      "decision": "Accepted British/American or Oxford spelling variant. Original dictionary headwords remain unchanged; independent learning cards are not a single continuous essay."
+    },
+    {
+      "word": "organise",
+      "rule": "EN_WORD_COHERENCY",
+      "message": "Do not mix variants of the same word ('organise' and 'organize') within a single text.",
+      "decision": "Accepted British/American or Oxford spelling variant. Original dictionary headwords remain unchanged; independent learning cards are not a single continuous essay."
+    },
+    {
+      "word": "organise",
+      "rule": "OXFORD_SPELLING_Z_NOT_S",
+      "message": "Would you like to use the Oxford spelling \"organize\"? The spelling 'organise' is also correct.",
+      "decision": "Accepted British/American or Oxford spelling variant. Original dictionary headwords remain unchanged; independent learning cards are not a single continuous essay."
+    },
+    {
+      "word": "realise",
+      "rule": "EN_WORD_COHERENCY",
+      "message": "Do not mix variants of the same word ('realise' and 'realize') within a single text.",
+      "decision": "Accepted British/American or Oxford spelling variant. Original dictionary headwords remain unchanged; independent learning cards are not a single continuous essay."
+    },
+    {
+      "word": "realise",
+      "rule": "OXFORD_SPELLING_Z_NOT_S",
+      "message": "Would you like to use the Oxford spelling \"realize\"? The spelling 'realise' is also correct.",
+      "decision": "Accepted British/American or Oxford spelling variant. Original dictionary headwords remain unchanged; independent learning cards are not a single continuous essay."
+    },
+    {
+      "word": "judgement",
+      "rule": "EN_WORD_COHERENCY",
+      "message": "Do not mix variants of the same word ('judgement' and 'judgment') within a single text.",
+      "decision": "Accepted British/American or Oxford spelling variant. Original dictionary headwords remain unchanged; independent learning cards are not a single continuous essay."
+    },
+    {
+      "word": "reading",
+      "rule": "EN_WORD_COHERENCY",
+      "message": "Do not mix variants of the same word ('organise' and 'organize') within a single text.",
+      "decision": "Accepted British/American or Oxford spelling variant. Original dictionary headwords remain unchanged; independent learning cards are not a single continuous essay."
+    },
+    {
+      "word": "reading",
+      "rule": "OXFORD_SPELLING_Z_NOT_S",
+      "message": "Would you like to use the Oxford spelling \"organize\"? The spelling 'organise' is also correct.",
+      "decision": "Accepted British/American or Oxford spelling variant. Original dictionary headwords remain unchanged; independent learning cards are not a single continuous essay."
+    },
+    {
+      "word": "struggle",
+      "rule": "EN_WORD_COHERENCY",
+      "message": "Do not mix variants of the same word ('organise' and 'organize') within a single text.",
+      "decision": "Accepted British/American or Oxford spelling variant. Original dictionary headwords remain unchanged; independent learning cards are not a single continuous essay."
+    },
+    {
+      "word": "struggle",
+      "rule": "OXFORD_SPELLING_Z_NOT_S",
+      "message": "Would you like to use the Oxford spelling \"organize\"? The spelling 'organise' is also correct.",
+      "decision": "Accepted British/American or Oxford spelling variant. Original dictionary headwords remain unchanged; independent learning cards are not a single continuous essay."
+    },
+    {
+      "word": "nowadays",
+      "rule": "EN_WORD_COHERENCY",
+      "message": "Do not mix variants of the same word ('organise' and 'organize') within a single text.",
+      "decision": "Accepted British/American or Oxford spelling variant. Original dictionary headwords remain unchanged; independent learning cards are not a single continuous essay."
+    },
+    {
+      "word": "nowadays",
+      "rule": "OXFORD_SPELLING_Z_NOT_S",
+      "message": "Would you like to use the Oxford spelling \"organize\"? The spelling 'organise' is also correct.",
+      "decision": "Accepted British/American or Oxford spelling variant. Original dictionary headwords remain unchanged; independent learning cards are not a single continuous essay."
+    }
+  ],
+  "limits": "Rule-based English check; does not certify all translations, semantics, or audio pronunciation. Each original bilingual card also underwent assistant language review; no teacher certification is asserted."
+}

@@ -30,7 +30,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -46,8 +46,9 @@
         }
       ],
       "blockers": [
-        "整体完成标准受词条资源覆盖及真机验收缺口约束；本轮不宣称原始规格全部完成。"
-      ]
+        "当前Cloud可完成的代码、1640词资料与自动化校验已补齐；总体现场验收仅受EXT-PHONE、EXT-PROVIDER和七词EXT-LANGUAGE外部条件约束。"
+      ],
+      "remaining_kind": "external-only"
     },
     {
       "id": "R002",
@@ -74,7 +75,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -90,8 +91,9 @@
         }
       ],
       "blockers": [
-        "整体完成标准受词条资源覆盖及真机验收缺口约束；本轮不宣称原始规格全部完成。"
-      ]
+        "当前Cloud可完成的代码、1640词资料与自动化校验已补齐；总体现场验收仅受EXT-PHONE、EXT-PROVIDER和七词EXT-LANGUAGE外部条件约束。"
+      ],
+      "remaining_kind": "external-only"
     },
     {
       "id": "R003",
@@ -118,7 +120,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -160,7 +162,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -244,7 +246,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -260,8 +262,9 @@
         }
       ],
       "blockers": [
-        "数据库/大列表/音频已移出主线程，并有模拟器P95回归；没有连接真实Android手机，无法把模拟器结果冒充全局真机触控/声音/系统退出验收。"
-      ]
+        "EXT-PHONE：IO优化和真实模拟器回归已完成；没有连接实际Android手机，无法用模拟器代替真机触控/扬声器/系统回收验收。"
+      ],
+      "remaining_kind": "external-only"
     },
     {
       "id": "R007",
@@ -288,7 +291,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -330,7 +333,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -372,7 +375,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -540,7 +543,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -604,7 +607,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveScreens.kt",
           "symbol": "private fun WorkflowScreen",
-          "logic": "WorkflowScreen 先仅显示词/原音标/发音；reveal 后展示核心义、原双语例句及已有补充，三档按钮调用 vm.rate，非静态选中态。"
+          "logic": "先主动回忆；reveal后显示已核对常用义、词性、1640词逐词原创双语例句/搭配及按本卡词性筛选的词形，保留原始资料供展开查看；三档按钮真实提交评分。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/SpeechController.kt",
@@ -656,7 +659,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -703,7 +706,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -844,7 +847,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
@@ -896,7 +899,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -1158,7 +1161,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -1200,7 +1203,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -1242,7 +1245,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -1284,7 +1287,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -1326,7 +1329,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -1558,7 +1561,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
@@ -1605,12 +1608,12 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveScreens.kt",
           "symbol": "private fun WorkflowScreen",
-          "logic": "WorkflowScreen 先仅显示词/原音标/发音；reveal 后展示核心义、原双语例句及已有补充，三档按钮调用 vm.rate，非静态选中态。"
+          "logic": "先主动回忆；reveal后显示已核对常用义、词性、1640词逐词原创双语例句/搭配及按本卡词性筛选的词形，保留原始资料供展开查看；三档按钮真实提交评分。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -1637,7 +1640,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveScreens.kt",
           "symbol": "private fun WorkflowScreen",
-          "logic": "WorkflowScreen 先仅显示词/原音标/发音；reveal 后展示核心义、原双语例句及已有补充，三档按钮调用 vm.rate，非静态选中态。"
+          "logic": "先主动回忆；reveal后显示已核对常用义、词性、1640词逐词原创双语例句/搭配及按本卡词性筛选的词形，保留原始资料供展开查看；三档按钮真实提交评分。"
         }
       ],
       "tests": [
@@ -1818,6 +1821,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditAlgorithmTest.kt",
           "symbol": "eachRequiredPerformanceSignalIndependentlyChangesNewWordVolume",
           "assertions": "六项学习表现分别降到0时新词数均低于对照；积压40词与10分钟预算也分别减少新词。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditPersistenceTest.kt",
+          "symbol": "recentPerformanceAndWeeklyAiEvidenceUseExactlySevenDaysWithoutFutureRecords",
+          "assertions": "真实SQLite分别写第8天、第7天、今天与未来作答，排程仅统计七天两条有效样本，周AI统计排除历史越界与未来记录。"
         }
       ],
       "blockers": []
@@ -2028,6 +2036,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditAlgorithmTest.kt",
           "symbol": "eachRequiredPerformanceSignalIndependentlyChangesNewWordVolume",
           "assertions": "六项学习表现分别降到0时新词数均低于对照；积压40词与10分钟预算也分别减少新词。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditPersistenceTest.kt",
+          "symbol": "recentPerformanceAndWeeklyAiEvidenceUseExactlySevenDaysWithoutFutureRecords",
+          "assertions": "真实SQLite分别写第8天、第7天、今天与未来作答，排程仅统计七天两条有效样本，周AI统计排除历史越界与未来记录。"
         }
       ],
       "blockers": []
@@ -2070,6 +2083,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditAlgorithmTest.kt",
           "symbol": "eachRequiredPerformanceSignalIndependentlyChangesNewWordVolume",
           "assertions": "六项学习表现分别降到0时新词数均低于对照；积压40词与10分钟预算也分别减少新词。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditPersistenceTest.kt",
+          "symbol": "recentPerformanceAndWeeklyAiEvidenceUseExactlySevenDaysWithoutFutureRecords",
+          "assertions": "真实SQLite分别写第8天、第7天、今天与未来作答，排程仅统计七天两条有效样本，周AI统计排除历史越界与未来记录。"
         }
       ],
       "blockers": []
@@ -2299,7 +2317,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveScreens.kt",
           "symbol": "private fun WorkflowScreen",
-          "logic": "WorkflowScreen 先仅显示词/原音标/发音；reveal 后展示核心义、原双语例句及已有补充，三档按钮调用 vm.rate，非静态选中态。"
+          "logic": "先主动回忆；reveal后显示已核对常用义、词性、1640词逐词原创双语例句/搭配及按本卡词性筛选的词形，保留原始资料供展开查看；三档按钮真实提交评分。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/SpeechController.kt",
@@ -2341,7 +2359,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveScreens.kt",
           "symbol": "private fun WorkflowScreen",
-          "logic": "WorkflowScreen 先仅显示词/原音标/发音；reveal 后展示核心义、原双语例句及已有补充，三档按钮调用 vm.rate，非静态选中态。"
+          "logic": "先主动回忆；reveal后显示已核对常用义、词性、1640词逐词原创双语例句/搭配及按本卡词性筛选的词形，保留原始资料供展开查看；三档按钮真实提交评分。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/SpeechController.kt",
@@ -2383,7 +2401,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveScreens.kt",
           "symbol": "private fun WorkflowScreen",
-          "logic": "WorkflowScreen 先仅显示词/原音标/发音；reveal 后展示核心义、原双语例句及已有补充，三档按钮调用 vm.rate，非静态选中态。"
+          "logic": "先主动回忆；reveal后显示已核对常用义、词性、1640词逐词原创双语例句/搭配及按本卡词性筛选的词形，保留原始资料供展开查看；三档按钮真实提交评分。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/SpeechController.kt",
@@ -2425,7 +2443,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveScreens.kt",
           "symbol": "private fun WorkflowScreen",
-          "logic": "WorkflowScreen 先仅显示词/原音标/发音；reveal 后展示核心义、原双语例句及已有补充，三档按钮调用 vm.rate，非静态选中态。"
+          "logic": "先主动回忆；reveal后显示已核对常用义、词性、1640词逐词原创双语例句/搭配及按本卡词性筛选的词形，保留原始资料供展开查看；三档按钮真实提交评分。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/SpeechController.kt",
@@ -2472,7 +2490,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveScreens.kt",
           "symbol": "private fun WorkflowScreen",
-          "logic": "WorkflowScreen 先仅显示词/原音标/发音；reveal 后展示核心义、原双语例句及已有补充，三档按钮调用 vm.rate，非静态选中态。"
+          "logic": "先主动回忆；reveal后显示已核对常用义、词性、1640词逐词原创双语例句/搭配及按本卡词性筛选的词形，保留原始资料供展开查看；三档按钮真实提交评分。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/SpeechController.kt",
@@ -2519,7 +2537,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveScreens.kt",
           "symbol": "private fun WorkflowScreen",
-          "logic": "WorkflowScreen 先仅显示词/原音标/发音；reveal 后展示核心义、原双语例句及已有补充，三档按钮调用 vm.rate，非静态选中态。"
+          "logic": "先主动回忆；reveal后显示已核对常用义、词性、1640词逐词原创双语例句/搭配及按本卡词性筛选的词形，保留原始资料供展开查看；三档按钮真实提交评分。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/SpeechController.kt",
@@ -2555,13 +2573,13 @@
       "criterion": "显示释义后展开核心义",
       "group": "card",
       "initial_status": "已完整实现",
-      "final_status": "部分实现",
+      "final_status": "已完整实现",
       "review": "跟进复查发现首行取义会将罕见名词义当作高中主提示；上一轮完成判定过宽，已修复已审校词并收紧状态。",
       "evidence": [
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveScreens.kt",
           "symbol": "private fun WorkflowScreen",
-          "logic": "WorkflowScreen 先仅显示词/原音标/发音；reveal 后展示核心义、原双语例句及已有补充，三档按钮调用 vm.rate，非静态选中态。"
+          "logic": "先主动回忆；reveal后显示已核对常用义、词性、1640词逐词原创双语例句/搭配及按本卡词性筛选的词形，保留原始资料供展开查看；三档按钮真实提交评分。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/SpeechController.kt",
@@ -2581,12 +2599,17 @@
         {
           "file": "tools/build_word_study_notes.py",
           "symbol": "def build():",
-          "logic": "从显式逐词资料编译并核对覆盖集合，243张原创卡与264个空词形分类实际进入资产；不为未审校词自动套句或捏造变化。"
+          "logic": "从全部1640词显式原创资料编译，校验精确覆盖、唯一目标、去重和双语内容；按明确词性/义项政策筛选词形，剔除词根元数据及无关词性，比较级/最高级必须成对。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
           "symbol": "fun refreshReviewedVocabulary(",
           "logic": "仅修正已审校词的未评分本地词义/拼写提示，已答历史与当前反馈不变，比较答案后幂等保存，不改掌握度或任务数量。"
+        },
+        {
+          "file": "tools/build_word_study_notes.py",
+          "symbol": "def morphology(",
+          "logic": "按选定常用词性和义项选择名词/动词/程度形式，配套不可数、集合、同形词及变体用法；不把原词典全量形式直接当教学资料。"
         }
       ],
       "tests": [
@@ -2624,11 +2647,24 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
           "symbol": "customDefinitionsAndUnreviewedWordsKeepTheirOriginalMeaning",
           "assertions": "同名词用户改写释义不匹配内置原文时，不被整理义覆盖；未知自定义词同样走原始释义回退。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
+          "symbol": "all1640ReviewedCardsReachTheActualMeaningSpellingAndContextGraders",
+          "assertions": "1640真实内置词逐词读取已核对卡片，验证常用义进入四选一正确/错误评分、拼写大小写/错误评分和实际语境答案。"
+        },
+        {
+          "file": "tools/tests/test_study_resources.py",
+          "symbol": "test_school_pos_does_not_leak_rare_nouns_or_root_metadata",
+          "assertions": "检查automatic无automatics、training无动词现在分词、wind无无关过去式，knowledge不可数，且无词根元数据。"
+        },
+        {
+          "file": "tools/tests/test_study_resources.py",
+          "symbol": "test_irregular_and_homograph_forms_are_explicitly_distinguished",
+          "assertions": "核对basis/status、lie两义、found/find、goods/means、medium/media、focus/focuses及curious标准程度形式；每条有程度形式时必须比较级/最高级配对。"
         }
       ],
-      "blockers": [
-        "仅243/1640词具有本轮校核的高中常用义；其余仍按原词库取义，不能把可显示释义当成全量核心义教学审校。"
-      ]
+      "blockers": []
     },
     {
       "id": "R062",
@@ -2639,13 +2675,13 @@
       "criterion": "显示释义后提供简短高考语境例句",
       "group": "card",
       "initial_status": "部分实现",
-      "final_status": "部分实现",
+      "final_status": "已完整实现",
       "review": "第二轮逐条阅读实现与调用链；运行证据另列 execution，不以接口/名称作结论。",
       "evidence": [
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveScreens.kt",
           "symbol": "private fun WorkflowScreen",
-          "logic": "WorkflowScreen 先仅显示词/原音标/发音；reveal 后展示核心义、原双语例句及已有补充，三档按钮调用 vm.rate，非静态选中态。"
+          "logic": "先主动回忆；reveal后显示已核对常用义、词性、1640词逐词原创双语例句/搭配及按本卡词性筛选的词形，保留原始资料供展开查看；三档按钮真实提交评分。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/SpeechController.kt",
@@ -2665,7 +2701,12 @@
         {
           "file": "tools/build_word_study_notes.py",
           "symbol": "def build():",
-          "logic": "从显式逐词资料编译并核对覆盖集合，243张原创卡与264个空词形分类实际进入资产；不为未审校词自动套句或捏造变化。"
+          "logic": "从全部1640词显式原创资料编译，校验精确覆盖、唯一目标、去重和双语内容；按明确词性/义项政策筛选词形，剔除词根元数据及无关词性，比较级/最高级必须成对。"
+        },
+        {
+          "file": "tools/build_word_study_notes.py",
+          "symbol": "def morphology(",
+          "logic": "按选定常用词性和义项选择名词/动词/程度形式，配套不可数、集合、同形词及变体用法；不把原词典全量形式直接当教学资料。"
         }
       ],
       "tests": [
@@ -2683,11 +2724,24 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditPersistenceTest.kt",
           "symbol": "adaptiveEvidenceSurvivesReopenAndEveryWordHasDifferentOfflineContexts",
           "assertions": "关闭重开真实数据库后记忆证据相等；1640词各至少2语境，represent的25种题种子出现多语境且答案均为原词。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
+          "symbol": "all1640ReviewedCardsReachTheActualMeaningSpellingAndContextGraders",
+          "assertions": "1640真实内置词逐词读取已核对卡片，验证常用义进入四选一正确/错误评分、拼写大小写/错误评分和实际语境答案。"
+        },
+        {
+          "file": "tools/tests/test_study_resources.py",
+          "symbol": "test_school_pos_does_not_leak_rare_nouns_or_root_metadata",
+          "assertions": "检查automatic无automatics、training无动词现在分词、wind无无关过去式，knowledge不可数，且无词根元数据。"
+        },
+        {
+          "file": "tools/tests/test_study_resources.py",
+          "symbol": "test_irregular_and_homograph_forms_are_explicitly_distinguished",
+          "assertions": "核对basis/status、lie两义、found/find、goods/means、medium/media、focus/focuses及curious标准程度形式；每条有程度形式时必须比较级/最高级配对。"
         }
       ],
-      "blockers": [
-        "新增243条原创高中双语例句并保留原1640词例句；其余1397词尚未完成高中语境适配审校，不冒称高考真题或独立教师认证。"
-      ]
+      "blockers": []
     },
     {
       "id": "R063",
@@ -2698,13 +2752,13 @@
       "criterion": "显示释义后提供常见搭配",
       "group": "card",
       "initial_status": "部分实现",
-      "final_status": "部分实现",
+      "final_status": "已完整实现",
       "review": "第二轮逐条阅读实现与调用链；运行证据另列 execution，不以接口/名称作结论。",
       "evidence": [
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveScreens.kt",
           "symbol": "private fun WorkflowScreen",
-          "logic": "WorkflowScreen 先仅显示词/原音标/发音；reveal 后展示核心义、原双语例句及已有补充，三档按钮调用 vm.rate，非静态选中态。"
+          "logic": "先主动回忆；reveal后显示已核对常用义、词性、1640词逐词原创双语例句/搭配及按本卡词性筛选的词形，保留原始资料供展开查看；三档按钮真实提交评分。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/SpeechController.kt",
@@ -2724,7 +2778,12 @@
         {
           "file": "tools/build_word_study_notes.py",
           "symbol": "def build():",
-          "logic": "从显式逐词资料编译并核对覆盖集合，243张原创卡与264个空词形分类实际进入资产；不为未审校词自动套句或捏造变化。"
+          "logic": "从全部1640词显式原创资料编译，校验精确覆盖、唯一目标、去重和双语内容；按明确词性/义项政策筛选词形，剔除词根元数据及无关词性，比较级/最高级必须成对。"
+        },
+        {
+          "file": "tools/build_word_study_notes.py",
+          "symbol": "def morphology(",
+          "logic": "按选定常用词性和义项选择名词/动词/程度形式，配套不可数、集合、同形词及变体用法；不把原词典全量形式直接当教学资料。"
         }
       ],
       "tests": [
@@ -2737,11 +2796,24 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/OfflineSpeechTest.kt",
           "symbol": "automaticRequestPlaysExactlyTwiceAndThenFinishes",
           "assertions": "播放器完成回调后再次播放，严格共两次，随后停止；使用可控播放器边界，不冒称真机声学验收。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
+          "symbol": "all1640ReviewedCardsReachTheActualMeaningSpellingAndContextGraders",
+          "assertions": "1640真实内置词逐词读取已核对卡片，验证常用义进入四选一正确/错误评分、拼写大小写/错误评分和实际语境答案。"
+        },
+        {
+          "file": "tools/tests/test_study_resources.py",
+          "symbol": "test_school_pos_does_not_leak_rare_nouns_or_root_metadata",
+          "assertions": "检查automatic无automatics、training无动词现在分词、wind无无关过去式，knowledge不可数，且无词根元数据。"
+        },
+        {
+          "file": "tools/tests/test_study_resources.py",
+          "symbol": "test_irregular_and_homograph_forms_are_explicitly_distinguished",
+          "assertions": "核对basis/status、lie两义、found/find、goods/means、medium/media、focus/focuses及curious标准程度形式；每条有程度形式时必须比较级/最高级配对。"
         }
       ],
-      "blockers": [
-        "本轮243条搭配加原WordNotes去重后覆盖261/1640词，剩余1379词尚未整理可靠离线常见搭配。"
-      ]
+      "blockers": []
     },
     {
       "id": "R064",
@@ -2752,13 +2824,13 @@
       "criterion": "显示释义后提供必要词形变化",
       "group": "card",
       "initial_status": "部分实现",
-      "final_status": "部分实现",
+      "final_status": "已完整实现",
       "review": "第二轮逐条阅读实现与调用链；运行证据另列 execution，不以接口/名称作结论。",
       "evidence": [
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveScreens.kt",
           "symbol": "private fun WorkflowScreen",
-          "logic": "WorkflowScreen 先仅显示词/原音标/发音；reveal 后展示核心义、原双语例句及已有补充，三档按钮调用 vm.rate，非静态选中态。"
+          "logic": "先主动回忆；reveal后显示已核对常用义、词性、1640词逐词原创双语例句/搭配及按本卡词性筛选的词形，保留原始资料供展开查看；三档按钮真实提交评分。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/SpeechController.kt",
@@ -2778,7 +2850,12 @@
         {
           "file": "tools/build_word_study_notes.py",
           "symbol": "def build():",
-          "logic": "从显式逐词资料编译并核对覆盖集合，243张原创卡与264个空词形分类实际进入资产；不为未审校词自动套句或捏造变化。"
+          "logic": "从全部1640词显式原创资料编译，校验精确覆盖、唯一目标、去重和双语内容；按明确词性/义项政策筛选词形，剔除词根元数据及无关词性，比较级/最高级必须成对。"
+        },
+        {
+          "file": "tools/build_word_study_notes.py",
+          "symbol": "def morphology(",
+          "logic": "按选定常用词性和义项选择名词/动词/程度形式，配套不可数、集合、同形词及变体用法；不把原词典全量形式直接当教学资料。"
         }
       ],
       "tests": [
@@ -2801,11 +2878,24 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
           "symbol": "everyOriginalWordHasMorphologyWhileMissingInflectionsAreNotInvented",
           "assertions": "遍历1640词验证实际用法记录；核对basis/bases、status/statuses，information/furniture不可数、ought情态、statistics一致关系及solar关系形容词分类。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
+          "symbol": "all1640ReviewedCardsReachTheActualMeaningSpellingAndContextGraders",
+          "assertions": "1640真实内置词逐词读取已核对卡片，验证常用义进入四选一正确/错误评分、拼写大小写/错误评分和实际语境答案。"
+        },
+        {
+          "file": "tools/tests/test_study_resources.py",
+          "symbol": "test_school_pos_does_not_leak_rare_nouns_or_root_metadata",
+          "assertions": "检查automatic无automatics、training无动词现在分词、wind无无关过去式，knowledge不可数，且无词根元数据。"
+        },
+        {
+          "file": "tools/tests/test_study_resources.py",
+          "symbol": "test_irregular_and_homograph_forms_are_explicitly_distinguished",
+          "assertions": "核对basis/status、lie两义、found/find、goods/means、medium/media、focus/focuses及curious标准程度形式；每条有程度形式时必须比较级/最高级配对。"
         }
       ],
-      "blockers": [
-        "原1376条字典词形加264词逐词用法说明已覆盖1640词；原字典多词性形式仍未全部按高中常用义筛选，非空记录不等于教学适配完成。"
-      ]
+      "blockers": []
     },
     {
       "id": "R065",
@@ -2822,7 +2912,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveScreens.kt",
           "symbol": "private fun WorkflowScreen",
-          "logic": "WorkflowScreen 先仅显示词/原音标/发音；reveal 后展示核心义、原双语例句及已有补充，三档按钮调用 vm.rate，非静态选中态。"
+          "logic": "先主动回忆；reveal后显示已核对常用义、词性、1640词逐词原创双语例句/搭配及按本卡词性筛选的词形，保留原始资料供展开查看；三档按钮真实提交评分。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/SpeechController.kt",
@@ -3000,7 +3090,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
@@ -3052,7 +3142,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
@@ -3104,7 +3194,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
@@ -3156,7 +3246,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
@@ -3218,12 +3308,17 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
           "symbol": "fun audit(",
           "logic": "WorkflowFactory.audit 仅对模糊/认识按45%概率插入词义、拼写或语境客观题，种子关联任务键，可复现但随任务变化。"
+        },
+        {
+          "file": "app/src/main/java/com/tanhaowen/contextenglish/study/SpellingAnswer.kt",
+          "symbol": "object SpellingAnswer",
+          "logic": "明确的14组同词英美拼写变体参与每日和旧流程判题；不进行模糊纠错，依词性/义项不同的词对不无条件接受。"
         }
       ],
       "tests": [
@@ -3241,6 +3336,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditPersistenceTest.kt",
           "symbol": "secondSubmissionCannotReplaceAlreadyGradedFeedbackOrMastery",
           "assertions": "同题已反馈后再次评分抛出异常；原反馈快照和完整单词记录保持第一次结果。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
+          "symbol": "standardSpellingVariantsEarnRealCreditWhileDifferentLexemesRemainWrong",
+          "assertions": "真实humour题接受humor且SQLite正确数/掌握度增加，错误数不增、原输入保存；advice题拒绝advise。"
         }
       ],
       "blockers": []
@@ -3270,7 +3370,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -3322,7 +3422,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -3374,7 +3474,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -3426,7 +3526,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -3478,7 +3578,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -3530,7 +3630,12 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
+        },
+        {
+          "file": "app/src/main/java/com/tanhaowen/contextenglish/study/SpellingAnswer.kt",
+          "symbol": "object SpellingAnswer",
+          "logic": "明确的14组同词英美拼写变体参与每日和旧流程判题；不进行模糊纠错，依词性/义项不同的词对不无条件接受。"
         }
       ],
       "tests": [
@@ -3553,6 +3658,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditAlgorithmTest.kt",
           "symbol": "spellingAndContextErrorsHaveRealMasteryAndDueDateConsequences",
           "assertions": "同一已熟悉词答错拼写或语境后，掌握度低于0.5、复习早于答对、遗忘数增加且不能保持稳定掌握。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
+          "symbol": "standardSpellingVariantsEarnRealCreditWhileDifferentLexemesRemainWrong",
+          "assertions": "真实humour题接受humor且SQLite正确数/掌握度增加，错误数不增、原输入保存；advice题拒绝advise。"
         }
       ],
       "blockers": []
@@ -3582,7 +3692,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -3703,7 +3813,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -3755,7 +3865,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -3864,7 +3974,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -3916,7 +4026,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -3968,7 +4078,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -4020,7 +4130,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -4072,7 +4182,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -5137,7 +5247,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
@@ -5189,7 +5299,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
@@ -5247,7 +5357,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
@@ -5300,7 +5410,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
@@ -5358,7 +5468,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
@@ -5369,6 +5479,11 @@
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveViewModel.kt",
           "symbol": "private fun calculateTomorrow",
           "logic": "next 在当日最后一步后独立计算并保存明日计划；prepareTomorrow 重算未开始的未来计划，逐任务缓存并保留已成功项，失败不破坏本地计划。"
+        },
+        {
+          "file": "app/src/main/java/com/tanhaowen/contextenglish/study/SpellingAnswer.kt",
+          "symbol": "object SpellingAnswer",
+          "logic": "明确的14组同词英美拼写变体参与每日和旧流程判题；不进行模糊纠错，依词性/义项不同的词对不无条件接受。"
         }
       ],
       "tests": [
@@ -5386,6 +5501,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditPersistenceTest.kt",
           "symbol": "newWordAccuracyUsesTheActualCohortNotTheQuizSlotName",
           "assertions": "新词落在review槽位仍正确计入新词表现；v5 JSON恢复能从学习快照回填真实归属。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
+          "symbol": "standardSpellingVariantsEarnRealCreditWhileDifferentLexemesRemainWrong",
+          "assertions": "真实humour题接受humor且SQLite正确数/掌握度增加，错误数不增、原输入保存；advice题拒绝advise。"
         }
       ],
       "blockers": []
@@ -5411,7 +5531,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
@@ -5464,7 +5584,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
@@ -5521,7 +5641,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
@@ -5573,7 +5693,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
@@ -5625,7 +5745,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
@@ -6060,7 +6180,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -6918,6 +7038,11 @@
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveScreens.kt",
           "symbol": "private fun ReadingBody",
           "logic": "ReadingBody 展示可点击查词的完整原文、生词/理解影响选择；评分反馈后记录错因，缓存逐题解析不透露未作答答案。"
+        },
+        {
+          "file": "app/src/main/java/com/tanhaowen/contextenglish/ai/LearningEnhancements.kt",
+          "symbol": "fun displayedContext(",
+          "logic": "从当前题干还原真实挖空句，词卡才用已显示例句；阅读使用真实原文，查词不在文中时不会伪造语境。"
         }
       ],
       "tests": [
@@ -6945,6 +7070,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
           "symbol": "contextFeedbackUsesTheActualSampledSentenceRatherThanAnUnrelatedDefaultExample",
           "assertions": "30种真实represent语境题至少两种语境，每个反馈均包含本次填空还原句，且真实正确选项可判定。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/EnhancementContractTest.kt",
+          "symbol": "displayedContextUsesTheCurrentClozeRatherThanAnUnrelatedDefaultExample",
+          "assertions": "实际语境提示包含当前抽中句而不含另一默认例句，校验拒绝引用不在当前句的证据。"
         }
       ],
       "blockers": []
@@ -6969,7 +7099,12 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveScreens.kt",
           "symbol": "private fun WorkflowScreen",
-          "logic": "WorkflowScreen 先仅显示词/原音标/发音；reveal 后展示核心义、原双语例句及已有补充，三档按钮调用 vm.rate，非静态选中态。"
+          "logic": "先主动回忆；reveal后显示已核对常用义、词性、1640词逐词原创双语例句/搭配及按本卡词性筛选的词形，保留原始资料供展开查看；三档按钮真实提交评分。"
+        },
+        {
+          "file": "app/src/main/java/com/tanhaowen/contextenglish/ai/LearningEnhancements.kt",
+          "symbol": "fun displayedContext(",
+          "logic": "从当前题干还原真实挖空句，词卡才用已显示例句；阅读使用真实原文，查词不在文中时不会伪造语境。"
         }
       ],
       "tests": [
@@ -6987,6 +7122,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/EnhancementContractTest.kt",
           "symbol": "generatedExamplesRequireTheTargetWordTranslationCollocationAndContrast",
           "assertions": "目标词、新语境例句、译文、搭配、词形和易混解释齐全才通过；删除contrast则拒绝。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/EnhancementContractTest.kt",
+          "symbol": "displayedContextUsesTheCurrentClozeRatherThanAnUnrelatedDefaultExample",
+          "assertions": "实际语境提示包含当前抽中句而不含另一默认例句，校验拒绝引用不在当前句的证据。"
         }
       ],
       "blockers": []
@@ -7113,6 +7253,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/AiTransportContractTest.kt",
           "symbol": "chatPayloadAndActualReturnedModelAndUsageAreParsedTogether",
           "assertions": "通过传输边界夹具核对生产Chat请求负载，并断言返回模型字段和输入/输出Token被解析；不是实际服务商付费联调。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditPersistenceTest.kt",
+          "symbol": "recentPerformanceAndWeeklyAiEvidenceUseExactlySevenDaysWithoutFutureRecords",
+          "assertions": "真实SQLite分别写第8天、第7天、今天与未来作答，排程仅统计七天两条有效样本，周AI统计排除历史越界与未来记录。"
         }
       ],
       "blockers": []
@@ -7165,6 +7310,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/AiTransportContractTest.kt",
           "symbol": "responsesApiUsesItsOwnPayloadAndOutputFormat",
           "assertions": "核对Responses专用负载及返回文本、响应模型和Token解析，传输边界使用夹具。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/AiHttpsIntegrationTest.kt",
+          "symbol": "realHttpsRequestValidatesPayloadPersistsUsageAndCacheAvoidsASecondSocketRequest",
+          "assertions": "未经替换的生产客户端通过本地真实TLS连接发送认证和请求体，保存响应实际模型/Token/费用0.000288，再次相同请求命中缓存且没有第二条网络请求。"
         }
       ],
       "blockers": []
@@ -7195,6 +7345,11 @@
           "file": "app/src/main/java/com/tanhaowen/contextenglish/AppViewModel.kt",
           "symbol": "private fun pumpCoach",
           "logic": "旧自动网络入口 pumpCoach 仅清空pending；当前核心AI边界只由显式按钮调用，启动/切页/学习评分最多读写本地队列。"
+        },
+        {
+          "file": "app/src/main/java/com/tanhaowen/contextenglish/AppViewModel.kt",
+          "symbol": "fun testConnection()",
+          "logic": "仅手动触发独立connection-test任务并useCache=false，重新请求当前凭据/模型；旧缓存不能伪造连接成功。"
         }
       ],
       "tests": [
@@ -7247,6 +7402,11 @@
           "file": "app/src/main/java/com/tanhaowen/contextenglish/AppViewModel.kt",
           "symbol": "private fun pumpCoach",
           "logic": "旧自动网络入口 pumpCoach 仅清空pending；当前核心AI边界只由显式按钮调用，启动/切页/学习评分最多读写本地队列。"
+        },
+        {
+          "file": "app/src/main/java/com/tanhaowen/contextenglish/AppViewModel.kt",
+          "symbol": "fun testConnection()",
+          "logic": "仅手动触发独立connection-test任务并useCache=false，重新请求当前凭据/模型；旧缓存不能伪造连接成功。"
         }
       ],
       "tests": [
@@ -7311,6 +7471,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/AiTransportContractTest.kt",
           "symbol": "chatPayloadAndActualReturnedModelAndUsageAreParsedTogether",
           "assertions": "通过传输边界夹具核对生产Chat请求负载，并断言返回模型字段和输入/输出Token被解析；不是实际服务商付费联调。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/AiHttpsIntegrationTest.kt",
+          "symbol": "realHttpsRequestValidatesPayloadPersistsUsageAndCacheAvoidsASecondSocketRequest",
+          "assertions": "未经替换的生产客户端通过本地真实TLS连接发送认证和请求体，保存响应实际模型/Token/费用0.000288，再次相同请求命中缓存且没有第二条网络请求。"
         }
       ],
       "blockers": []
@@ -7358,6 +7523,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/AiTransportContractTest.kt",
           "symbol": "chatPayloadAndActualReturnedModelAndUsageAreParsedTogether",
           "assertions": "通过传输边界夹具核对生产Chat请求负载，并断言返回模型字段和输入/输出Token被解析；不是实际服务商付费联调。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/AiHttpsIntegrationTest.kt",
+          "symbol": "realHttpsRequestValidatesPayloadPersistsUsageAndCacheAvoidsASecondSocketRequest",
+          "assertions": "未经替换的生产客户端通过本地真实TLS连接发送认证和请求体，保存响应实际模型/Token/费用0.000288，再次相同请求命中缓存且没有第二条网络请求。"
         }
       ],
       "blockers": []
@@ -8551,6 +8721,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/EnhancementContractTest.kt",
           "symbol": "robustJsonAcceptsFencesButRejectsWrongTypesAndTrailingObjects",
           "assertions": "接受JSON围栏；拒绝字段类型不符和末尾追加另一对象的内容。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/UsageAndCompatibilityTest.kt",
+          "symbol": "overflowAndInconsistentCacheUsageCannotBecomeKnownBillableCounts",
+          "assertions": "Long加法溢出、超范围浮点计数和缓存大于输入不标完整已知；合法100.0/2.0仍准确解析为102。"
         }
       ],
       "blockers": []
@@ -8598,6 +8773,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditViewModelIntegrationTest.kt",
           "symbol": "invalidAiResponseLeavesLocalPlanUsableAndCannotEnterCache",
           "assertions": "无效JSON记真实账目但不写有效缓存；本地计划不变，仍能继续揭示/评分/前进。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/UsageAndCompatibilityTest.kt",
+          "symbol": "overflowAndInconsistentCacheUsageCannotBecomeKnownBillableCounts",
+          "assertions": "Long加法溢出、超范围浮点计数和缓存大于输入不标完整已知；合法100.0/2.0仍准确解析为102。"
         }
       ],
       "blockers": []
@@ -8635,6 +8815,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AiSchedulerTest.kt",
           "symbol": "elapsedActualModelPriceSnapshotsAndTodayTotalsComeFromCompletedCalls",
           "assertions": "延时30ms真实计时，记录返回模型和四类用量价格；两次调用累计0.00584，缓存不额外计费。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/AiHttpsIntegrationTest.kt",
+          "symbol": "realHttpsRequestValidatesPayloadPersistsUsageAndCacheAvoidsASecondSocketRequest",
+          "assertions": "未经替换的生产客户端通过本地真实TLS连接发送认证和请求体，保存响应实际模型/Token/费用0.000288，再次相同请求命中缓存且没有第二条网络请求。"
         }
       ],
       "blockers": []
@@ -8687,6 +8872,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/AiTransportContractTest.kt",
           "symbol": "omittedActualModelIsReportedAsUnknownRatherThanInvented",
           "assertions": "未返回模型时明确记录未返回（含请求模型作为说明），不把请求模型当真实响应。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/AiHttpsIntegrationTest.kt",
+          "symbol": "realHttpsRequestValidatesPayloadPersistsUsageAndCacheAvoidsASecondSocketRequest",
+          "assertions": "未经替换的生产客户端通过本地真实TLS连接发送认证和请求体，保存响应实际模型/Token/费用0.000288，再次相同请求命中缓存且没有第二条网络请求。"
         }
       ],
       "blockers": []
@@ -8724,6 +8914,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/UsageAndCompatibilityTest.kt",
           "symbol": "openAiCachedInputIsNotBilledTwice",
           "assertions": "核对OpenAI输入已包含缓存时的普通输入分区与费用，缓存读取不再重复收取普通输入费用。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/UsageAndCompatibilityTest.kt",
+          "symbol": "overflowAndInconsistentCacheUsageCannotBecomeKnownBillableCounts",
+          "assertions": "Long加法溢出、超范围浮点计数和缓存大于输入不标完整已知；合法100.0/2.0仍准确解析为102。"
         }
       ],
       "blockers": []
@@ -8761,6 +8956,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/UsageAndCompatibilityTest.kt",
           "symbol": "openAiCachedInputIsNotBilledTwice",
           "assertions": "核对OpenAI输入已包含缓存时的普通输入分区与费用，缓存读取不再重复收取普通输入费用。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/UsageAndCompatibilityTest.kt",
+          "symbol": "overflowAndInconsistentCacheUsageCannotBecomeKnownBillableCounts",
+          "assertions": "Long加法溢出、超范围浮点计数和缓存大于输入不标完整已知；合法100.0/2.0仍准确解析为102。"
         }
       ],
       "blockers": []
@@ -8813,6 +9013,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/UsageAndCompatibilityTest.kt",
           "symbol": "separateGatewayCountsIncludeBothCachesOnce",
           "assertions": "独立网关input不含缓存时，写入/读取各计一次并正确归入总输入。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/UsageAndCompatibilityTest.kt",
+          "symbol": "overflowAndInconsistentCacheUsageCannotBecomeKnownBillableCounts",
+          "assertions": "Long加法溢出、超范围浮点计数和缓存大于输入不标完整已知；合法100.0/2.0仍准确解析为102。"
         }
       ],
       "blockers": []
@@ -8865,6 +9070,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/UsageAndCompatibilityTest.kt",
           "symbol": "separateGatewayCountsIncludeBothCachesOnce",
           "assertions": "独立网关input不含缓存时，写入/读取各计一次并正确归入总输入。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/UsageAndCompatibilityTest.kt",
+          "symbol": "overflowAndInconsistentCacheUsageCannotBecomeKnownBillableCounts",
+          "assertions": "Long加法溢出、超范围浮点计数和缓存大于输入不标完整已知；合法100.0/2.0仍准确解析为102。"
         }
       ],
       "blockers": []
@@ -9145,6 +9355,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/UsageAndCompatibilityTest.kt",
           "symbol": "deepSeekHitAndMissAreNotAddedToPromptTwice",
           "assertions": "DeepSeek命中/未命中分区不重复叠加到已给定prompt总量。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/AiHttpsIntegrationTest.kt",
+          "symbol": "realHttpsRequestValidatesPayloadPersistsUsageAndCacheAvoidsASecondSocketRequest",
+          "assertions": "未经替换的生产客户端通过本地真实TLS连接发送认证和请求体，保存响应实际模型/Token/费用0.000288，再次相同请求命中缓存且没有第二条网络请求。"
         }
       ],
       "blockers": []
@@ -9177,6 +9392,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AiSchedulerTest.kt",
           "symbol": "elapsedActualModelPriceSnapshotsAndTodayTotalsComeFromCompletedCalls",
           "assertions": "延时30ms真实计时，记录返回模型和四类用量价格；两次调用累计0.00584，缓存不额外计费。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/AiHttpsIntegrationTest.kt",
+          "symbol": "realHttpsRequestValidatesPayloadPersistsUsageAndCacheAvoidsASecondSocketRequest",
+          "assertions": "未经替换的生产客户端通过本地真实TLS连接发送认证和请求体，保存响应实际模型/Token/费用0.000288，再次相同请求命中缓存且没有第二条网络请求。"
         }
       ],
       "blockers": []
@@ -9209,6 +9429,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AiSchedulerTest.kt",
           "symbol": "elapsedActualModelPriceSnapshotsAndTodayTotalsComeFromCompletedCalls",
           "assertions": "延时30ms真实计时，记录返回模型和四类用量价格；两次调用累计0.00584，缓存不额外计费。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/AiHttpsIntegrationTest.kt",
+          "symbol": "realHttpsRequestValidatesPayloadPersistsUsageAndCacheAvoidsASecondSocketRequest",
+          "assertions": "未经替换的生产客户端通过本地真实TLS连接发送认证和请求体，保存响应实际模型/Token/费用0.000288，再次相同请求命中缓存且没有第二条网络请求。"
         }
       ],
       "blockers": []
@@ -9343,6 +9568,16 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/UsageAndCompatibilityTest.kt",
           "symbol": "deepSeekHitAndMissAreNotAddedToPromptTwice",
           "assertions": "DeepSeek命中/未命中分区不重复叠加到已给定prompt总量。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/AiHttpsIntegrationTest.kt",
+          "symbol": "realHttpsRequestValidatesPayloadPersistsUsageAndCacheAvoidsASecondSocketRequest",
+          "assertions": "未经替换的生产客户端通过本地真实TLS连接发送认证和请求体，保存响应实际模型/Token/费用0.000288，再次相同请求命中缓存且没有第二条网络请求。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/UsageAndCompatibilityTest.kt",
+          "symbol": "overflowAndInconsistentCacheUsageCannotBecomeKnownBillableCounts",
+          "assertions": "Long加法溢出、超范围浮点计数和缓存大于输入不标完整已知；合法100.0/2.0仍准确解析为102。"
         }
       ],
       "blockers": []
@@ -9405,6 +9640,16 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/AiTransportContractTest.kt",
           "symbol": "omittedActualModelIsReportedAsUnknownRatherThanInvented",
           "assertions": "未返回模型时明确记录未返回（含请求模型作为说明），不把请求模型当真实响应。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/AiHttpsIntegrationTest.kt",
+          "symbol": "realHttpsRequestValidatesPayloadPersistsUsageAndCacheAvoidsASecondSocketRequest",
+          "assertions": "未经替换的生产客户端通过本地真实TLS连接发送认证和请求体，保存响应实际模型/Token/费用0.000288，再次相同请求命中缓存且没有第二条网络请求。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/UsageAndCompatibilityTest.kt",
+          "symbol": "overflowAndInconsistentCacheUsageCannotBecomeKnownBillableCounts",
+          "assertions": "Long加法溢出、超范围浮点计数和缓存大于输入不标完整已知；合法100.0/2.0仍准确解析为102。"
         }
       ],
       "blockers": []
@@ -10288,6 +10533,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/AiTransportContractTest.kt",
           "symbol": "chatPayloadAndActualReturnedModelAndUsageAreParsedTogether",
           "assertions": "通过传输边界夹具核对生产Chat请求负载，并断言返回模型字段和输入/输出Token被解析；不是实际服务商付费联调。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditPersistenceTest.kt",
+          "symbol": "recentPerformanceAndWeeklyAiEvidenceUseExactlySevenDaysWithoutFutureRecords",
+          "assertions": "真实SQLite分别写第8天、第7天、今天与未来作答，排程仅统计七天两条有效样本，周AI统计排除历史越界与未来记录。"
         }
       ],
       "blockers": []
@@ -10669,6 +10919,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
           "symbol": "customDefinitionsAndUnreviewedWordsKeepTheirOriginalMeaning",
           "assertions": "同名词用户改写释义不匹配内置原文时，不被整理义覆盖；未知自定义词同样走原始释义回退。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditPersistenceTest.kt",
+          "symbol": "replannedQuestionAtSameIndexRejectsOldUiAnswerWithoutAnySideEffects",
+          "assertions": "同索引同任务key修改当前题目后，旧UI评分被拒绝，原单词/快照/计时/作答数不变；新题真实提交可正常计分一次。"
         }
       ],
       "blockers": []
@@ -11458,7 +11713,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -11469,8 +11724,9 @@
         }
       ],
       "blockers": [
-        "数据库/大列表/音频已移出主线程，并有模拟器P95回归；没有连接真实Android手机，无法把模拟器结果冒充全局真机触控/声音/系统退出验收。"
-      ]
+        "EXT-PHONE：IO优化和真实模拟器回归已完成；没有连接实际Android手机，无法用模拟器代替真机触控/扬声器/系统回收验收。"
+      ],
+      "remaining_kind": "external-only"
     },
     {
       "id": "R244",
@@ -11576,7 +11832,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveScreens.kt",
           "symbol": "private fun WorkflowScreen",
-          "logic": "WorkflowScreen 先仅显示词/原音标/发音；reveal 后展示核心义、原双语例句及已有补充，三档按钮调用 vm.rate，非静态选中态。"
+          "logic": "先主动回忆；reveal后显示已核对常用义、词性、1640词逐词原创双语例句/搭配及按本卡词性筛选的词形，保留原始资料供展开查看；三档按钮真实提交评分。"
         }
       ],
       "tests": [
@@ -11613,7 +11869,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveScreens.kt",
           "symbol": "private fun WorkflowScreen",
-          "logic": "WorkflowScreen 先仅显示词/原音标/发音；reveal 后展示核心义、原双语例句及已有补充，三档按钮调用 vm.rate，非静态选中态。"
+          "logic": "先主动回忆；reveal后显示已核对常用义、词性、1640词逐词原创双语例句/搭配及按本卡词性筛选的词形，保留原始资料供展开查看；三档按钮真实提交评分。"
         }
       ],
       "tests": [
@@ -11804,6 +12060,16 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditViewModelIntegrationTest.kt",
           "symbol": "coreLearningKeepsWorkingDuringAnInFlightAiRequestAndCancellation",
           "assertions": "挂起AI传输时仍可揭示/评分/推进；取消后账目为CANCELLED_USAGE_UNKNOWN且不伪造Token。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/AiHttpsIntegrationTest.kt",
+          "symbol": "realHttpsRequestValidatesPayloadPersistsUsageAndCacheAvoidsASecondSocketRequest",
+          "assertions": "未经替换的生产客户端通过本地真实TLS连接发送认证和请求体，保存响应实际模型/Token/费用0.000288，再次相同请求命中缓存且没有第二条网络请求。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/AiHttpsIntegrationTest.kt",
+          "symbol": "cancellingARealPendingHttpsRequestRecordsUnknownUsageAndAllowsManualRetry",
+          "assertions": "取消真实等待中的HTTPS请求，在3秒内结束、落库CANCELLED_USAGE_UNKNOWN、不入缓存，可手动重试成功。"
         }
       ],
       "blockers": []
@@ -11836,6 +12102,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditViewModelIntegrationTest.kt",
           "symbol": "actualViewModelCompletesOfflineAndAutomaticallyCreatesAdaptiveTomorrow",
           "assertions": "真实ViewModel驱动全部步骤、SQLite评分与保存；无AI请求；失败小测令明日新词减少、复习与语法专项出现。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/AiHttpsIntegrationTest.kt",
+          "symbol": "cancellingARealPendingHttpsRequestRecordsUnknownUsageAndAllowsManualRetry",
+          "assertions": "取消真实等待中的HTTPS请求，在3秒内结束、落库CANCELLED_USAGE_UNKNOWN、不入缓存，可手动重试成功。"
         }
       ],
       "blockers": []
@@ -11855,7 +12126,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/StudyClock.kt",
@@ -11912,7 +12183,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/StudyClock.kt",
@@ -11969,7 +12240,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/StudyClock.kt",
@@ -12026,7 +12297,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/StudyClock.kt",
@@ -12083,7 +12354,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/StudyClock.kt",
@@ -12140,7 +12411,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/StudyClock.kt",
@@ -12178,6 +12449,16 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditPersistenceTest.kt",
           "symbol": "secondSubmissionCannotReplaceAlreadyGradedFeedbackOrMastery",
           "assertions": "同题已反馈后再次评分抛出异常；原反馈快照和完整单词记录保持第一次结果。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/AiHttpsIntegrationTest.kt",
+          "symbol": "realHttpsRequestValidatesPayloadPersistsUsageAndCacheAvoidsASecondSocketRequest",
+          "assertions": "未经替换的生产客户端通过本地真实TLS连接发送认证和请求体，保存响应实际模型/Token/费用0.000288，再次相同请求命中缓存且没有第二条网络请求。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/AiHttpsIntegrationTest.kt",
+          "symbol": "cancellingARealPendingHttpsRequestRecordsUnknownUsageAndAllowsManualRetry",
+          "assertions": "取消真实等待中的HTTPS请求，在3秒内结束、落库CANCELLED_USAGE_UNKNOWN、不入缓存，可手动重试成功。"
         }
       ],
       "blockers": []
@@ -12197,7 +12478,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/StudyClock.kt",
@@ -12235,6 +12516,16 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditPersistenceTest.kt",
           "symbol": "secondSubmissionCannotReplaceAlreadyGradedFeedbackOrMastery",
           "assertions": "同题已反馈后再次评分抛出异常；原反馈快照和完整单词记录保持第一次结果。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/AiHttpsIntegrationTest.kt",
+          "symbol": "realHttpsRequestValidatesPayloadPersistsUsageAndCacheAvoidsASecondSocketRequest",
+          "assertions": "未经替换的生产客户端通过本地真实TLS连接发送认证和请求体，保存响应实际模型/Token/费用0.000288，再次相同请求命中缓存且没有第二条网络请求。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/AiHttpsIntegrationTest.kt",
+          "symbol": "cancellingARealPendingHttpsRequestRecordsUnknownUsageAndAllowsManualRetry",
+          "assertions": "取消真实等待中的HTTPS请求，在3秒内结束、落库CANCELLED_USAGE_UNKNOWN、不入缓存，可手动重试成功。"
         }
       ],
       "blockers": []
@@ -12432,7 +12723,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/StudyClock.kt",
@@ -12465,6 +12756,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
           "symbol": "contentCorrectionPreservesAnsweredHistoryAndOnlyRefreshesUnansweredLocalQuestionsOnce",
           "assertions": "旧未答词义题改为自动的、拼写提示同步；已答前缀、已评分当前题、选择、反馈、索引、2300ms计时保留；重复修复结果相同。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditPersistenceTest.kt",
+          "symbol": "replannedQuestionAtSameIndexRejectsOldUiAnswerWithoutAnySideEffects",
+          "assertions": "同索引同任务key修改当前题目后，旧UI评分被拒绝，原单词/快照/计时/作答数不变；新题真实提交可正常计分一次。"
         }
       ],
       "blockers": []
@@ -12484,7 +12780,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/StudyClock.kt",
@@ -12522,6 +12818,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
           "symbol": "contentCorrectionPreservesAnsweredHistoryAndOnlyRefreshesUnansweredLocalQuestionsOnce",
           "assertions": "旧未答词义题改为自动的、拼写提示同步；已答前缀、已评分当前题、选择、反馈、索引、2300ms计时保留；重复修复结果相同。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditPersistenceTest.kt",
+          "symbol": "replannedQuestionAtSameIndexRejectsOldUiAnswerWithoutAnySideEffects",
+          "assertions": "同索引同任务key修改当前题目后，旧UI评分被拒绝，原单词/快照/计时/作答数不变；新题真实提交可正常计分一次。"
         }
       ],
       "blockers": []
@@ -12546,7 +12847,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/data/EnglishDatabase.kt",
@@ -12556,7 +12857,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -12598,7 +12899,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/data/EnglishDatabase.kt",
@@ -12608,7 +12909,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -12650,7 +12951,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/data/EnglishDatabase.kt",
@@ -12660,7 +12961,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -12702,7 +13003,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/data/EnglishDatabase.kt",
@@ -12712,7 +13013,12 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+        },
+        {
+          "file": "app/src/main/java/com/tanhaowen/contextenglish/AppViewModel.kt",
+          "symbol": "fun testConnection()",
+          "logic": "仅手动触发独立connection-test任务并useCache=false，重新请求当前凭据/模型；旧缓存不能伪造连接成功。"
         }
       ],
       "tests": [
@@ -12754,7 +13060,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/data/EnglishDatabase.kt",
@@ -12764,7 +13070,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -12806,7 +13112,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/data/EnglishDatabase.kt",
@@ -12816,7 +13122,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -12858,7 +13164,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/data/EnglishDatabase.kt",
@@ -12868,7 +13174,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -12910,7 +13216,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/data/EnglishDatabase.kt",
@@ -12920,7 +13226,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -12962,7 +13268,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/data/EnglishDatabase.kt",
@@ -12972,7 +13278,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -13014,7 +13320,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/data/EnglishDatabase.kt",
@@ -13024,7 +13330,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -13077,6 +13383,11 @@
           "file": "app/src/main/java/com/tanhaowen/contextenglish/data/AiUsage.kt",
           "symbol": "fun calculate(",
           "logic": "AiCostCalculator 将普通输入（总输入减缓存分区）、输出、缓存写、缓存读分别乘请求时的每百万单价，保存总费用与分项。"
+        },
+        {
+          "file": "app/src/main/java/com/tanhaowen/contextenglish/study/SpellingAnswer.kt",
+          "symbol": "object SpellingAnswer",
+          "logic": "明确的14组同词英美拼写变体参与每日和旧流程判题；不进行模糊纠错，依词性/义项不同的词对不无条件接受。"
         }
       ],
       "tests": [
@@ -13089,6 +13400,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/UsageAndCompatibilityTest.kt",
           "symbol": "openAiCachedInputIsNotBilledTwice",
           "assertions": "核对OpenAI输入已包含缓存时的普通输入分区与费用，缓存读取不再重复收取普通输入费用。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
+          "symbol": "standardSpellingVariantsEarnRealCreditWhileDifferentLexemesRemainWrong",
+          "assertions": "真实humour题接受humor且SQLite正确数/掌握度增加，错误数不增、原输入保存；advice题拒绝advise。"
         }
       ],
       "blockers": []
@@ -13435,7 +13751,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/data/EnglishDatabase.kt",
@@ -13445,7 +13761,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -13487,7 +13803,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/data/EnglishDatabase.kt",
@@ -13497,7 +13813,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -13539,7 +13855,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/data/EnglishDatabase.kt",
@@ -13549,7 +13865,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -13591,7 +13907,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/data/EnglishDatabase.kt",
@@ -13601,7 +13917,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -13619,6 +13935,11 @@
           "file": "app/src/androidTest/java/com/tanhaowen/contextenglish/OfflineDayUiTest.kt",
           "symbol": "quickDayCanFinishOfflineAfterRecreationWithRealGradingAndTimingEvidence",
           "assertions": "真实Android界面走完整快速日、Activity重建、键盘打开时提交拼写；评分与语境落库、明日计划、0次AI及经验最近秩P95均实际核对。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditPersistenceTest.kt",
+          "symbol": "replannedQuestionAtSameIndexRejectsOldUiAnswerWithoutAnySideEffects",
+          "assertions": "同索引同任务key修改当前题目后，旧UI评分被拒绝，原单词/快照/计时/作答数不变；新题真实提交可正常计分一次。"
         }
       ],
       "blockers": []
@@ -13643,7 +13964,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/data/EnglishDatabase.kt",
@@ -13653,7 +13974,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -13774,7 +14095,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -13890,7 +14211,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         }
       ],
       "tests": [
@@ -14031,7 +14352,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
@@ -14078,7 +14399,7 @@
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveRepository.kt",
           "symbol": "fun answer(",
-          "logic": "AdaptiveRepository.answer 在一个 SQLite 事务提交唯一任务作答、word_memory/words、study_events、诊断、计时和快照；反馈已保存时拒绝重复评分。"
+          "logic": "SQLite事务中验证计划存在、索引和当前题目一致且未评分，再提交唯一作答、掌握度、诊断、计时和快照；过期UI与重复答案拒绝且不产生副作用。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/StudyClock.kt",
@@ -14163,6 +14484,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditViewModelIntegrationTest.kt",
           "symbol": "invalidAiResponseLeavesLocalPlanUsableAndCannotEnterCache",
           "assertions": "无效JSON记真实账目但不写有效缓存；本地计划不变，仍能继续揭示/评分/前进。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/AiHttpsIntegrationTest.kt",
+          "symbol": "realHttpsRequestValidatesPayloadPersistsUsageAndCacheAvoidsASecondSocketRequest",
+          "assertions": "未经替换的生产客户端通过本地真实TLS连接发送认证和请求体，保存响应实际模型/Token/费用0.000288，再次相同请求命中缓存且没有第二条网络请求。"
         }
       ],
       "blockers": []
@@ -14193,6 +14519,11 @@
           "file": "app/src/main/java/com/tanhaowen/contextenglish/ai/AiTaskScheduler.kt",
           "symbol": "private fun key(",
           "logic": "key 包含版本、endpoint、apiStyle、请求模型、内容类型与完整输入哈希；ai_tasks 保存实际响应模型、生成时间和30天过期时间；无效内容不得进入DONE。"
+        },
+        {
+          "file": "app/src/main/java/com/tanhaowen/contextenglish/AppViewModel.kt",
+          "symbol": "fun testConnection()",
+          "logic": "仅手动触发独立connection-test任务并useCache=false，重新请求当前凭据/模型；旧缓存不能伪造连接成功。"
         }
       ],
       "tests": [
@@ -14257,6 +14588,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditViewModelIntegrationTest.kt",
           "symbol": "invalidAiResponseLeavesLocalPlanUsableAndCannotEnterCache",
           "assertions": "无效JSON记真实账目但不写有效缓存；本地计划不变，仍能继续揭示/评分/前进。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/AiHttpsIntegrationTest.kt",
+          "symbol": "realHttpsRequestValidatesPayloadPersistsUsageAndCacheAvoidsASecondSocketRequest",
+          "assertions": "未经替换的生产客户端通过本地真实TLS连接发送认证和请求体，保存响应实际模型/Token/费用0.000288，再次相同请求命中缓存且没有第二条网络请求。"
         }
       ],
       "blockers": []
@@ -14304,6 +14640,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditViewModelIntegrationTest.kt",
           "symbol": "invalidAiResponseLeavesLocalPlanUsableAndCannotEnterCache",
           "assertions": "无效JSON记真实账目但不写有效缓存；本地计划不变，仍能继续揭示/评分/前进。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/AiHttpsIntegrationTest.kt",
+          "symbol": "realHttpsRequestValidatesPayloadPersistsUsageAndCacheAvoidsASecondSocketRequest",
+          "assertions": "未经替换的生产客户端通过本地真实TLS连接发送认证和请求体，保存响应实际模型/Token/费用0.000288，再次相同请求命中缓存且没有第二条网络请求。"
         }
       ],
       "blockers": []
@@ -14351,6 +14692,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditViewModelIntegrationTest.kt",
           "symbol": "invalidAiResponseLeavesLocalPlanUsableAndCannotEnterCache",
           "assertions": "无效JSON记真实账目但不写有效缓存；本地计划不变，仍能继续揭示/评分/前进。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/ai/AiHttpsIntegrationTest.kt",
+          "symbol": "realHttpsRequestValidatesPayloadPersistsUsageAndCacheAvoidsASecondSocketRequest",
+          "assertions": "未经替换的生产客户端通过本地真实TLS连接发送认证和请求体，保存响应实际模型/Token/费用0.000288，再次相同请求命中缓存且没有第二条网络请求。"
         }
       ],
       "blockers": []
@@ -14478,8 +14824,9 @@
         }
       ],
       "blockers": [
-        "数据库/大列表/音频已移出主线程，并有模拟器P95回归；没有连接真实Android手机，无法把模拟器结果冒充全局真机触控/声音/系统退出验收。"
-      ]
+        "EXT-PHONE：IO优化和真实模拟器回归已完成；没有连接实际Android手机，无法用模拟器代替真机触控/扬声器/系统回收验收。"
+      ],
+      "remaining_kind": "external-only"
     },
     {
       "id": "R305",
@@ -14553,7 +14900,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -14590,7 +14937,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
@@ -14637,7 +14984,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
@@ -14653,6 +15000,11 @@
           "file": "docs/V1_LEXICAL_UPDATE.md",
           "symbol": "## 实际修复",
           "logic": "跟进记录实际词义排序错误、243条整理卡、261词搭配、264空项用法分类、保留历史的旧题修正，以及仍未完成的教学/真机边界。"
+        },
+        {
+          "file": "docs/V1_CLOUD_COMPLETION.md",
+          "symbol": "# v1.0 Cloud 最终补齐",
+          "logic": "记录从code10继续的真实资源/代码/质量修复、核心实现与测试映射、最终执行及唯一外部验收边界。"
         }
       ],
       "tests": [
@@ -14694,7 +15046,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
@@ -14710,6 +15062,11 @@
           "file": "docs/V1_LEXICAL_UPDATE.md",
           "symbol": "## 实际修复",
           "logic": "跟进记录实际词义排序错误、243条整理卡、261词搭配、264空项用法分类、保留历史的旧题修正，以及仍未完成的教学/真机边界。"
+        },
+        {
+          "file": "docs/V1_CLOUD_COMPLETION.md",
+          "symbol": "# v1.0 Cloud 最终补齐",
+          "logic": "记录从code10继续的真实资源/代码/质量修复、核心实现与测试映射、最终执行及唯一外部验收边界。"
         }
       ],
       "tests": [
@@ -14751,7 +15108,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
@@ -14762,6 +15119,11 @@
           "file": "docs/V1_AUDIT_DELIVERY.md",
           "symbol": "SQLite 升级为 v6",
           "logic": "本轮交付说明记录对应实际修改、运行验证与明确限制；执行结果按真实完成状态填写，不以计划冒充结果。"
+        },
+        {
+          "file": "docs/V1_CLOUD_COMPLETION.md",
+          "symbol": "# v1.0 Cloud 最终补齐",
+          "logic": "记录从code10继续的真实资源/代码/质量修复、核心实现与测试映射、最终执行及唯一外部验收边界。"
         }
       ],
       "tests": [
@@ -14803,7 +15165,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
@@ -14819,6 +15181,11 @@
           "file": "docs/V1_LEXICAL_UPDATE.md",
           "symbol": "## 实际修复",
           "logic": "跟进记录实际词义排序错误、243条整理卡、261词搭配、264空项用法分类、保留历史的旧题修正，以及仍未完成的教学/真机边界。"
+        },
+        {
+          "file": "docs/V1_CLOUD_COMPLETION.md",
+          "symbol": "# v1.0 Cloud 最终补齐",
+          "logic": "记录从code10继续的真实资源/代码/质量修复、核心实现与测试映射、最终执行及唯一外部验收边界。"
         }
       ],
       "tests": [
@@ -14860,7 +15227,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
@@ -14876,6 +15243,11 @@
           "file": "docs/V1_LEXICAL_UPDATE.md",
           "symbol": "## 实际修复",
           "logic": "跟进记录实际词义排序错误、243条整理卡、261词搭配、264空项用法分类、保留历史的旧题修正，以及仍未完成的教学/真机边界。"
+        },
+        {
+          "file": "docs/V1_CLOUD_COMPLETION.md",
+          "symbol": "# v1.0 Cloud 最终补齐",
+          "logic": "记录从code10继续的真实资源/代码/质量修复、核心实现与测试映射、最终执行及唯一外部验收边界。"
         }
       ],
       "tests": [
@@ -14917,7 +15289,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
@@ -14933,6 +15305,11 @@
           "file": "docs/V1_LEXICAL_UPDATE.md",
           "symbol": "## 实际修复",
           "logic": "跟进记录实际词义排序错误、243条整理卡、261词搭配、264空项用法分类、保留历史的旧题修正，以及仍未完成的教学/真机边界。"
+        },
+        {
+          "file": "docs/V1_CLOUD_COMPLETION.md",
+          "symbol": "# v1.0 Cloud 最终补齐",
+          "logic": "记录从code10继续的真实资源/代码/质量修复、核心实现与测试映射、最终执行及唯一外部验收边界。"
         }
       ],
       "tests": [
@@ -14974,7 +15351,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
@@ -14990,6 +15367,11 @@
           "file": "docs/V1_LEXICAL_UPDATE.md",
           "symbol": "## 实际修复",
           "logic": "跟进记录实际词义排序错误、243条整理卡、261词搭配、264空项用法分类、保留历史的旧题修正，以及仍未完成的教学/真机边界。"
+        },
+        {
+          "file": "docs/V1_CLOUD_COMPLETION.md",
+          "symbol": "# v1.0 Cloud 最终补齐",
+          "logic": "记录从code10继续的真实资源/代码/质量修复、核心实现与测试映射、最终执行及唯一外部验收边界。"
         }
       ],
       "tests": [
@@ -15031,7 +15413,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
@@ -15078,7 +15460,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
@@ -15125,7 +15507,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
@@ -15172,7 +15554,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
@@ -16474,93 +16856,26 @@
     }
   },
   "evidence_policy": {
-    "ai": "生产代码使用真实HTTPS客户端。自动化测试只在外部传输边界注入确定性响应，不能代替用户中转站/真实模型的付费联调；未发起付费API调用。",
+    "ai": "生产HTTPS客户端已走真实本地TLS连接、生产调度和SQLite费用/缓存链路；其他契约测试仅替换外部响应。没有个人中转站或真实模型付费联调，不把本地测试服务器当真实模型。",
     "ui": "Android模拟器UI与性能结果独立记录；没有真机连接，真机全局点击延迟/声学质量/系统杀进程待验收。",
-    "content": "原词库/音频固定哈希不变；243条原创高中卡片、261词有效搭配、1640词形/用法记录具有明确来源与覆盖边界；Codex语言核对不冒称独立教师认证，不以行数或非空字段认定全量教学审校。"
+    "content": "1640词各有独立常用义/搭配/原创双语例句和按词性义项筛选的词形。原资源固定哈希不变；全量实际评分、结构门禁、独立语法/词形交叉检查均有证据。仅少量同形异音资料终审属于外部验收；不宣称真题或独立教师认证。"
   },
   "execution": {
-    "jvm": {
-      "tests": 146,
-      "failures": 0,
-      "errors": 0,
-      "skipped": 0,
-      "local_report": "docs/audit/test-results-code10.json"
-    },
-    "android_ui": {
-      "tests": 5,
-      "failures": 0,
-      "errors": 0,
-      "skipped": 0,
-      "api_level": 35,
-      "seconds": 17.084,
-      "p95_ms": 113,
-      "latency_ms": [
-        103,
-        113,
-        72,
-        64,
-        58
-      ],
-      "percentile_method": "empirical nearest rank; five-card sample, not a population latency claim",
-      "scope": "Android emulator, not physical-device touch latency",
-      "artifact_id": 12540978611,
-      "cases": [
-        "quickDayCanFinishOfflineAfterRecreationWithRealGradingAndTimingEvidence",
-        "activeRecallResumesWithoutDuplicateNavigation",
-        "sessionSnapshotAndAnswerAreAtomicAndBackupSafe",
-        "secondaryToolsPreserveDraftsAndSearchWithSingleNavigation",
-        "billingBackupRoundTripAndInvalidImportKeepLocalData"
-      ]
-    },
-    "release": {
-      "application_id": "com.tanhaowen.contextenglish",
-      "version_code": 10,
-      "version": "1.0.0",
-      "certificate_sha256": "e13229f272357c3d270ae903c1a93bf3b902138282cf24aabe9e8e172d87fbf1",
-      "apk_sha256": "16e89f74c8bafd1c5f40ba368661d8166c9589d44fbbeb41299c534b7946967e",
-      "debuggable": false,
-      "offline_audio_files": 1640,
-      "reviewed_study_cards": 243,
-      "morphology_records": 1640,
-      "study_notes_sha256": "22d4ad378a387ee34e0f37e51c6dc52ce5d2e2ee5ca026c59df9a3cef56d3ad3",
-      "signing_identity": "permanent-v1.0-and-later",
-      "run_url": "https://github.com/tanhaowen20080919-sudo/EnglishLearningApp/actions/runs/40045531503",
-      "artifact_id": 12541766040,
-      "source_commit": "7c85e176205c00e4da8f03370f3ca645a8b58892",
-      "apksigner": "PASS",
-      "zipalign": "PASS"
-    },
+    "jvm": "Final spelling-variant regression included; exact159-test cloud/local verification pending",
+    "android_ui": "pending final code11 cloud run",
+    "release": "pending final code11 fixed certificate build",
     "resources": {
-      "reviewed_study_cards": 243,
-      "effective_collocations": 261,
+      "reviewed_study_cards": 1640,
+      "effective_collocations": 1640,
       "morphology_records": 1640,
-      "explicit_morphology_reviews": 264,
-      "scope": "record coverage does not certify all senses match the high-school curriculum"
+      "pos_adapted_profiles": 1640,
+      "explicit_missing_source_reviews": 264,
+      "language_quality_report": "docs/audit/language-quality-code11.json",
+      "inflection_crosscheck_report": "docs/audit/inflection-crosscheck-code11.json"
     },
-    "ai_live_provider": "Not exercised; manual HTTPS production path remains, no paid provider calls",
-    "physical_device": "No physical device; emulator checks cannot replace hardware acceptance",
-    "source_commit": "7c85e176205c00e4da8f03370f3ca645a8b58892",
-    "app_tree": "b9c337987a9ca23280658a881ffc7cd767a903ca",
-    "cloud_workflow": "https://github.com/tanhaowen20080919-sudo/EnglishLearningApp/actions/runs/40045531503",
-    "cloud_jvm": {
-      "tests": 146,
-      "failures": 0,
-      "errors": 0,
-      "skipped": 0,
-      "artifact_id": 12541121608,
-      "run_id": 40045531503,
-      "source_commit": "7c85e176205c00e4da8f03370f3ca645a8b58892"
-    },
-    "verified_at_utc": "2026-10-24T00:42:09.831077+00:00",
-    "lint": {
-      "errors": 0,
-      "warnings": 12,
-      "information": 1
-    },
-    "signing_safety_tests": {
-      "tests": 6,
-      "failures": 0
-    }
+    "ai_live_provider": "Personal paid relay/model not exercised; production HTTPS transport verified with real local TLS sockets and synthetic remote responses",
+    "physical_device": "No physical phone; all device-only boundaries in external acceptance",
+    "language_expert": "Seven specified polysemous/homograph notes and retained recordings await expert final check; no teacher certification claimed"
   },
   "previous_execution_code9": {
     "jvm": {
@@ -16669,6 +16984,91 @@
     "ai_live_provider": "Not exercised; HTTPS production path and protocol contracts tested with external-boundary fixtures, no paid requests",
     "physical_device": "No physical device; emulator results do not replace device latency/audio/OS process-lifecycle acceptance"
   },
-  "followup_baseline": "398274cf28c04c339aa1bc32d9cb69924c76433b",
-  "followup_report": "docs/V1_LEXICAL_UPDATE.md"
+  "followup_baseline": "d106b5f23ef75a37bf7b23e4f742f3ce4ace8a7d",
+  "followup_report": "docs/V1_CLOUD_COMPLETION.md",
+  "previous_execution_code10": {
+    "jvm": {
+      "tests": 146,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "local_report": "docs/audit/test-results-code10.json"
+    },
+    "android_ui": {
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "api_level": 35,
+      "seconds": 17.084,
+      "p95_ms": 113,
+      "latency_ms": [
+        103,
+        113,
+        72,
+        64,
+        58
+      ],
+      "percentile_method": "empirical nearest rank; five-card sample, not a population latency claim",
+      "scope": "Android emulator, not physical-device touch latency",
+      "artifact_id": 12540978611,
+      "cases": [
+        "quickDayCanFinishOfflineAfterRecreationWithRealGradingAndTimingEvidence",
+        "activeRecallResumesWithoutDuplicateNavigation",
+        "sessionSnapshotAndAnswerAreAtomicAndBackupSafe",
+        "secondaryToolsPreserveDraftsAndSearchWithSingleNavigation",
+        "billingBackupRoundTripAndInvalidImportKeepLocalData"
+      ]
+    },
+    "release": {
+      "application_id": "com.tanhaowen.contextenglish",
+      "version_code": 10,
+      "version": "1.0.0",
+      "certificate_sha256": "e13229f272357c3d270ae903c1a93bf3b902138282cf24aabe9e8e172d87fbf1",
+      "apk_sha256": "16e89f74c8bafd1c5f40ba368661d8166c9589d44fbbeb41299c534b7946967e",
+      "debuggable": false,
+      "offline_audio_files": 1640,
+      "reviewed_study_cards": 243,
+      "morphology_records": 1640,
+      "study_notes_sha256": "22d4ad378a387ee34e0f37e51c6dc52ce5d2e2ee5ca026c59df9a3cef56d3ad3",
+      "signing_identity": "permanent-v1.0-and-later",
+      "run_url": "https://github.com/tanhaowen20080919-sudo/EnglishLearningApp/actions/runs/40045531503",
+      "artifact_id": 12541766040,
+      "source_commit": "7c85e176205c00e4da8f03370f3ca645a8b58892",
+      "apksigner": "PASS",
+      "zipalign": "PASS"
+    },
+    "resources": {
+      "reviewed_study_cards": 243,
+      "effective_collocations": 261,
+      "morphology_records": 1640,
+      "explicit_morphology_reviews": 264,
+      "scope": "record coverage does not certify all senses match the high-school curriculum"
+    },
+    "ai_live_provider": "Not exercised; manual HTTPS production path remains, no paid provider calls",
+    "physical_device": "No physical device; emulator checks cannot replace hardware acceptance",
+    "source_commit": "7c85e176205c00e4da8f03370f3ca645a8b58892",
+    "app_tree": "b9c337987a9ca23280658a881ffc7cd767a903ca",
+    "cloud_workflow": "https://github.com/tanhaowen20080919-sudo/EnglishLearningApp/actions/runs/40045531503",
+    "cloud_jvm": {
+      "tests": 146,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "artifact_id": 12541121608,
+      "run_id": 40045531503,
+      "source_commit": "7c85e176205c00e4da8f03370f3ca645a8b58892"
+    },
+    "verified_at_utc": "2026-10-24T00:42:09.831077+00:00",
+    "lint": {
+      "errors": 0,
+      "warnings": 12,
+      "information": 1
+    },
+    "signing_safety_tests": {
+      "tests": 6,
+      "failures": 0
+    }
+  },
+  "external_acceptance": "docs/audit/external-acceptance-code11.json"
 }

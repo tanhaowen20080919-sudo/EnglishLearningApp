@@ -199,6 +199,7 @@ private fun WorkflowScreen(state: AdaptiveState,vm: AdaptiveViewModel,autoSpeak:
                     else {
                         val reviewed=WordStudyResources.note(word)
                         Text(if(reviewed!=null) "高中常用义" else "原词库释义",style=MaterialTheme.typography.labelMedium)
+                        reviewed?.pos?.takeIf { it.isNotBlank() }?.let { Text("词性：${it.replace(","," / ")}",style=MaterialTheme.typography.labelSmall) }
                         Text(com.tanhaowen.contextenglish.study.StudyEngine.meaning(word),style=MaterialTheme.typography.titleLarge,modifier=Modifier.testTag("learn-meaning"))
                         if(reviewed!=null) {
                             Text("原创高中语境",style=MaterialTheme.typography.labelMedium)

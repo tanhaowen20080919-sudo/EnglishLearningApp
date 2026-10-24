@@ -9,6 +9,20 @@ data class EnhancementTask(val type: String,val title: String,val prompt: String
     val validate: (String)->Unit,val practice: Boolean = false)
 
 object LearningEnhancements {
+    /** Bind a manual explanation to the sentence on screen, including restored cloze answers. */
+    fun displayedContext(w: DailyWorkflow,words: List<VocabWord>,lookedUp: String? = null): EnhancementTask {
+        val reading=LocalContent.readings.first { it.id==w.readingId }
+        val q=w.step?.question
+        val word=words.firstOrNull { it.id==(q?.wordId ?: w.step?.wordId) }
+        if(word!=null) {
+            val sentence=if(q?.form=="context") q.prompt.substringBefore('\n').replace("____",word.word)
+                else WordStudyResources.note(word)?.example ?: word.example
+            return context(word.word,sentence)
+        }
+        val target=lookedUp?.takeIf { Regex("(?i)(?<![a-z])${Regex.escape(it)}(?![a-z])").containsMatchIn(reading.passage) }
+            ?: reading.glossary.keys.first { Regex("(?i)(?<![a-z])${Regex.escape(it)}(?![a-z])").containsMatchIn(reading.passage) }
+        return context(target,reading.passage)
+    }
     private fun text(j: JSONObject,key: String,min: Int = 1,max: Int = 12000): String {
         val value=j.opt(key)
         require(value is String && value.trim().length in min..max) { "AI 字段 $key 缺失或格式不正确" }

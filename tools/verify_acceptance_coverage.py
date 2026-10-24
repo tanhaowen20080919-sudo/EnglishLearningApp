@@ -21,6 +21,11 @@ for row in doc['items']:
         assert ref['symbol'] in text,(row['id'],ref['file'],ref['symbol'])
         assert (ref.get('logic') or ref.get('assertions','')).strip()
     if row['final_status']!='已完整实现':assert row['blockers']
+if doc.get('external_acceptance'):
+    external=json.loads((root/doc['external_acceptance']).read_text())
+    external_ids={key for item in external['items'] for key in item['requirements']}
+    assert all(row.get('remaining_kind')=='external-only' and row['id'] in external_ids
+               for row in doc['items'] if row['final_status']!='已完整实现')
 table=(root/'docs/V1_REQUIREMENTS_AUDIT.md').read_text()
 assert set(re.findall(r'^\| (R\d{3}) \|',table,re.M))==ids
 assert len(re.findall(r'^\| R\d{3} \|',table,re.M))==318

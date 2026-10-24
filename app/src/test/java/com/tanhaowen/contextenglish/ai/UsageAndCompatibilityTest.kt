@@ -69,6 +69,16 @@ class UsageAndCompatibilityTest {
         val u = usage("""{"usage":{"prompt_tokens":3000000000,"completion_tokens":2000000000}}""")
         assertEquals(5000000000L, u.totalTokens)
     }
+    @Test fun overflowAndInconsistentCacheUsageCannotBecomeKnownBillableCounts() {
+        val overflow=usage("""{"usage":{"prompt_tokens":9223372036854775807,"completion_tokens":100}}""")
+        assertFalse(overflow.known);assertEquals(0L,overflow.totalTokens)
+        val outsideLong=usage("""{"usage":{"prompt_tokens":1e30,"completion_tokens":20}}""")
+        assertFalse(outsideLong.known);assertTrue(outsideLong.promptTokens>=0)
+        val invalidCache=usage("""{"usage":{"prompt_tokens":5,"completion_tokens":2,"prompt_tokens_details":{"cached_tokens":20}}}""")
+        assertFalse(invalidCache.known)
+        val decimalWhole=usage("""{"usage":{"prompt_tokens":100.0,"completion_tokens":2.0}}""")
+        assertTrue(decimalWhole.known);assertEquals(102L,decimalWhole.totalTokens)
+    }
     @Test fun deepSeekCanDeriveInputWhenPromptIsOmitted() {
         val u = usage("""{"usage":{"completion_tokens":20,"prompt_cache_hit_tokens":600,"prompt_cache_miss_tokens":100}}""")
         assertEquals(700L, u.promptTokens)

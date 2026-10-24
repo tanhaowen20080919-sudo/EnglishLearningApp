@@ -68,7 +68,7 @@ object StudyEngine {
         typed: String = "", unknown: Boolean = false): StudySession {
         if (session.feedback != null || session.task != question.task || question.task.kind == TaskKind.LEARN) return session
         val right = !unknown && if (question.task.kind == TaskKind.SPELLING)
-            typed.trim().equals(question.word.word.trim(), ignoreCase = true)
+            SpellingAnswer.correct(question.word.word,typed)
         else selected == question.answer
         val credited = right && !session.hinted
         val answerText = if (question.task.kind == TaskKind.SPELLING) question.word.word else question.options[question.answer]

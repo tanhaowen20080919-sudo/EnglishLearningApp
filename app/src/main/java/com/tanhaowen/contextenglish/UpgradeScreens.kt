@@ -99,6 +99,7 @@ fun WordDetail(w: VocabWord, state: AppUiState, vm: AppViewModel, close: () -> U
             val reviewed=com.tanhaowen.contextenglish.adaptive.WordStudyResources.note(w)
             if(reviewed!=null) {
                 Text("高中常用义",style=MaterialTheme.typography.labelMedium)
+                if(reviewed.pos.isNotBlank()) Text("词性：${reviewed.pos.replace(","," / ")}",style=MaterialTheme.typography.labelSmall)
                 Text(com.tanhaowen.contextenglish.study.StudyEngine.meaning(w),style=MaterialTheme.typography.titleLarge)
                 Text(reviewed.example);Text(reviewed.translation,color=MaterialTheme.colorScheme.onSurfaceVariant)
                 Text("常见搭配：${reviewed.collocation}")

@@ -222,7 +222,7 @@ class AppViewModel(
         lastAi = { testConnection() }
         prepareAiOutput()
         runAiAction { settings ->
-            scheduler.generate(settings, "仅回复 OK，确认接口和当前模型可用。", maxTokens = 32).fold(
+            scheduler.request(settings,"connection-test", "仅回复 OK，确认接口和当前模型可用。", maxTokens = 32,useCache=false).fold(
                 onSuccess = { result ->
                     persistAiResult("接口测试", result, settings)
                     require(result.content.isNotBlank()) { "接口已响应但没有返回文字，请检查模型或接口类型" }

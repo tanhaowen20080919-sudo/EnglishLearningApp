@@ -30,7 +30,8 @@ from build_word_study_notes import build
 compiled=json.loads((assets/'word-study-notes.json').read_text())
 assert compiled==build(),'Rebuild word-study-notes.json from its reviewed source files'
 assert len(compiled['morphology'])==1640
+assert len(compiled['studyCards'])==1640 and compiled['coverage']['posAdaptedProfiles']==1640
 assert compiled['coverage']['explicitMorphologyReviews']==264
 old=set(re.findall(r'"([a-z-]+)" to WordNote', (root/'app/src/main/java/com/tanhaowen/contextenglish/adaptive/WordNotes.kt').read_text()))
 print('Reviewed high-school cards:',len(compiled['studyCards']),'of 1640; effective collocations:',len(old|compiled['studyCards'].keys()),'of 1640')
-print('Morphology: 1376 ECDICT records + 264 explicit word-by-word usage reviews. Original dictionary/audio remain unchanged.')
+print('Morphology: all 1640 profiles scoped to selected school senses/POS, including 264 explicit missing-source reviews. Original dictionary/audio remain unchanged.')

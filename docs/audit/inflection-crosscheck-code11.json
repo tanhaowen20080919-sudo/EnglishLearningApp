@@ -1,0 +1,104 @@
+{
+  "checked_verbs": 683,
+  "differences": [
+    [
+      "found",
+      "过去分词",
+      "founded"
+    ],
+    [
+      "found",
+      "过去式",
+      "founded"
+    ],
+    [
+      "found",
+      "现在分词",
+      "founding"
+    ],
+    [
+      "found",
+      "第三人称单数",
+      "founds"
+    ],
+    [
+      "speed",
+      "过去分词",
+      "speeded"
+    ]
+  ],
+  "source": "Simple English Wiktionary export through https://kaikki.org/dictionary/Simple%20English/",
+  "source_snapshot_sha256": "c9f6fc7fdec1178b3d381603ff198fb5a6c1627d8830dcd8bbe728dddd2ebe06",
+  "resolutions": {
+    "found": "The comparison entry treats found as a form of find. The school verb found (establish) is independently standard: founds/founding/founded/founded.",
+    "speed": "Both sped and speeded are standard; the school profile explicitly lists both."
+  },
+  "limits": "Independent comparison covers 683 verbs with available verb paradigms, not all word senses or every noun/degree form. Missing-source cases and countability are explicit curated policies. No external dictionary definitions or examples are copied into the new corpus.",
+  "noun_profiles_compared": 756,
+  "degree_profiles_compared": 70,
+  "additional_reviews": {
+    "medium": "Use media for the selected medium=媒介 sense, rather than importing mediums from unrelated senses.",
+    "focus": "Use focuses for general重点/中心; foci is identified as the maths/optics variant.",
+    "sweat_and_significance": "Mass school senses do not inherit rare or unrelated plurals.",
+    "curriculum_phenomenon_maximum_minimum": "Explicitly retain standard Latin and regular plural alternatives with usage labels.",
+    "folk": "Collective folk and informal folks are distinguished.",
+    "touch": "Simple export produced es as the noun plural. Reject this extraction artefact; standard touches is retained.",
+    "curious_unfair_mature_extreme": "Prefer school-use more/most forms over rare or literary -er/-est variants.",
+    "incomplete_degree_pairs": "Explicitly complete the missing standard comparative/superlative pairs; the compiler now rejects one-sided pairs.",
+    "explicit_degree_policy": "Every source-missing adjective now requires an explicit school-sense classification or one of 66 individually reviewed more/most senses. well=better/best; sharp/loose/gentle/mean/noble/tense standard pairs; non-gradable school senses do not inherit automatic more/most."
+  },
+  "policy_sha256": "cdf750ce0057429699ff74074a45c0683106ffb5f12dff2f334b813171a3df6e",
+  "final_profiles_compared": {
+    "verb": 682,
+    "noun": 756,
+    "degree": 67
+  },
+  "final_differences_reviewed": [
+    [
+      "speed",
+      "过去分词",
+      "speeded"
+    ],
+    [
+      "found",
+      "过去分词",
+      "founded"
+    ],
+    [
+      "found",
+      "过去式",
+      "founded"
+    ],
+    [
+      "found",
+      "现在分词",
+      "founding"
+    ],
+    [
+      "found",
+      "第三人称单数",
+      "founds"
+    ],
+    [
+      "touch",
+      "复数",
+      "touches"
+    ],
+    [
+      "severe",
+      "比较级",
+      "more severe"
+    ],
+    [
+      "severe",
+      "最高级",
+      "most severe"
+    ]
+  ],
+  "difference_decisions": {
+    "found": "Selected establish verb uses founded, unlike source comparison entry for find past form.",
+    "touch": "Comparison export noun form es is an extraction artefact; correct touches retained.",
+    "speed": "Both sped and speeded are standard.",
+    "degree_forms": "Explicit school-use more/most pairs and complete standard -er/-est pairs reviewed in morphology-policy.json; source comparisons may omit valid alternatives."
+  }
+}
