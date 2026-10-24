@@ -1,0 +1,27 @@
+{
+  "scope": "Only external acceptance remains; no planned code/data work is deferred here.",
+  "items": [
+    {
+      "id": "EXT-PHONE",
+      "requirements": ["R001", "R002", "R006", "R243", "R304"],
+      "reason": "Cloud has no attached physical Android phone. Emulator timing is not a claim about real touch latency, speaker/acoustic quality, OEM background process limits or installation on the user's device.",
+      "cloud_completed": "Main-thread work moved to IO, real offline day/recreation/navigation/backup tests, original audio identity, emulator timings and screenshots.",
+      "external_check": "Install the fixed-certificate code11 APK on the actual phone; complete a day, verify repeated pronunciation, navigation latency, screen/background return and process recovery."
+    },
+    {
+      "id": "EXT-PROVIDER",
+      "requirements": ["R001", "R002"],
+      "reason": "The user's personal API Key, relay endpoint and paid model account are not supplied to this Cloud task. No paid request is fabricated or made with substitute credentials.",
+      "cloud_completed": "Production HTTPS client tested over real local TLS sockets, request payload/authentication, responses, HTTP error, malformed body, cancellation, SQLite usage/cost ledger and cache; typed enhancement contracts and full ViewModel flows tested.",
+      "external_check": "In the app, configure the personal endpoint/model/prices and manually test one explanation, tomorrow preparation/cache reuse, cancellation and provider usage/bill comparison."
+    },
+    {
+      "id": "EXT-LANGUAGE",
+      "requirements": ["R001", "R002"],
+      "words": ["wind", "wound", "tear", "live", "lead", "lie", "bear"],
+      "reason": "Final specialist judgment on these few polysemous/homograph teaching notes and whether the retained original standalone recording matches the chosen sense is not claimed from rule-based grammar/inflection checks.",
+      "cloud_completed": "All1640 common-sense bilingual cards and POS profiles authored/reviewed; grammar checks, source comparison, original recording hashes, explicit homograph pronunciation and semantic notes are present. No unreviewed corpus-sized gap is deferred.",
+      "external_check": "A language reviewer listens to these retained recordings and checks the seven usage/contrast notes against the intended learner level. No independent teacher certification is asserted for the corpus."
+    }
+  ]
+}

@@ -53,6 +53,16 @@ class StudyResourceQualityTest(unittest.TestCase):
         self.assertIn('lied',profiles['lie']['text']);self.assertIn('lain',profiles['lie']['text'])
         self.assertIn('不构造 goodses',profiles['goods']['text'])
         self.assertIn('单复数同形',profiles['means']['text'])
+        self.assertIn('media',profiles['medium']['text']);self.assertNotIn('mediums',profiles['medium']['forms'].values())
+        self.assertIn('focuses',profiles['focus']['text'])
+        self.assertEqual('more curious',profiles['curious']['forms']['比较级'])
+        self.assertEqual('messiest',profiles['messy']['forms']['最高级'])
+        self.assertEqual('better',profiles['well']['forms']['比较级'])
+        self.assertEqual('sharper',profiles['sharp']['forms']['比较级'])
+        self.assertNotIn('more single',profiles['single']['text'])
+        self.assertNotIn('程度比较常用 more superior',profiles['superior']['text'])
+        for word,profile in profiles.items():
+            self.assertEqual('比较级' in profile['forms'],'最高级' in profile['forms'],word)
     def test_missing_source_inflections_require_an_explicit_decision(self):
         with self.assertRaises(ValueError):
             compiler.morphology('example',{'pos':'v'},'',{}, {'uncountable_core':[],'noun_usage':{},'overrides':{},'non_comparing_adjectives':[]})

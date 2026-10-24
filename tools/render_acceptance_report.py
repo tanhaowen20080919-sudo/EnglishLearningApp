@@ -16,14 +16,14 @@ def main():
     initial=Counter(row['initial_status'] for row in doc['items'])
     final=Counter(row['final_status'] for row in doc['items'])
     lines=['# v1.0 原始需求逐项实现审计与验收表','',
-        '**结论：尚不能声明原始 v1.0 规格全部完成。** 功能修复已落实到代码，词条资源覆盖和真机验收缺口保留为“部分实现”；不会用构建/测试成功覆盖这些缺口。','',
+        '**结论：当前 Cloud 可完成的代码与资源缺口已补齐；外部条件未验收，尚不能声明原始 v1.0 规格全部完成。** 剩余“部分实现”仅对应真机及整体现场验收，不再包含未开发功能或未补齐的词条资源。最终执行结果和边界逐项列明。','',
         f'完整读取原始 DOCX 正文全部 22 章、{doc["paragraph_count"]} 个段落（含表格），拆为 {len(doc["items"])} 条验收项。原文 SHA-256：`{doc["source_document_sha256"]}`。',
         '原文逐段见 [完整提取文本](audit/original-requirements.txt)；结构段与验收项的全量映射见 [机器可读清单](audit/acceptance.json)。章节、表头有结构映射，未删除原文。“后续可扩展七选五”按原文验收扩展点，不冒称已有七选五题库。','',
         f'首轮基线：`{doc["baseline_commit"]}`；回滚分支：`{doc["rollback_branch"]}`。具体首轮缺口见 [第一轮审计](V1_AUDIT_FIRST_PASS.md)。','',
         '| 轮次 | 已完整实现 | 部分实现 | 未实现 |','|---|---:|---:|---:|',
         f'| 首轮 | {initial["已完整实现"]} | {initial["部分实现"]} | {initial["未实现"]} |',
         f'| 当前复核 | {final["已完整实现"]} | {final["部分实现"]} | {final["未实现"]} |','',
-        '最新词条跟进见 [code10 词条复查](V1_LEXICAL_UPDATE.md)。上一正式 code9 的执行结果保存在清单 previous_execution_code9；R061 因发现词义排序质量问题而收紧为部分实现。','',
+        '最新结果见 [code11 Cloud 补齐](V1_CLOUD_COMPLETION.md) 与 [仅存外部验收清单](audit/external-acceptance-code11.json)。code9/code10 的执行记录分别保存在 previous_execution_code9/previous_execution_code10；本轮补齐全量1640词教学卡及词形适配后，R061～R064具备完整代码/数据/测试证据。','',
         '## 验证边界','']
     for value in doc['evidence_policy'].values():lines.append('- '+value)
     lines+=['','执行记录：','', '```json',json.dumps(doc['execution'],ensure_ascii=False,indent=2),'```','',
@@ -37,7 +37,7 @@ def main():
         tests='<br>'.join(link(t)+'：'+t['assertions'] for t in row['tests'])
         status=row['final_status']+('：'+'；'.join(row.get('blockers',[])) if row.get('blockers') else '')
         lines.append('| '+' | '.join(map(clean,[row['id'],source+' '+row['criterion'],evidence,tests,row['initial_status'],status]))+' |')
-    lines+=['','## 未完成项及真实限制','']
+    lines+=['','## 仅存外部验收项及真实限制','']
     for row in doc['items']:
         if row['final_status']!='已完整实现':lines.append('- **'+row['id']+' '+row['criterion']+'**：'+'；'.join(row['blockers']))
     lines+=['','固定正式证书 SHA-256 为 `e13229f272357c3d270ae903c1a93bf3b902138282cf24aabe9e8e172d87fbf1`；applicationId 保持 `com.tanhaowen.contextenglish`。本轮没有生成或替换 Release keystore。','']

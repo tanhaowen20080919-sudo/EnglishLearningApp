@@ -1,3 +1,5 @@
+> 历史工作检查点；当前结果见 [code11 Cloud补齐](V1_CLOUD_COMPLETION.md)。
+
 # Cloud completion checkpoint (work in progress)
 
 Resumes main d106b5f / versionCode 10. The working branch preserves authored school-sense meanings, collocations and original bilingual examples for all 1640 original words, explicit POS metadata, and the POS-scoped morphology compiler/policy. Original vocabulary/IPA/audio files and Release signing identity are unchanged.

@@ -19,6 +19,9 @@ def morphology(word, row, raw, reviewed, policy):
     for part in raw.split('；'):
         label,_,value=part.partition(' ')
         if value:slots[label]=value
+    if word in policy.get('degree_usage',{}):
+        slots.pop('比较级',None);slots.pop('最高级',None)
+        slots.update(policy['degree_usage'][word])
     selected={k:v for k,v in slots.items() if
         ('v' in pos and k in ('第三人称单数','现在分词','过去式','过去分词')) or
         ('n' in pos and k=='复数' and word not in policy['uncountable_core'] and word not in policy['noun_usage']) or
@@ -44,12 +47,16 @@ def morphology(word, row, raw, reviewed, policy):
             if word in policy['non_comparing_adjectives']:
                 parts.append('本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。')
                 if not review:kind='relational'
-            elif 'adj' in pos and not review:
+            elif 'adj' in pos and not review and word in policy.get('periphrastic_degrees',[]):
                 parts.append(f'程度比较常用 more {word} / most {word}，不机械添加 -er/-est。')
+            elif 'adj' in pos and not review:
+                raise ValueError('Adjective requires an explicit school-sense degree decision: '+word)
             elif 'adv' in pos and not review:
                 parts.append('副词用法不采用名词复数或动词变位；不机械加 -er/-est。')
         if not parts:parts.append('本卡为'+row['pos']+'用法，无名词复数或普通动词变位。')
+    if word in policy.get('usage_notes',{}):parts.append(policy['usage_notes'][word])
     text=' '.join(dict.fromkeys(parts))
+    assert ('比较级' in selected)==('最高级' in selected),(word,'incomplete degree pair')
     assert text.strip() and '词根变化' not in text and '词根/原形' not in text,word
     return {'text':text,'kind':kind,'basis':'school-sense POS adaptation + explicit usage review',
             'reference':review['reference'] if review else 'https://github.com/skywind3000/ECDICT',

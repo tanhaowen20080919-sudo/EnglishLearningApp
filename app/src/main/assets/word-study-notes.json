@@ -3696,7 +3696,7 @@
     "time": {
       "meaning": "时间；次数；计时",
       "collocation": "on time",
-      "example": "Please arrive on time so the meeting can begin promptly.",
+      "example": "Please arrive on time so that the meeting can begin promptly.",
       "translation": "请准时到达，以便会议及时开始。",
       "pos": "n,v",
       "originalMeaning": "n. 时间, 时侯, 时机, 时期, 期限, 次数, 节拍, 暂停, 规定时间\nvt. 测定...的时间, 记录...的时间, 计时, 定时\na. 时间的, 记时的, 定时的, 定期的, 分期的\n[计] DOS内部命令:用于显示或设定系统的时间",
@@ -4569,8 +4569,8 @@
     "consequence": {
       "meaning": "后果",
       "collocation": "as a consequence",
-      "example": "Think about the possible consequence before making a risky choice.",
-      "translation": "作出冒险的选择之前，要想想可能的后果。",
+      "example": "Consider a possible consequence of each choice before you decide.",
+      "translation": "作决定之前，考虑每个选择可能产生的一种后果。",
       "pos": "n",
       "originalMeaning": "n. 结果, 重要性\n[法] 结果, 后果, 推断",
       "provenance": "Original EnglishLearningApp school-level educational text; authored and language-checked with Codex; not an official exam quotation or teacher certification"
@@ -4893,8 +4893,8 @@
     "earthquake": {
       "meaning": "地震",
       "collocation": "an earthquake drill",
-      "example": "The school holds regular drills so students know what to do during an earthquake.",
-      "translation": "学校定期演练，让学生知道地震时该做什么。",
+      "example": "The school holds regular earthquake drills to prepare students for emergencies.",
+      "translation": "学校定期举行地震演练，让学生为紧急情况做好准备。",
       "pos": "n",
       "originalMeaning": "n. 地震",
       "provenance": "Original EnglishLearningApp school-level educational text; authored and language-checked with Codex; not an official exam quotation or teacher certification"
@@ -4902,8 +4902,8 @@
     "contribute": {
       "meaning": "贡献；促成",
       "collocation": "contribute to",
-      "example": "Everyone can contribute to the project in a different way.",
-      "translation": "每个人都能以不同方式为这个项目作贡献。",
+      "example": "Everyone can contribute differently to the same project.",
+      "translation": "每个人都能以不同方式为同一个项目作贡献。",
       "pos": "v",
       "originalMeaning": "vt. 有助于, 捐助, 投稿\nvi. 出力, 捐献, 投稿",
       "provenance": "Original EnglishLearningApp school-level educational text; authored and language-checked with Codex; not an official exam quotation or teacher certification"
@@ -5046,7 +5046,7 @@
     "space": {
       "meaning": "空间；太空；隔开",
       "collocation": "outer space",
-      "example": "Leave enough space between the plants so their roots can grow.",
+      "example": "Leave enough space between the plants to allow their roots to grow.",
       "translation": "在植物之间留足空间，让根可以生长。",
       "pos": "n,v",
       "originalMeaning": "n. 位置, 空间, 距离, 太空, 空白, 间隔, (期刊等的)篇幅\nvt. 隔开, 分隔\nvi. 留间隔\n[计] 空白, 空格校验",
@@ -8403,7 +8403,7 @@
     "avoid": {
       "meaning": "避免",
       "collocation": "avoid doing",
-      "example": "Try to avoid making decisions when you are extremely tired.",
+      "example": "Try to avoid making decisions when you are exhausted.",
       "translation": "尽量避免在极度疲劳时作决定。",
       "pos": "v",
       "originalMeaning": "v. 避免；避开",
@@ -14037,7 +14037,7 @@
     "customer": {
       "meaning": "顾客",
       "collocation": "serve a customer",
-      "example": "Every customer can bring a reusable cup to the cafe.",
+      "example": "Every customer can bring a reusable cup to the café.",
       "translation": "每位顾客都可以自带可重复使用的杯子去咖啡馆。",
       "pos": "n",
       "originalMeaning": "n. 消费者\n[化] 顾客",
@@ -15429,8 +15429,8 @@
       "forms": {}
     },
     "extra": {
-      "text": "程度比较常用 more extra / most extra，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -15519,8 +15519,8 @@
       }
     },
     "opening": {
-      "text": "复数 openings。 程度比较常用 more opening / most opening，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "复数 openings。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -15823,8 +15823,8 @@
       "forms": {}
     },
     "present": {
-      "text": "过去分词 presented；过去式 presented；第三人称单数 presents；现在分词 presenting；复数 presents。 程度比较常用 more present / most present，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "过去分词 presented；过去式 presented；第三人称单数 presents；现在分词 presenting；复数 presents。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -16543,8 +16543,8 @@
       "forms": {}
     },
     "instant": {
-      "text": "复数 instants。 程度比较常用 more instant / most instant，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "复数 instants。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -16908,8 +16908,8 @@
       }
     },
     "parallel": {
-      "text": "复数 parallels。 程度比较常用 more parallel / most parallel，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "复数 parallels。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -17155,7 +17155,7 @@
       }
     },
     "ample": {
-      "text": "比较级 ampler。",
+      "text": "比较级 ampler；最高级 amplest。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
@@ -17163,7 +17163,8 @@
         "adj"
       ],
       "forms": {
-        "比较级": "ampler"
+        "比较级": "ampler",
+        "最高级": "amplest"
       }
     },
     "race": {
@@ -17231,8 +17232,8 @@
       "forms": {}
     },
     "speed": {
-      "text": "本卡名词常用义通常不可数，不机械加复数；具体次数/种类等另义须结合语境。 现在分词 speeding；过去式 sped；第三人称单数 speeds；过去分词 speeded。",
-      "kind": "uncountable",
+      "text": "速度名词可指不同速率，复数 speeds；加速动词 speeds / speeding / sped 或 speeded / sped 或 speeded。",
+      "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -17502,16 +17503,14 @@
       }
     },
     "communication": {
-      "text": "复数 communications。",
+      "text": "交流通常不可数；具体消息/通信活动依语境可数，复数 communications。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
         "n"
       ],
-      "forms": {
-        "复数": "communications"
-      }
+      "forms": {}
     },
     "defend": {
       "text": "现在分词 defending；过去分词 defended；过去式 defended；第三人称单数 defends。",
@@ -17883,16 +17882,14 @@
       }
     },
     "memory": {
-      "text": "复数 memories。",
+      "text": "记忆力通常不可数；一段回忆可数，复数 memories。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
         "n"
       ],
-      "forms": {
-        "复数": "memories"
-      }
+      "forms": {}
     },
     "skilful": {
       "text": "形容词表达程度比较时，常用 more skilful / most skilful；不机械拼写 -er/-est。",
@@ -18045,16 +18042,14 @@
       }
     },
     "phenomenon": {
-      "text": "复数 phenomena。",
+      "text": "现象复数通常 phenomena；phenomenons 也有使用，不机械写 phenomenones。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
         "n"
       ],
-      "forms": {
-        "复数": "phenomena"
-      }
+      "forms": {}
     },
     "available": {
       "text": "形容词，be available to/for；相关名词 availability，不写 availables 表示“可用的”。",
@@ -18328,16 +18323,14 @@
       }
     },
     "curriculum": {
-      "text": "复数 curricula。",
+      "text": "课程/课程体系复数 curricula 或 curriculums。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
         "n"
       ],
-      "forms": {
-        "复数": "curricula"
-      }
+      "forms": {}
     },
     "run": {
       "text": "过去式 ran；现在分词 running；过去分词 run；第三人称单数 runs；复数 runs。",
@@ -18533,7 +18526,7 @@
       "forms": {}
     },
     "severe": {
-      "text": "最高级 severest；比较级 severer。",
+      "text": "比较级 more severe；最高级 most severe。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
@@ -18541,8 +18534,8 @@
         "adj"
       ],
       "forms": {
-        "最高级": "severest",
-        "比较级": "severer"
+        "比较级": "more severe",
+        "最高级": "most severe"
       }
     },
     "promise": {
@@ -18563,8 +18556,8 @@
       }
     },
     "last": {
-      "text": "过去式 lasted；第三人称单数 lasts；现在分词 lasting；过去分词 lasted。 程度比较常用 more last / most last，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "过去式 lasted；第三人称单数 lasts；现在分词 lasting；过去分词 lasted。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -18816,8 +18809,8 @@
       }
     },
     "standard": {
-      "text": "复数 standards。 程度比较常用 more standard / most standard，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "复数 standards。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -18898,8 +18891,8 @@
       }
     },
     "local": {
-      "text": "复数 locals。 程度比较常用 more local / most local，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "复数 locals。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -19721,8 +19714,8 @@
       }
     },
     "key": {
-      "text": "复数 keys。 程度比较常用 more key / most key，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "复数 keys。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -19746,8 +19739,8 @@
       }
     },
     "bound": {
-      "text": "程度比较常用 more bound / most bound，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -19953,8 +19946,8 @@
       }
     },
     "major": {
-      "text": "复数 majors；现在分词 majoring；过去式 majored；第三人称单数 majors；过去分词 majored。 程度比较常用 more major / most major，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "复数 majors；现在分词 majoring；过去式 majored；第三人称单数 majors；过去分词 majored。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -20286,16 +20279,14 @@
       }
     },
     "freedom": {
-      "text": "复数 freedoms。",
-      "kind": "pos-scoped",
+      "text": "本卡名词常用义通常不可数，不机械加复数；具体次数/种类等另义须结合语境。",
+      "kind": "uncountable",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
         "n"
       ],
-      "forms": {
-        "复数": "freedoms"
-      }
+      "forms": {}
     },
     "count": {
       "text": "复数 counts；过去分词 counted；现在分词 counting；第三人称单数 counts；过去式 counted。",
@@ -20337,7 +20328,7 @@
       "forms": {}
     },
     "tense": {
-      "text": "复数 tenses。 程度比较常用 more tense / most tense，不机械添加 -er/-est。",
+      "text": "复数 tenses；比较级 tenser；最高级 tensest。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
@@ -20346,7 +20337,9 @@
         "n"
       ],
       "forms": {
-        "复数": "tenses"
+        "复数": "tenses",
+        "比较级": "tenser",
+        "最高级": "tensest"
       }
     },
     "variety": {
@@ -20466,8 +20459,8 @@
       }
     },
     "temporary": {
-      "text": "程度比较常用 more temporary / most temporary，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -20584,16 +20577,14 @@
       "forms": {}
     },
     "soil": {
-      "text": "复数 soils。",
-      "kind": "pos-scoped",
+      "text": "本卡名词常用义通常不可数，不机械加复数；具体次数/种类等另义须结合语境。",
+      "kind": "uncountable",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
         "n"
       ],
-      "forms": {
-        "复数": "soils"
-      }
+      "forms": {}
     },
     "classify": {
       "text": "过去分词 classified；现在分词 classifying；第三人称单数 classifies；过去式 classified。",
@@ -20611,7 +20602,7 @@
       }
     },
     "bravery": {
-      "text": "不可数名词“勇敢”；相关形容词 brave，不写 braveries 表示一般勇敢。",
+      "text": "本卡名词常用义通常不可数，不机械加复数；具体次数/种类等另义须结合语境。 不可数名词“勇敢”；相关形容词 brave，不写 braveries 表示一般勇敢。",
       "kind": "uncountable",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://en.wiktionary.org/wiki/bravery",
@@ -20838,7 +20829,7 @@
       }
     },
     "mean": {
-      "text": "第三人称单数 means；过去式 meant；过去分词 meant；现在分词 meaning。 程度比较常用 more mean / most mean，不机械添加 -er/-est。",
+      "text": "第三人称单数 means；过去式 meant；过去分词 meant；现在分词 meaning；比较级 meaner；最高级 meanest。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
@@ -20850,7 +20841,9 @@
         "第三人称单数": "means",
         "过去式": "meant",
         "过去分词": "meant",
-        "现在分词": "meaning"
+        "现在分词": "meaning",
+        "比较级": "meaner",
+        "最高级": "meanest"
       }
     },
     "remove": {
@@ -21136,7 +21129,7 @@
       "forms": {}
     },
     "messy": {
-      "text": "比较级 messier。",
+      "text": "比较级 messier；最高级 messiest。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
@@ -21144,7 +21137,8 @@
         "adj"
       ],
       "forms": {
-        "比较级": "messier"
+        "比较级": "messier",
+        "最高级": "messiest"
       }
     },
     "violate": {
@@ -21490,17 +21484,15 @@
       }
     },
     "medium": {
-      "text": "复数 mediums。 程度比较常用 more medium / most medium，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "媒介义复数通常 media；mediums 常指灵媒等另义，不作本卡主复数。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
         "adj",
         "n"
       ],
-      "forms": {
-        "复数": "mediums"
-      }
+      "forms": {}
     },
     "consequence": {
       "text": "复数 consequences。",
@@ -21580,8 +21572,8 @@
       }
     },
     "relative": {
-      "text": "复数 relatives。 程度比较常用 more relative / most relative，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "复数 relatives。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -21610,7 +21602,7 @@
       }
     },
     "firm": {
-      "text": "复数 firms；比较级 firmer。",
+      "text": "复数 firms；比较级 firmer；最高级 firmest。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
@@ -21620,7 +21612,8 @@
       ],
       "forms": {
         "复数": "firms",
-        "比较级": "firmer"
+        "比较级": "firmer",
+        "最高级": "firmest"
       }
     },
     "decide": {
@@ -22278,8 +22271,8 @@
       }
     },
     "disabled": {
-      "text": "程度比较常用 more disabled / most disabled，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -22313,8 +22306,8 @@
       }
     },
     "spare": {
-      "text": "过去分词 spared；过去式 spared；现在分词 sparing；第三人称单数 spares。 程度比较常用 more spare / most spare，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "过去分词 spared；过去式 spared；现在分词 sparing；第三人称单数 spares。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -22344,20 +22337,18 @@
       }
     },
     "liberty": {
-      "text": "复数 liberties。",
-      "kind": "pos-scoped",
+      "text": "本卡名词常用义通常不可数，不机械加复数；具体次数/种类等另义须结合语境。",
+      "kind": "uncountable",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
         "n"
       ],
-      "forms": {
-        "复数": "liberties"
-      }
+      "forms": {}
     },
     "average": {
-      "text": "复数 averages；现在分词 averaging；过去式 averaged；过去分词 averaged；第三人称单数 averages。 程度比较常用 more average / most average，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "复数 averages；现在分词 averaging；过去式 averaged；过去分词 averaged；第三人称单数 averages。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -22374,7 +22365,7 @@
       }
     },
     "courage": {
-      "text": "不可数名词“勇气”；说 show courage / have the courage to do。",
+      "text": "本卡名词常用义通常不可数，不机械加复数；具体次数/种类等另义须结合语境。 不可数名词“勇气”；说 show courage / have the courage to do。",
       "kind": "uncountable",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://en.wiktionary.org/wiki/courage",
@@ -22474,16 +22465,14 @@
       "forms": {}
     },
     "fiction": {
-      "text": "复数 fictions。",
-      "kind": "pos-scoped",
+      "text": "本卡名词常用义通常不可数，不机械加复数；具体次数/种类等另义须结合语境。",
+      "kind": "uncountable",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
         "n"
       ],
-      "forms": {
-        "复数": "fictions"
-      }
+      "forms": {}
     },
     "mind": {
       "text": "复数 minds；过去分词 minded；现在分词 minding；过去式 minded；第三人称单数 minds。",
@@ -22721,8 +22710,8 @@
       }
     },
     "alternative": {
-      "text": "复数 alternatives。 程度比较常用 more alternative / most alternative，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "复数 alternatives。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -23498,8 +23487,8 @@
       }
     },
     "back": {
-      "text": "过去分词 backed；复数 backs；过去式 backed；现在分词 backing；第三人称单数 backs。 程度比较常用 more back / most back，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "过去分词 backed；复数 backs；过去式 backed；现在分词 backing；第三人称单数 backs。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -24014,16 +24003,14 @@
       }
     },
     "anxiety": {
-      "text": "复数 anxieties。",
+      "text": "焦虑通常不可数；具体忧虑可数，复数 anxieties。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
         "n"
       ],
-      "forms": {
-        "复数": "anxieties"
-      }
+      "forms": {}
     },
     "disaster": {
       "text": "复数 disasters。",
@@ -24194,8 +24181,8 @@
       }
     },
     "heat": {
-      "text": "过去分词 heated；复数 heats；现在分词 heating；第三人称单数 heats；过去式 heated。",
-      "kind": "pos-scoped",
+      "text": "本卡名词常用义通常不可数，不机械加复数；具体次数/种类等另义须结合语境。 过去分词 heated；现在分词 heating；第三人称单数 heats；过去式 heated。",
+      "kind": "uncountable",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -24204,14 +24191,13 @@
       ],
       "forms": {
         "过去分词": "heated",
-        "复数": "heats",
         "现在分词": "heating",
         "第三人称单数": "heats",
         "过去式": "heated"
       }
     },
     "fancy": {
-      "text": "过去式 fancied；第三人称单数 fancies；过去分词 fancied；复数 fancies；现在分词 fancying；比较级 fancier。",
+      "text": "过去式 fancied；第三人称单数 fancies；过去分词 fancied；复数 fancies；现在分词 fancying；比较级 fancier；最高级 fanciest。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
@@ -24226,7 +24212,8 @@
         "过去分词": "fancied",
         "复数": "fancies",
         "现在分词": "fancying",
-        "比较级": "fancier"
+        "比较级": "fancier",
+        "最高级": "fanciest"
       }
     },
     "information": {
@@ -24544,8 +24531,8 @@
       }
     },
     "bottom": {
-      "text": "复数 bottoms。 程度比较常用 more bottom / most bottom，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "复数 bottoms。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -24557,7 +24544,7 @@
       }
     },
     "flat": {
-      "text": "复数 flats；比较级 flatter。",
+      "text": "复数 flats；比较级 flatter；最高级 flattest。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
@@ -24567,7 +24554,8 @@
       ],
       "forms": {
         "复数": "flats",
-        "比较级": "flatter"
+        "比较级": "flatter",
+        "最高级": "flattest"
       }
     },
     "violent": {
@@ -24745,14 +24733,17 @@
       }
     },
     "noble": {
-      "text": "程度比较常用 more noble / most noble，不机械添加 -er/-est。",
+      "text": "比较级 nobler；最高级 noblest。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
         "adj"
       ],
-      "forms": {}
+      "forms": {
+        "比较级": "nobler",
+        "最高级": "noblest"
+      }
     },
     "substitute": {
       "text": "复数 substitutes；过去分词 substituted；现在分词 substituting；过去式 substituted；第三人称单数 substitutes。",
@@ -24880,8 +24871,8 @@
       "forms": {}
     },
     "sweat": {
-      "text": "现在分词 sweating；过去式 sweated；复数 sweats；过去分词 sweated；第三人称单数 sweats。",
-      "kind": "pos-scoped",
+      "text": "本卡名词常用义通常不可数，不机械加复数；具体次数/种类等另义须结合语境。 现在分词 sweating；过去式 sweated；过去分词 sweated；第三人称单数 sweats。",
+      "kind": "uncountable",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -24891,7 +24882,6 @@
       "forms": {
         "现在分词": "sweating",
         "过去式": "sweated",
-        "复数": "sweats",
         "过去分词": "sweated",
         "第三人称单数": "sweats"
       }
@@ -24939,8 +24929,8 @@
       "forms": {}
     },
     "material": {
-      "text": "复数 materials。 程度比较常用 more material / most material，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "复数 materials。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -25271,8 +25261,8 @@
       }
     },
     "right": {
-      "text": "复数 rights。 程度比较常用 more right / most right，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "复数 rights。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -25298,7 +25288,7 @@
       }
     },
     "maximum": {
-      "text": "复数 maxima。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "text": "最大值复数 maximums 或 maxima，最大限度整体表达也常用单数。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
       "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
@@ -25306,9 +25296,7 @@
         "adj",
         "n"
       ],
-      "forms": {
-        "复数": "maxima"
-      }
+      "forms": {}
     },
     "neighbourhood": {
       "text": "复数 neighbourhoods。",
@@ -25333,7 +25321,7 @@
       "forms": {}
     },
     "license": {
-      "text": "过去分词 licensed；现在分词 licensing；复数 licenses；第三人称单数 licenses；过去式 licensed。",
+      "text": "名词为美式 license（英式 licence），复数 licenses/licences；动词 license 为许可。 过去分词 licensed；现在分词 licensing；第三人称单数 licenses；过去式 licensed。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
@@ -25344,7 +25332,6 @@
       "forms": {
         "过去分词": "licensed",
         "现在分词": "licensing",
-        "复数": "licenses",
         "第三人称单数": "licenses",
         "过去式": "licensed"
       }
@@ -25557,8 +25544,8 @@
       }
     },
     "blank": {
-      "text": "复数 blanks；比较级 blanker。",
-      "kind": "pos-scoped",
+      "text": "复数 blanks。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -25566,8 +25553,7 @@
         "n"
       ],
       "forms": {
-        "复数": "blanks",
-        "比较级": "blanker"
+        "复数": "blanks"
       }
     },
     "drop": {
@@ -25766,8 +25752,8 @@
       }
     },
     "chief": {
-      "text": "复数 chiefs。 程度比较常用 more chief / most chief，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "复数 chiefs。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -25885,7 +25871,7 @@
       }
     },
     "curious": {
-      "text": "比较级 curiouser。",
+      "text": "比较级 more curious；最高级 most curious。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
@@ -25893,7 +25879,8 @@
         "adj"
       ],
       "forms": {
-        "比较级": "curiouser"
+        "比较级": "more curious",
+        "最高级": "most curious"
       }
     },
     "widespread": {
@@ -25944,8 +25931,8 @@
       "forms": {}
     },
     "correct": {
-      "text": "过去分词 corrected；过去式 corrected；现在分词 correcting；第三人称单数 corrects。 程度比较常用 more correct / most correct，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "过去分词 corrected；过去式 corrected；现在分词 correcting；第三人称单数 corrects。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -26045,8 +26032,8 @@
       }
     },
     "total": {
-      "text": "现在分词 totalling；过去式 totalled；复数 totals；第三人称单数 totals；过去分词 totalled。 程度比较常用 more total / most total，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "现在分词 totalling；过去式 totalled；复数 totals；第三人称单数 totals；过去分词 totalled。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -26344,7 +26331,7 @@
       }
     },
     "unfair": {
-      "text": "最高级 unfairest。",
+      "text": "比较级 more unfair；最高级 most unfair。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
@@ -26352,7 +26339,8 @@
         "adj"
       ],
       "forms": {
-        "最高级": "unfairest"
+        "比较级": "more unfair",
+        "最高级": "most unfair"
       }
     },
     "fantastic": {
@@ -26366,8 +26354,8 @@
       "forms": {}
     },
     "forward": {
-      "text": "过去分词 forwarded；过去式 forwarded；现在分词 forwarding；第三人称单数 forwards。 程度比较常用 more forward / most forward，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "过去分词 forwarded；过去式 forwarded；现在分词 forwarding；第三人称单数 forwards。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -26662,8 +26650,8 @@
       }
     },
     "chemical": {
-      "text": "复数 chemicals。 程度比较常用 more chemical / most chemical，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "复数 chemicals。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -26757,7 +26745,7 @@
       }
     },
     "power": {
-      "text": "复数 powers；过去分词 powered；过去式 powered；第三人称单数 powers；现在分词 powering。",
+      "text": "电力/力量通常不可数；职权或能力项目等可数，复数 powers。 过去分词 powered；过去式 powered；第三人称单数 powers；现在分词 powering。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
@@ -26766,7 +26754,6 @@
         "v"
       ],
       "forms": {
-        "复数": "powers",
         "过去分词": "powered",
         "过去式": "powered",
         "第三人称单数": "powers",
@@ -26916,7 +26903,7 @@
       }
     },
     "comfort": {
-      "text": "复数 comforts；过去分词 comforted；过去式 comforted；现在分词 comforting；第三人称单数 comforts。",
+      "text": "舒适/安慰一般不可数；提供安慰的人或事可数（a comfort / comforts）。 过去分词 comforted；过去式 comforted；现在分词 comforting；第三人称单数 comforts。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
@@ -26925,7 +26912,6 @@
         "v"
       ],
       "forms": {
-        "复数": "comforts",
         "过去分词": "comforted",
         "过去式": "comforted",
         "现在分词": "comforting",
@@ -26962,8 +26948,8 @@
       }
     },
     "actual": {
-      "text": "程度比较常用 more actual / most actual，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -27103,16 +27089,14 @@
       }
     },
     "satisfaction": {
-      "text": "复数 satisfactions。",
-      "kind": "pos-scoped",
+      "text": "本卡名词常用义通常不可数，不机械加复数；具体次数/种类等另义须结合语境。",
+      "kind": "uncountable",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
         "n"
       ],
-      "forms": {
-        "复数": "satisfactions"
-      }
+      "forms": {}
     },
     "devotion": {
       "text": "复数 devotions。",
@@ -27139,8 +27123,8 @@
       }
     },
     "double": {
-      "text": "过去分词 doubled；现在分词 doubling；复数 doubles；过去式 doubled；第三人称单数 doubles。 程度比较常用 more double / most double，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "过去分词 doubled；现在分词 doubling；复数 doubles；过去式 doubled；第三人称单数 doubles。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -27245,7 +27229,7 @@
       }
     },
     "mature": {
-      "text": "第三人称单数 matures；过去分词 matured；现在分词 maturing；过去式 matured；比较级 maturer。",
+      "text": "第三人称单数 matures；过去分词 matured；现在分词 maturing；过去式 matured；比较级 more mature；最高级 most mature。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
@@ -27258,7 +27242,8 @@
         "过去分词": "matured",
         "现在分词": "maturing",
         "过去式": "matured",
-        "比较级": "maturer"
+        "比较级": "more mature",
+        "最高级": "most mature"
       }
     },
     "avoid": {
@@ -27277,8 +27262,8 @@
       }
     },
     "hurt": {
-      "text": "过去分词 hurt；过去式 hurt；现在分词 hurting；第三人称单数 hurts；复数 hurts。 程度比较常用 more hurt / most hurt，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "过去分词 hurt；过去式 hurt；现在分词 hurting；第三人称单数 hurts；复数 hurts。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -27516,7 +27501,7 @@
       "forms": {}
     },
     "finance": {
-      "text": "过去分词 financed；复数 finances；现在分词 financing；过去式 financed；第三人称单数 finances。",
+      "text": "财政/财务通常不可数；个人或机构财力常用复数 finances。 过去分词 financed；现在分词 financing；过去式 financed；第三人称单数 finances。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
@@ -27526,7 +27511,6 @@
       ],
       "forms": {
         "过去分词": "financed",
-        "复数": "finances",
         "现在分词": "financing",
         "过去式": "financed",
         "第三人称单数": "finances"
@@ -27779,16 +27763,14 @@
       }
     },
     "beauty": {
-      "text": "复数 beauties。",
-      "kind": "pos-scoped",
+      "text": "本卡名词常用义通常不可数，不机械加复数；具体次数/种类等另义须结合语境。",
+      "kind": "uncountable",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
         "n"
       ],
-      "forms": {
-        "复数": "beauties"
-      }
+      "forms": {}
     },
     "competition": {
       "text": "复数 competitions。",
@@ -28239,8 +28221,8 @@
       "forms": {}
     },
     "mass": {
-      "text": "复数 masses。 程度比较常用 more mass / most mass，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "复数 masses。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -28268,8 +28250,8 @@
       }
     },
     "absent": {
-      "text": "程度比较常用 more absent / most absent，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -29169,8 +29151,8 @@
       }
     },
     "senior": {
-      "text": "复数 seniors。 程度比较常用 more senior / most senior，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "复数 seniors。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。 senior 常与 to 连用；职位程度可依语境说 more senior，不机械写 seniorer/seniorest。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -29536,16 +29518,14 @@
       "forms": {}
     },
     "significance": {
-      "text": "复数 significances。",
-      "kind": "pos-scoped",
+      "text": "本卡名词常用义通常不可数，不机械加复数；具体次数/种类等另义须结合语境。",
+      "kind": "uncountable",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
         "n"
       ],
-      "forms": {
-        "复数": "significances"
-      }
+      "forms": {}
     },
     "idiom": {
       "text": "复数 idioms。",
@@ -30854,8 +30834,8 @@
       }
     },
     "capital": {
-      "text": "资金/资本通常不可数；首都/大写字母可数，复数 capitals。 程度比较常用 more capital / most capital，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "资金/资本通常不可数；首都/大写字母可数，复数 capitals。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -31061,7 +31041,7 @@
       }
     },
     "focus": {
-      "text": "过去分词 focused；现在分词 focusing；第三人称单数 focuses；过去式 focused；复数 foci。",
+      "text": "重点/中心义复数通常 focuses；数学/光学焦点可用 foci。 过去分词 focused；现在分词 focusing；第三人称单数 focuses；过去式 focused。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
@@ -31073,8 +31053,7 @@
         "过去分词": "focused",
         "现在分词": "focusing",
         "第三人称单数": "focuses",
-        "过去式": "focused",
-        "复数": "foci"
+        "过去式": "focused"
       }
     },
     "awful": {
@@ -31111,7 +31090,7 @@
       "forms": {}
     },
     "minimum": {
-      "text": "复数 minima。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "text": "最小值复数 minimums 或 minima，最低限度整体表达也常用单数。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
       "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
@@ -31119,9 +31098,7 @@
         "adj",
         "n"
       ],
-      "forms": {
-        "复数": "minima"
-      }
+      "forms": {}
     },
     "sincerely": {
       "text": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
@@ -31549,7 +31526,7 @@
       }
     },
     "sound": {
-      "text": "第三人称单数 sounds；复数 sounds；过去式 sounded；现在分词 sounding；过去分词 sounded；比较级 sounder。",
+      "text": "第三人称单数 sounds；复数 sounds；过去式 sounded；现在分词 sounding；过去分词 sounded；比较级 sounder；最高级 soundest。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
@@ -31564,7 +31541,8 @@
         "过去式": "sounded",
         "现在分词": "sounding",
         "过去分词": "sounded",
-        "比较级": "sounder"
+        "比较级": "sounder",
+        "最高级": "soundest"
       }
     },
     "outline": {
@@ -31656,8 +31634,8 @@
       "forms": {}
     },
     "separate": {
-      "text": "过去分词 separated；现在分词 separating；第三人称单数 separates；过去式 separated。 程度比较常用 more separate / most separate，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "过去分词 separated；现在分词 separating；第三人称单数 separates；过去式 separated。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -31672,8 +31650,8 @@
       }
     },
     "liquid": {
-      "text": "复数 liquids。 程度比较常用 more liquid / most liquid，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "复数 liquids。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -31803,7 +31781,7 @@
       }
     },
     "likely": {
-      "text": "最高级 likeliest。",
+      "text": "比较级 more likely；最高级 most likely。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
@@ -31812,20 +31790,19 @@
         "adv"
       ],
       "forms": {
-        "最高级": "likeliest"
+        "比较级": "more likely",
+        "最高级": "most likely"
       }
     },
     "being": {
-      "text": "复数 beings。",
+      "text": "生物/人可数，复数 beings；存在义不可数，不把 be 的变位当作本卡名词词形。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
         "n"
       ],
-      "forms": {
-        "复数": "beings"
-      }
+      "forms": {}
     },
     "electric": {
       "text": "本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
@@ -32141,7 +32118,7 @@
       }
     },
     "handy": {
-      "text": "比较级 handier。",
+      "text": "比较级 handier；最高级 handiest。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
@@ -32149,7 +32126,8 @@
         "adj"
       ],
       "forms": {
-        "比较级": "handier"
+        "比较级": "handier",
+        "最高级": "handiest"
       }
     },
     "outstanding": {
@@ -32380,8 +32358,8 @@
       }
     },
     "single": {
-      "text": "复数 singles。 程度比较常用 more single / most single，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "复数 singles。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -32813,8 +32791,8 @@
       }
     },
     "classic": {
-      "text": "复数 classics。 程度比较常用 more classic / most classic，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "复数 classics。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -32885,7 +32863,7 @@
       }
     },
     "percent": {
-      "text": "数字后通常用单数形式 percent；percent of + 名词的主谓一致依其指代内容判断；percentage 可数复数 percentages。",
+      "text": "数字后 percent 通常不加 -s（twenty percent）；可数的百分比通常用 percentage / percentages。 数字后通常用单数形式 percent；percent of + 名词的主谓一致依其指代内容判断；percentage 可数复数 percentages。",
       "kind": "usage",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://en.wiktionary.org/wiki/percent",
@@ -32896,7 +32874,7 @@
       "forms": {}
     },
     "free": {
-      "text": "过去分词 freed；现在分词 freeing；比较级 freer；过去式 freed；第三人称单数 frees。",
+      "text": "过去分词 freed；现在分词 freeing；过去式 freed；第三人称单数 frees；比较级 freer；最高级 freest。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
@@ -32908,9 +32886,10 @@
       "forms": {
         "过去分词": "freed",
         "现在分词": "freeing",
-        "比较级": "freer",
         "过去式": "freed",
-        "第三人称单数": "frees"
+        "第三人称单数": "frees",
+        "比较级": "freer",
+        "最高级": "freest"
       }
     },
     "forecast": {
@@ -33256,17 +33235,15 @@
       }
     },
     "folk": {
-      "text": "复数 folks。 程度比较常用 more folk / most folk，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "人们/民间群体常用 folk，口语 folks 也常用；folk 作形容词不变形。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
         "adj",
         "n"
       ],
-      "forms": {
-        "复数": "folks"
-      }
+      "forms": {}
     },
     "dare": {
       "text": "过去式 dared；过去分词 dared；现在分词 daring；第三人称单数 dares。",
@@ -33510,8 +33487,8 @@
       "forms": {}
     },
     "essential": {
-      "text": "程度比较常用 more essential / most essential，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -33661,8 +33638,8 @@
       }
     },
     "automatic": {
-      "text": "程度比较常用 more automatic / most automatic，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -34326,8 +34303,8 @@
       "forms": {}
     },
     "junior": {
-      "text": "程度比较常用 more junior / most junior，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。 junior 常与 to 连用；年少/初级关系不机械写 juniorer/juniorest。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -34407,14 +34384,17 @@
       }
     },
     "gentle": {
-      "text": "程度比较常用 more gentle / most gentle，不机械添加 -er/-est。",
+      "text": "比较级 gentler；最高级 gentlest。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
         "adj"
       ],
-      "forms": {}
+      "forms": {
+        "比较级": "gentler",
+        "最高级": "gentlest"
+      }
     },
     "shape": {
       "text": "复数 shapes；过去分词 shaped；现在分词 shaping；过去式 shaped；第三人称单数 shapes。",
@@ -34434,8 +34414,8 @@
       }
     },
     "perfect": {
-      "text": "程度比较常用 more perfect / most perfect，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -34577,8 +34557,8 @@
       "forms": {}
     },
     "innocent": {
-      "text": "程度比较常用 more innocent / most innocent，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -34705,7 +34685,7 @@
       "forms": {}
     },
     "vast": {
-      "text": "比较级 vaster。",
+      "text": "比较级 vaster；最高级 vastest。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
@@ -34713,7 +34693,8 @@
         "adj"
       ],
       "forms": {
-        "比较级": "vaster"
+        "比较级": "vaster",
+        "最高级": "vastest"
       }
     },
     "welfare": {
@@ -34759,8 +34740,8 @@
       "forms": {}
     },
     "necessary": {
-      "text": "程度比较常用 more necessary / most necessary，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -35124,7 +35105,7 @@
       "forms": {}
     },
     "while": {
-      "text": "连词 while 与短语 for a while；作动词“消磨时间”时为 whiles / whiled / whiling。",
+      "text": "一会儿常用 a while，不机械构造 whiles；连词 while 不变形。 连词 while 与短语 for a while；作动词“消磨时间”时为 whiles / whiled / whiling。",
       "kind": "mixed",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://en.wiktionary.org/wiki/while",
@@ -35260,8 +35241,8 @@
       }
     },
     "illegal": {
-      "text": "程度比较常用 more illegal / most illegal，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -35511,8 +35492,8 @@
       }
     },
     "contrary": {
-      "text": "程度比较常用 more contrary / most contrary，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -35802,16 +35783,14 @@
       }
     },
     "raw": {
-      "text": "最高级 rawest。",
-      "kind": "pos-scoped",
+      "text": "本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
         "adj"
       ],
-      "forms": {
-        "最高级": "rawest"
-      }
+      "forms": {}
     },
     "value": {
       "text": "复数 values；过去分词 valued；过去式 valued；现在分词 valuing；第三人称单数 values。",
@@ -35959,7 +35938,7 @@
       }
     },
     "extreme": {
-      "text": "最高级 extremest。",
+      "text": "比较级 more extreme；最高级 most extreme。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
@@ -35967,7 +35946,8 @@
         "adj"
       ],
       "forms": {
-        "最高级": "extremest"
+        "比较级": "more extreme",
+        "最高级": "most extreme"
       }
     },
     "whole": {
@@ -36074,8 +36054,8 @@
       }
     },
     "constant": {
-      "text": "程度比较常用 more constant / most constant，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -36188,8 +36168,8 @@
       "forms": {}
     },
     "superior": {
-      "text": "程度比较常用 more superior / most superior，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。 superior 常与 to 连用（优于），不机械写 more superior 或 superiorer。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -36198,17 +36178,20 @@
       "forms": {}
     },
     "sharp": {
-      "text": "程度比较常用 more sharp / most sharp，不机械添加 -er/-est。",
+      "text": "比较级 sharper；最高级 sharpest。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
         "adj"
       ],
-      "forms": {}
+      "forms": {
+        "比较级": "sharper",
+        "最高级": "sharpest"
+      }
     },
     "well": {
-      "text": "程度比较常用 more well / most well，不机械添加 -er/-est。",
+      "text": "比较级 better；最高级 best。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
@@ -36216,17 +36199,23 @@
         "adj",
         "adv"
       ],
-      "forms": {}
+      "forms": {
+        "比较级": "better",
+        "最高级": "best"
+      }
     },
     "loose": {
-      "text": "程度比较常用 more loose / most loose，不机械添加 -er/-est。",
+      "text": "比较级 looser；最高级 loosest。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
         "adj"
       ],
-      "forms": {}
+      "forms": {
+        "比较级": "looser",
+        "最高级": "loosest"
+      }
     },
     "independent": {
       "text": "程度比较常用 more independent / most independent，不机械添加 -er/-est。",
@@ -36239,16 +36228,14 @@
       "forms": {}
     },
     "blind": {
-      "text": "比较级 blinder。",
-      "kind": "pos-scoped",
+      "text": "本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
         "adj"
       ],
-      "forms": {
-        "比较级": "blinder"
-      }
+      "forms": {}
     },
     "wild": {
       "text": "比较级 wilder；最高级 wildest。",
@@ -36303,8 +36290,8 @@
       "forms": {}
     },
     "still": {
-      "text": "程度比较常用 more still / most still，不机械添加 -er/-est。",
-      "kind": "pos-scoped",
+      "text": "本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。 副词仍然不比较；本卡静止的形容词义不机械套比较变化。",
+      "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
       "selectedPos": [
@@ -36324,7 +36311,7 @@
       "forms": {}
     },
     "calm": {
-      "text": "比较级 calmer。",
+      "text": "比较级 calmer；最高级 calmest。",
       "kind": "pos-scoped",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
@@ -36332,7 +36319,8 @@
         "adj"
       ],
       "forms": {
-        "比较级": "calmer"
+        "比较级": "calmer",
+        "最高级": "calmest"
       }
     },
     "sudden": {
@@ -36452,7 +36440,7 @@
       "forms": {}
     },
     "potential": {
-      "text": "复数 potentials。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
+      "text": "潜力义通常不可数；不把物理学电势等另义的 potentials 机械用于本卡。 本卡关系/分类等常用义不机械加 -er/-est；程度比较须根据具体语境。",
       "kind": "relational",
       "basis": "school-sense POS adaptation + explicit usage review",
       "reference": "https://github.com/skywind3000/ECDICT",
@@ -36460,9 +36448,7 @@
         "adj",
         "n"
       ],
-      "forms": {
-        "复数": "potentials"
-      }
+      "forms": {}
     },
     "lead": {
       "text": "带领/导致 /liːd/：leads / leading / led / led；金属铅 /led/ 为另义，不作为本卡核心提示。",
