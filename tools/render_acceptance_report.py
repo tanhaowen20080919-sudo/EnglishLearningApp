@@ -22,7 +22,8 @@ def main():
         f'首轮基线：`{doc["baseline_commit"]}`；回滚分支：`{doc["rollback_branch"]}`。具体首轮缺口见 [第一轮审计](V1_AUDIT_FIRST_PASS.md)。','',
         '| 轮次 | 已完整实现 | 部分实现 | 未实现 |','|---|---:|---:|---:|',
         f'| 首轮 | {initial["已完整实现"]} | {initial["部分实现"]} | {initial["未实现"]} |',
-        f'| 二轮 | {final["已完整实现"]} | {final["部分实现"]} | {final["未实现"]} |','',
+        f'| 当前复核 | {final["已完整实现"]} | {final["部分实现"]} | {final["未实现"]} |','',
+        '最新词条跟进见 [code10 词条复查](V1_LEXICAL_UPDATE.md)。上一正式 code9 的执行结果保存在清单 previous_execution_code9；R061 因发现词义排序质量问题而收紧为部分实现。','',
         '## 验证边界','']
     for value in doc['evidence_policy'].values():lines.append('- '+value)
     lines+=['','执行记录：','', '```json',json.dumps(doc['execution'],ensure_ascii=False,indent=2),'```','',

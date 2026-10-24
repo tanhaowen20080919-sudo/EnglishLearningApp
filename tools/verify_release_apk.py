@@ -32,12 +32,21 @@ def verify(apk: Path):
     with zipfile.ZipFile(apk) as archive:
         if archive.testzip() is not None:
             raise ValueError("APK ZIP integrity check failed.")
+        notes_data=archive.read("assets/word-study-notes.json")
+        notes=json.loads(notes_data)
+        source_notes=(ROOT/"app/src/main/assets/word-study-notes.json").read_bytes()
+        if hashlib.sha256(notes_data).digest()!=hashlib.sha256(source_notes).digest():
+            raise ValueError("APK study notes differ from the reviewed source asset.")
+        if len(notes["morphology"])!=1640:
+            raise ValueError("APK is missing word morphology/usage records.")
         audio_files = sum(name.startswith("assets/pronunciation/") and name.endswith(".mp3") for name in archive.namelist())
     with apk.open("rb") as stream:
         digest = hashlib.file_digest(stream, "sha256").hexdigest()
     return {"application_id": app[1], "version_code": int(app[2]), "version": app[3],
             "certificate_sha256": fingerprints[0], "apk_sha256": digest,
             "debuggable": False, "offline_audio_files": audio_files,
+            "reviewed_study_cards":len(notes["studyCards"]),"morphology_records":len(notes["morphology"]),
+            "study_notes_sha256":hashlib.sha256(notes_data).hexdigest(),
             "signing_identity": "permanent-v1.0-and-later"}
 
 

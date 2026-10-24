@@ -96,8 +96,23 @@ fun WordDetail(w: VocabWord, state: AppUiState, vm: AppViewModel, close: () -> U
                 StudyIconButton(StudyIcon.STAR,if(w.favorite) "取消收藏" else "收藏单词",{ vm.toggleFavorite(w) },selected=w.favorite)
             }
             if(state.studySettings.showPhonetic) Text(w.phonetic,color=MaterialTheme.colorScheme.onSurfaceVariant)
-            Text(w.meaning,style=MaterialTheme.typography.bodyLarge)
-            if(w.example.isNotBlank()) { Text(w.example);Text(w.exampleTranslation,color=MaterialTheme.colorScheme.onSurfaceVariant) }
+            val reviewed=com.tanhaowen.contextenglish.adaptive.WordStudyResources.note(w)
+            if(reviewed!=null) {
+                Text("高中常用义",style=MaterialTheme.typography.labelMedium)
+                Text(com.tanhaowen.contextenglish.study.StudyEngine.meaning(w),style=MaterialTheme.typography.titleLarge)
+                Text(reviewed.example);Text(reviewed.translation,color=MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("常见搭配：${reviewed.collocation}")
+                var original by rememberSaveable(w.id) { mutableStateOf(false) }
+                TextButton(onClick={ original=!original }) { Text("原词库资料（含其他词义）") }
+                if(original) { Text(w.meaning);Text(w.example);Text(w.exampleTranslation) }
+            } else {
+                Text("原词库释义",style=MaterialTheme.typography.labelMedium)
+                Text(w.meaning,style=MaterialTheme.typography.bodyLarge)
+                if(w.example.isNotBlank()) { Text(w.example);Text(w.exampleTranslation,color=MaterialTheme.colorScheme.onSurfaceVariant) }
+            }
+            com.tanhaowen.contextenglish.adaptive.WordStudyResources.morphology(w.word)?.let {
+                Text("词形与用法（按对应词性）：${it.text}",style=MaterialTheme.typography.bodySmall)
+            }
             state.coachNotes[w.id]?.let { Text(it.tip,color=MaterialTheme.colorScheme.primary) }
             HorizontalDivider()
             Text("正确 ${w.correctCount} · 错误 ${w.mistakeCount} · 复习 ${w.reviewCount}",style=MaterialTheme.typography.bodySmall)

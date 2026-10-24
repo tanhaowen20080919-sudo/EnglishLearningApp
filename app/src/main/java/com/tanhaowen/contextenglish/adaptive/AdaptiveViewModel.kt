@@ -42,7 +42,7 @@ class AdaptiveViewModel(private val app: ContextEnglishApp,
             val day=today().toString();val words=app.repository.loadWords();val skills=repository.skills(today())
             val existing=repository.load(day)
             val mode=existing?.mode ?: mutable.value.workflow?.mode ?: Intensity.STANDARD
-            val plan=if(existing?.started==true) existing else WorkflowFactory.create(day,mode,
+            val plan=if(existing?.started==true) WorkflowFactory.refreshReviewedVocabulary(existing,words).also { if(it!=existing) repository.save(it) } else WorkflowFactory.create(day,mode,
                 existing?.budgetMinutes ?: mode.minutes,words,repository.performance(today()),skills,now(),app.studySettingsStore.load().newWords).also(repository::save)
             mutable.update { it.copy(workflow=plan,words=words,skills=skills,results=repository.results(day),report=repository.summary().toString(2),
                 lookedUp=repository.lookedUp(day,plan.readingId),tomorrow=repository.load(today().plusDays(1).toString())) }
@@ -148,7 +148,7 @@ class AdaptiveViewModel(private val app: ContextEnglishApp,
         val w=mutable.value.workflow ?: return
         val reading=LocalContent.readings.first { it.id==w.readingId }
         val meaning=reading.glossary.entries.firstOrNull { it.key.equals(word,true) }?.value
-            ?: mutable.value.words.firstOrNull { it.word.equals(word,true) }?.meaning ?: "本地词库暂无此词，可记录后查阅"
+            ?: mutable.value.words.firstOrNull { it.word.equals(word,true) }?.let { WordStudyResources.note(it)?.meaning ?: it.meaning } ?: "本地词库暂无此词，可记录后查阅"
         local {
             repository.readingWord(w.day,w.readingId,word,meaning,impacts ?: (mutable.value.lookedUp[word] ?: false))
             mutable.update { it.copy(lookedUp=repository.lookedUp(w.day,w.readingId),message="$word：$meaning") }
@@ -234,7 +234,7 @@ class AdaptiveViewModel(private val app: ContextEnglishApp,
             val word=snapshot.words.firstOrNull { it.id==(w.step?.question?.wordId ?: w.step?.wordId) }
             when(kind) {
                 "sentence" -> LearningEnhancements.sentence(reading)
-                "context" -> LearningEnhancements.context(word?.word ?: snapshot.lookedUp.keys.lastOrNull() ?: reading.glossary.keys.first(),if(word!=null) word.example else reading.passage)
+                "context" -> LearningEnhancements.context(word?.word ?: snapshot.lookedUp.keys.lastOrNull() ?: reading.glossary.keys.first(),if(word!=null) WordStudyResources.note(word)?.example ?: word.example else reading.passage)
                 "examples" -> LearningEnhancements.examples(word ?: snapshot.words.first { it.id in w.newIds })
                 "practice","supplement" -> LearningEnhancements.practice(w,snapshot.words,snapshot.skills,kind=="supplement")
                 else -> error("未知增强类型")

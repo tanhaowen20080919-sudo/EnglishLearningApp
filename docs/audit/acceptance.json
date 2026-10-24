@@ -2555,8 +2555,8 @@
       "criterion": "显示释义后展开核心义",
       "group": "card",
       "initial_status": "已完整实现",
-      "final_status": "已完整实现",
-      "review": "第二轮逐条阅读实现与调用链；运行证据另列 execution，不以接口/名称作结论。",
+      "final_status": "部分实现",
+      "review": "跟进复查发现首行取义会将罕见名词义当作高中主提示；上一轮完成判定过宽，已修复已审校词并收紧状态。",
       "evidence": [
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/AdaptiveScreens.kt",
@@ -2572,6 +2572,21 @@
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/OfflineWordResources.kt",
           "symbol": "object OfflineWordResources",
           "logic": "IO一次性加载1376词来源词形和全部1640词的第二语境；原义/音标/双语例句/音频不被覆盖，词形缺失不编造。"
+        },
+        {
+          "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/WordStudyResources.kt",
+          "symbol": "object WordStudyResources",
+          "logic": "从独立资产加载已整理常用义/双语例句/搭配及词形用法；常用义仅匹配原始单词与完整释义，保护自定义词义，资源失败回退原词库。"
+        },
+        {
+          "file": "tools/build_word_study_notes.py",
+          "symbol": "def build():",
+          "logic": "从显式逐词资料编译并核对覆盖集合，243张原创卡与264个空词形分类实际进入资产；不为未审校词自动套句或捏造变化。"
+        },
+        {
+          "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
+          "symbol": "fun refreshReviewedVocabulary(",
+          "logic": "仅修正已审校词的未评分本地词义/拼写提示，已答历史与当前反馈不变，比较答案后幂等保存，不改掌握度或任务数量。"
         }
       ],
       "tests": [
@@ -2584,9 +2599,36 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/OfflineSpeechTest.kt",
           "symbol": "automaticRequestPlaysExactlyTwiceAndThenFinishes",
           "assertions": "播放器完成回调后再次播放，严格共两次，随后停止；使用可控播放器边界，不冒称真机声学验收。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
+          "symbol": "reviewedCoreSensesDoNotTeachRareNounsAsTheMainAdjectiveMeaning",
+          "assertions": "对automatic/swift/specific/perfect/basic/natural/still实际读库并出题，断言高中常用义为正确选项且原始数据库完整释义保持不变。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
+          "symbol": "contentCorrectionPreservesAnsweredHistoryAndOnlyRefreshesUnansweredLocalQuestionsOnce",
+          "assertions": "旧未答词义题改为自动的、拼写提示同步；已答前缀、已评分当前题、选择、反馈、索引、2300ms计时保留；重复修复结果相同。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
+          "symbol": "reviewedSensesAlsoParticipateInDistractorAmbiguityFiltering",
+          "assertions": "以privilege新增荣幸义为真实目标，20种题种子均不把同义荣幸作为错误项，四选项与正确答案仍有效。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
+          "symbol": "actualGradingAndAiInputsUseTheSameReviewedSenseWithoutRewritingLegacyData",
+          "assertions": "使用真正SQLite作答增加掌握度，AI词条提示包含自动的，重开数据库常用义一致，完整旧释义未被重写。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
+          "symbol": "customDefinitionsAndUnreviewedWordsKeepTheirOriginalMeaning",
+          "assertions": "同名词用户改写释义不匹配内置原文时，不被整理义覆盖；未知自定义词同样走原始释义回退。"
         }
       ],
-      "blockers": []
+      "blockers": [
+        "仅243/1640词具有本轮校核的高中常用义；其余仍按原词库取义，不能把可显示释义当成全量核心义教学审校。"
+      ]
     },
     {
       "id": "R062",
@@ -2614,6 +2656,16 @@
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/OfflineWordResources.kt",
           "symbol": "object OfflineWordResources",
           "logic": "IO一次性加载1376词来源词形和全部1640词的第二语境；原义/音标/双语例句/音频不被覆盖，词形缺失不编造。"
+        },
+        {
+          "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/WordStudyResources.kt",
+          "symbol": "object WordStudyResources",
+          "logic": "从独立资产加载已整理常用义/双语例句/搭配及词形用法；常用义仅匹配原始单词与完整释义，保护自定义词义，资源失败回退原词库。"
+        },
+        {
+          "file": "tools/build_word_study_notes.py",
+          "symbol": "def build():",
+          "logic": "从显式逐词资料编译并核对覆盖集合，243张原创卡与264个空词形分类实际进入资产；不为未审校词自动套句或捏造变化。"
         }
       ],
       "tests": [
@@ -2634,7 +2686,7 @@
         }
       ],
       "blockers": [
-        "原1640条双语例句完整保留，另有署名英语语境，但尚无逐词核验的高考适配双语例句库；不能将通用语料标成已审校高考例句。"
+        "新增243条原创高中双语例句并保留原1640词例句；其余1397词尚未完成高中语境适配审校，不冒称高考真题或独立教师认证。"
       ]
     },
     {
@@ -2663,6 +2715,16 @@
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/OfflineWordResources.kt",
           "symbol": "object OfflineWordResources",
           "logic": "IO一次性加载1376词来源词形和全部1640词的第二语境；原义/音标/双语例句/音频不被覆盖，词形缺失不编造。"
+        },
+        {
+          "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/WordStudyResources.kt",
+          "symbol": "object WordStudyResources",
+          "logic": "从独立资产加载已整理常用义/双语例句/搭配及词形用法；常用义仅匹配原始单词与完整释义，保护自定义词义，资源失败回退原词库。"
+        },
+        {
+          "file": "tools/build_word_study_notes.py",
+          "symbol": "def build():",
+          "logic": "从显式逐词资料编译并核对覆盖集合，243张原创卡与264个空词形分类实际进入资产；不为未审校词自动套句或捏造变化。"
         }
       ],
       "tests": [
@@ -2678,7 +2740,7 @@
         }
       ],
       "blockers": [
-        "经整理的离线常见搭配仅WordNotes 20/1640词；其余可手动AI补充但不等同于可靠离线覆盖。"
+        "本轮243条搭配加原WordNotes去重后覆盖261/1640词，剩余1379词尚未整理可靠离线常见搭配。"
       ]
     },
     {
@@ -2707,6 +2769,16 @@
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/OfflineWordResources.kt",
           "symbol": "object OfflineWordResources",
           "logic": "IO一次性加载1376词来源词形和全部1640词的第二语境；原义/音标/双语例句/音频不被覆盖，词形缺失不编造。"
+        },
+        {
+          "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/WordStudyResources.kt",
+          "symbol": "object WordStudyResources",
+          "logic": "从独立资产加载已整理常用义/双语例句/搭配及词形用法；常用义仅匹配原始单词与完整释义，保护自定义词义，资源失败回退原词库。"
+        },
+        {
+          "file": "tools/build_word_study_notes.py",
+          "symbol": "def build():",
+          "logic": "从显式逐词资料编译并核对覆盖集合，243张原创卡与264个空词形分类实际进入资产；不为未审校词自动套句或捏造变化。"
         }
       ],
       "tests": [
@@ -2724,10 +2796,15 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditPersistenceTest.kt",
           "symbol": "adaptiveEvidenceSurvivesReopenAndEveryWordHasDifferentOfflineContexts",
           "assertions": "关闭重开真实数据库后记忆证据相等；1640词各至少2语境，represent的25种题种子出现多语境且答案均为原词。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
+          "symbol": "everyOriginalWordHasMorphologyWhileMissingInflectionsAreNotInvented",
+          "assertions": "遍历1640词验证实际用法记录；核对basis/bases、status/statuses，information/furniture不可数、ought情态、statistics一致关系及solar关系形容词分类。"
         }
       ],
       "blockers": [
-        "ECDICT提供1376词词形，另有少量WordNotes补充；其余缺项多含不变词，仍缺逐词“无变化/缺资料”校核，未自动编造。"
+        "原1376条字典词形加264词逐词用法说明已覆盖1640词；原字典多词性形式仍未全部按高中常用义筛选，非空记录不等于教学适配完成。"
       ]
     },
     {
@@ -3528,6 +3605,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditAlgorithmTest.kt",
           "symbol": "spellingAndContextErrorsHaveRealMasteryAndDueDateConsequences",
           "assertions": "同一已熟悉词答错拼写或语境后，掌握度低于0.5、复习早于答对、遗忘数增加且不能保持稳定掌握。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
+          "symbol": "contextFeedbackUsesTheActualSampledSentenceRatherThanAnUnrelatedDefaultExample",
+          "assertions": "30种真实represent语境题至少两种语境，每个反馈均包含本次填空还原句，且真实正确选项可判定。"
         }
       ],
       "blockers": []
@@ -3748,6 +3830,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditPersistenceTest.kt",
           "symbol": "adaptiveEvidenceSurvivesReopenAndEveryWordHasDifferentOfflineContexts",
           "assertions": "关闭重开真实数据库后记忆证据相等；1640词各至少2语境，represent的25种题种子出现多语境且答案均为原词。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
+          "symbol": "contextFeedbackUsesTheActualSampledSentenceRatherThanAnUnrelatedDefaultExample",
+          "assertions": "30种真实represent语境题至少两种语境，每个反馈均包含本次填空还原句，且真实正确选项可判定。"
         }
       ],
       "blockers": []
@@ -6848,6 +6935,16 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/EnhancementContractTest.kt",
           "symbol": "contextMeaningMustGroundTheRequestedWordInItsActualSentence",
           "assertions": "要求目标词与实际原句匹配，错误单词或不含目标词的引文均拒绝。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
+          "symbol": "actualGradingAndAiInputsUseTheSameReviewedSenseWithoutRewritingLegacyData",
+          "assertions": "使用真正SQLite作答增加掌握度，AI词条提示包含自动的，重开数据库常用义一致，完整旧释义未被重写。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
+          "symbol": "contextFeedbackUsesTheActualSampledSentenceRatherThanAnUnrelatedDefaultExample",
+          "assertions": "30种真实represent语境题至少两种语境，每个反馈均包含本次填空还原句，且真实正确选项可判定。"
         }
       ],
       "blockers": []
@@ -10567,6 +10664,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditPersistenceTest.kt",
           "symbol": "oldV5JsonIsRestoredAndInvalidMemoryRollsBackAtomically",
           "assertions": "v5 JSON可恢复；mastery=2.0非法导入被拒且原1640词与记忆保持不变。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
+          "symbol": "customDefinitionsAndUnreviewedWordsKeepTheirOriginalMeaning",
+          "assertions": "同名词用户改写释义不匹配内置原文时，不被整理义覆盖；未知自定义词同样走原始释义回退。"
         }
       ],
       "blockers": []
@@ -12336,6 +12438,11 @@
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/StudyClock.kt",
           "symbol": "class StudyClock",
           "logic": "StudyClock 按单调时钟累加前台作答片段；暂停/后台持久化 stepElapsedMs，反馈时不计时，重启恢复；过期计时写入不能覆盖新评分。"
+        },
+        {
+          "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
+          "symbol": "fun refreshReviewedVocabulary(",
+          "logic": "仅修正已审校词的未评分本地词义/拼写提示，已答历史与当前反馈不变，比较答案后幂等保存，不改掌握度或任务数量。"
         }
       ],
       "tests": [
@@ -12353,6 +12460,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditPersistenceTest.kt",
           "symbol": "adaptiveEvidenceSurvivesReopenAndEveryWordHasDifferentOfflineContexts",
           "assertions": "关闭重开真实数据库后记忆证据相等；1640词各至少2语境，represent的25种题种子出现多语境且答案均为原词。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
+          "symbol": "contentCorrectionPreservesAnsweredHistoryAndOnlyRefreshesUnansweredLocalQuestionsOnce",
+          "assertions": "旧未答词义题改为自动的、拼写提示同步；已答前缀、已评分当前题、选择、反馈、索引、2300ms计时保留；重复修复结果相同。"
         }
       ],
       "blockers": []
@@ -12378,6 +12490,11 @@
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/StudyClock.kt",
           "symbol": "class StudyClock",
           "logic": "StudyClock 按单调时钟累加前台作答片段；暂停/后台持久化 stepElapsedMs，反馈时不计时，重启恢复；过期计时写入不能覆盖新评分。"
+        },
+        {
+          "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
+          "symbol": "fun refreshReviewedVocabulary(",
+          "logic": "仅修正已审校词的未评分本地词义/拼写提示，已答历史与当前反馈不变，比较答案后幂等保存，不改掌握度或任务数量。"
         }
       ],
       "tests": [
@@ -12400,6 +12517,11 @@
           "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/AuditPersistenceTest.kt",
           "symbol": "clockCheckpointCannotOverwriteNewerAnswerAndFeedback",
           "assertions": "旧步骤计时检查点不能覆盖新答案快照；active_ms只累计已评分的3500ms。"
+        },
+        {
+          "file": "app/src/test/java/com/tanhaowen/contextenglish/adaptive/WordStudyResourcesTest.kt",
+          "symbol": "contentCorrectionPreservesAnsweredHistoryAndOnlyRefreshesUnansweredLocalQuestionsOnce",
+          "assertions": "旧未答词义题改为自动的、拼写提示同步；已答前缀、已评分当前题、选择、反馈、索引、2300ms计时保留；重复修复结果相同。"
         }
       ],
       "blockers": []
@@ -14526,6 +14648,11 @@
           "file": "docs/V1_AUDIT_DELIVERY.md",
           "symbol": "## 主要改动",
           "logic": "本轮交付说明记录对应实际修改、运行验证与明确限制；执行结果按真实完成状态填写，不以计划冒充结果。"
+        },
+        {
+          "file": "docs/V1_LEXICAL_UPDATE.md",
+          "symbol": "## 实际修复",
+          "logic": "跟进记录实际词义排序错误、243条整理卡、261词搭配、264空项用法分类、保留历史的旧题修正，以及仍未完成的教学/真机边界。"
         }
       ],
       "tests": [
@@ -14578,6 +14705,11 @@
           "file": "docs/V1_AUDIT_DELIVERY.md",
           "symbol": "## 架构与数据迁移",
           "logic": "本轮交付说明记录对应实际修改、运行验证与明确限制；执行结果按真实完成状态填写，不以计划冒充结果。"
+        },
+        {
+          "file": "docs/V1_LEXICAL_UPDATE.md",
+          "symbol": "## 实际修复",
+          "logic": "跟进记录实际词义排序错误、243条整理卡、261词搭配、264空项用法分类、保留历史的旧题修正，以及仍未完成的教学/真机边界。"
         }
       ],
       "tests": [
@@ -14682,6 +14814,11 @@
           "file": "docs/V1_AUDIT_DELIVERY.md",
           "symbol": "## AI 调度与缓存",
           "logic": "本轮交付说明记录对应实际修改、运行验证与明确限制；执行结果按真实完成状态填写，不以计划冒充结果。"
+        },
+        {
+          "file": "docs/V1_LEXICAL_UPDATE.md",
+          "symbol": "## 实际修复",
+          "logic": "跟进记录实际词义排序错误、243条整理卡、261词搭配、264空项用法分类、保留历史的旧题修正，以及仍未完成的教学/真机边界。"
         }
       ],
       "tests": [
@@ -14734,6 +14871,11 @@
           "file": "docs/V1_AUDIT_DELIVERY.md",
           "symbol": "## 测试与构建结果",
           "logic": "本轮交付说明记录对应实际修改、运行验证与明确限制；执行结果按真实完成状态填写，不以计划冒充结果。"
+        },
+        {
+          "file": "docs/V1_LEXICAL_UPDATE.md",
+          "symbol": "## 实际修复",
+          "logic": "跟进记录实际词义排序错误、243条整理卡、261词搭配、264空项用法分类、保留历史的旧题修正，以及仍未完成的教学/真机边界。"
         }
       ],
       "tests": [
@@ -14786,6 +14928,11 @@
           "file": "docs/V1_AUDIT_DELIVERY.md",
           "symbol": "GitHub Actions →",
           "logic": "本轮交付说明记录对应实际修改、运行验证与明确限制；执行结果按真实完成状态填写，不以计划冒充结果。"
+        },
+        {
+          "file": "docs/V1_LEXICAL_UPDATE.md",
+          "symbol": "## 实际修复",
+          "logic": "跟进记录实际词义排序错误、243条整理卡、261词搭配、264空项用法分类、保留历史的旧题修正，以及仍未完成的教学/真机边界。"
         }
       ],
       "tests": [
@@ -14838,6 +14985,11 @@
           "file": "docs/V1_AUDIT_DELIVERY.md",
           "symbol": "## 已知问题与未完成边界",
           "logic": "本轮交付说明记录对应实际修改、运行验证与明确限制；执行结果按真实完成状态填写，不以计划冒充结果。"
+        },
+        {
+          "file": "docs/V1_LEXICAL_UPDATE.md",
+          "symbol": "## 实际修复",
+          "logic": "跟进记录实际词义排序错误、243条整理卡、261词搭配、264空项用法分类、保留历史的旧题修正，以及仍未完成的教学/真机边界。"
         }
       ],
       "tests": [
@@ -16324,9 +16476,23 @@
   "evidence_policy": {
     "ai": "生产代码使用真实HTTPS客户端。自动化测试只在外部传输边界注入确定性响应，不能代替用户中转站/真实模型的付费联调；未发起付费API调用。",
     "ui": "Android模拟器UI与性能结果独立记录；没有真机连接，真机全局点击延迟/声学质量/系统杀进程待验收。",
-    "content": "原创阅读不称官方真题；语料署名与许可保留。词条高考适配/搭配/缺失词形校核不足项保持部分实现。"
+    "content": "原词库/音频固定哈希不变；243条原创高中卡片、261词有效搭配、1640词形/用法记录具有明确来源与覆盖边界；Codex语言核对不冒称独立教师认证，不以行数或非空字段认定全量教学审校。"
   },
   "execution": {
+    "jvm": "pending code10 final verification",
+    "android_ui": "pending code10 cloud run",
+    "release": "pending code10 permanent signing",
+    "resources": {
+      "reviewed_study_cards": 243,
+      "effective_collocations": 261,
+      "morphology_records": 1640,
+      "explicit_morphology_reviews": 264,
+      "scope": "record coverage does not certify all senses match the high-school curriculum"
+    },
+    "ai_live_provider": "Not exercised; manual HTTPS production path remains, no paid provider calls",
+    "physical_device": "No physical device; emulator checks cannot replace hardware acceptance"
+  },
+  "previous_execution_code9": {
     "jvm": {
       "tests": 139,
       "failures": 0,
@@ -16432,5 +16598,7 @@
     "verified_at_utc": "2026-10-23T22:32:45.168551+00:00",
     "ai_live_provider": "Not exercised; HTTPS production path and protocol contracts tested with external-boundary fixtures, no paid requests",
     "physical_device": "No physical device; emulator results do not replace device latency/audio/OS process-lifecycle acceptance"
-  }
+  },
+  "followup_baseline": "398274cf28c04c339aa1bc32d9cb69924c76433b",
+  "followup_report": "docs/V1_LEXICAL_UPDATE.md"
 }

@@ -65,7 +65,10 @@ object LocalContent {
         val corpus=OfflineWordResources.get(w.word)?.examples.orEmpty().filter { token.findAll(it.text).count()==1 }.map {
             token.replace(it.text,"____")+"\n"+it.translation.ifBlank { "词义提示："+StudyEngine.meaning(w) }
         }
-        return (listOfNotNull(LocalCloze.prompt(w),alternate)+corpus).distinctBy { normalizeContext(it,w.word) }
+        val reviewed=WordStudyResources.note(w)?.takeIf { token.findAll(it.example).count()==1 }?.let {
+            token.replace(it.example,"____")+"\n"+it.translation
+        }
+        return (listOfNotNull(LocalCloze.prompt(w),alternate,reviewed)+corpus).distinctBy { normalizeContext(it,w.word) }
     }
     private fun normalizeContext(cloze: String,word: String)=cloze.substringBefore('\n').replace("____",word).lowercase().replace(Regex("\\s+")," ").trim()
     fun vocabulary(w: VocabWord, pool: List<VocabWord>, form: String, key: String): LocalQuestion {
@@ -81,16 +84,19 @@ object LocalContent {
         val cloze = contexts.takeIf { it.isNotEmpty() }?.let { it[random.nextInt(it.size)] }
         val requested=if(form=="sense") "context" else form
         val actual = if(requested=="context" && cloze==null) "meaning" else requested
+        val reviewed=WordStudyResources.note(w)
+        val wordExplanation=reviewed?.let { "${w.word}：${it.meaning}\n${it.example}\n${it.translation}" }
+            ?: "${w.word}：${w.meaning}\n${w.example}\n${w.exampleTranslation}"
         if(actual=="spelling") return LocalQuestion(key,StudyEngine.meaning(w),emptyList(),-1,
-            "${w.word}：${w.meaning}",actual,wordId=w.id,spelling=w.word,context=key)
+            wordExplanation,actual,wordId=w.id,spelling=w.word,context=key)
         val answer = if(actual=="context") w.word else StudyEngine.meaning(w)
-        val targetAtoms=atoms(w.meaning)
-        val choices = pool.asSequence().filter { it.id!=w.id && it.meaning!=w.meaning && atoms(it.meaning).intersect(targetAtoms).isEmpty() }
+        val targetAtoms=atoms(w.meaning)+atoms(StudyEngine.meaning(w))
+        val choices = pool.asSequence().filter { it.id!=w.id && it.meaning!=w.meaning && (atoms(it.meaning)+atoms(StudyEngine.meaning(it))).intersect(targetAtoms).isEmpty() }
             .map { if(actual=="context") it.word else StudyEngine.meaning(it) }
             .filter { it.isNotBlank() && it!=answer }.distinct().toList().shuffled(random).take(3)
         require(choices.size==3) { "词库不足，无法组成可靠题目" }
         val options=(choices+answer).shuffled(random)
         return LocalQuestion(key,if(actual=="context") cloze!! else w.word,options,options.indexOf(answer),
-            "${w.word}：${w.meaning}\n${w.example}\n${w.exampleTranslation}",actual,wordId=w.id,context=if(actual=="context") "example:${w.id}:${cloze.hashCode()}" else key)
+            if(actual=="context") "当前句（填词后）：${cloze!!.replace("____",w.word)}\n常用义参考：${StudyEngine.meaning(w)}" else wordExplanation,actual,wordId=w.id,context=if(actual=="context") "example:${w.id}:${cloze.hashCode()}" else key)
     }
 }

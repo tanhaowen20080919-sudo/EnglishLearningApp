@@ -93,6 +93,26 @@ object WorkflowFactory {
                 if(grammar!=null) LearningParameters.GRAMMAR_SPECIAL_SECONDS else 0)/60.0).toInt())
     }
 
+    /** A content correction may refresh ungraded local vocabulary questions; answered history is immutable. */
+    fun refreshReviewedVocabulary(old: DailyWorkflow,words: List<VocabWord>): DailyWorkflow {
+        val byId=words.associateBy { it.id }
+        var changed=false
+        val steps=old.steps.mapIndexed { index,step ->
+            if(index<old.index || index==old.index && old.feedback.isNotBlank()) return@mapIndexed step
+            val q=step.question ?: return@mapIndexed step
+            val word=byId[q.wordId] ?: return@mapIndexed step
+            if(WordStudyResources.note(word)==null) return@mapIndexed step
+            val sense=com.tanhaowen.contextenglish.study.StudyEngine.meaning(word)
+            val revised=when {
+                q.form=="meaning" && q.prompt==word.word && q.answerText!=sense -> LocalContent.vocabulary(word,words,"meaning",q.id)
+                q.form=="spelling" && q.spelling==word.word && q.prompt==word.meaning.lineSequence().firstOrNull() && q.prompt!=sense -> q.copy(prompt=sense)
+                else -> q
+            }
+            if(revised==q) step else { changed=true;step.copy(question=revised) }
+        }
+        return if(changed) old.copy(steps=steps) else old
+    }
+
     fun readingGrammarDiagnosis(w: DailyWorkflow, tag: String): DailyWorkflow {
         val step=w.step ?: return w
         require(step.question?.form=="reading" && w.feedback.isNotBlank() && !w.correct)

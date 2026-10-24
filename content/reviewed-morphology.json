@@ -1,0 +1,1591 @@
+{
+  "format": 1,
+  "scope": "Explicit word-by-word review of the 264 original entries lacking ECDICT exchange data; notes are original educational explanations, not automatically generated inflections.",
+  "reviewer": "Codex language review; not an independent teacher certification",
+  "records": {
+    "aboard": {
+      "kind": "invariant",
+      "note": "副词/介词：go aboard / aboard the ship；不作规则名词或动词变形。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/aboard"
+    },
+    "abroad": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/abroad"
+    },
+    "abundant": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more abundant / most abundant；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/abundant"
+    },
+    "accessible": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more accessible / most accessible；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/accessible"
+    },
+    "accurate": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more accurate / most accurate；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/accurate"
+    },
+    "adequate": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more adequate / most adequate；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/adequate"
+    },
+    "admirable": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more admirable / most admirable；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/admirable"
+    },
+    "advice": {
+      "kind": "uncountable",
+      "note": "不可数名词“建议”：a piece of advice；advise 是动词，不是 advice 的复数。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/advice"
+    },
+    "against": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/against"
+    },
+    "aggressive": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more aggressive / most aggressive；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/aggressive"
+    },
+    "agricultural": {
+      "kind": "relational",
+      "note": "高中常用作性质、类别、范围或关系形容词，通常不需要机械构造 -er/-est；有可比较语境时须按具体词义判断。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/agricultural"
+    },
+    "agriculture": {
+      "kind": "uncountable",
+      "note": "不可数名词“农业”；相关形容词 agricultural。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/agriculture"
+    },
+    "ahead": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/ahead"
+    },
+    "alike": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more alike / most alike；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/alike"
+    },
+    "alive": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more alive / most alive；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/alive"
+    },
+    "allergic": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more allergic / most allergic；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/allergic"
+    },
+    "although": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/although"
+    },
+    "altogether": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/altogether"
+    },
+    "ambiguous": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more ambiguous / most ambiguous；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/ambiguous"
+    },
+    "anxious": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more anxious / most anxious；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/anxious"
+    },
+    "apart": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/apart"
+    },
+    "apparent": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more apparent / most apparent；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/apparent"
+    },
+    "approximately": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/approximately"
+    },
+    "as": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/as"
+    },
+    "ashamed": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more ashamed / most ashamed；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/ashamed"
+    },
+    "assistance": {
+      "kind": "uncountable",
+      "note": "不可数名词“帮助”；相关动词 assist，assistant（助手）为可数名词。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/assistance"
+    },
+    "attractive": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more attractive / most attractive；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/attractive"
+    },
+    "available": {
+      "kind": "usage",
+      "note": "形容词，be available to/for；相关名词 availability，不写 availables 表示“可用的”。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/available"
+    },
+    "aware": {
+      "kind": "comparison",
+      "note": "形容词 more aware / most aware；常用 be aware of，相关名词 awareness。",
+      "scope": "高中常用义",
+      "reference": "https://en.wiktionary.org/wiki/aware"
+    },
+    "awful": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more awful / most awful；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/awful"
+    },
+    "awkward": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more awkward / most awkward；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/awkward"
+    },
+    "basis": {
+      "kind": "irregular",
+      "note": "名词单数 basis，复数 bases（注意与动词 base 的语法语境区分）。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/basis"
+    },
+    "behalf": {
+      "kind": "usage",
+      "note": "高中重点掌握 on behalf of（代表）；不机械使用 behalfs。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/behalf"
+    },
+    "beneath": {
+      "kind": "invariant",
+      "note": "高中常用作副词、介词或连词，无规则复数、时态或比较级变化；按具体句中用法理解。",
+      "scope": "高中常用义",
+      "reference": "https://en.wiktionary.org/wiki/beneath"
+    },
+    "beneficial": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more beneficial / most beneficial；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/beneficial"
+    },
+    "besides": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/besides"
+    },
+    "beyond": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/beyond"
+    },
+    "bravery": {
+      "kind": "uncountable",
+      "note": "不可数名词“勇敢”；相关形容词 brave，不写 braveries 表示一般勇敢。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/bravery"
+    },
+    "breathless": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more breathless / most breathless；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/breathless"
+    },
+    "cautious": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more cautious / most cautious；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/cautious"
+    },
+    "central": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more central / most central；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/central"
+    },
+    "certain": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more certain / most certain；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/certain"
+    },
+    "changeable": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more changeable / most changeable；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/changeable"
+    },
+    "chaos": {
+      "kind": "uncountable",
+      "note": "不可数名词“混乱”；chaotic 为相关形容词，不把 chaos 当规则复数。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/chaos"
+    },
+    "cheerful": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more cheerful / most cheerful；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/cheerful"
+    },
+    "civil": {
+      "kind": "relational",
+      "note": "高中常用作性质、类别、范围或关系形容词，通常不需要机械构造 -er/-est；有可比较语境时须按具体词义判断。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/civil"
+    },
+    "comfortable": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more comfortable / most comfortable；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/comfortable"
+    },
+    "common": {
+      "kind": "comparison",
+      "note": "比较级 commoner / more common，最高级 commonest / most common；名词 commoner 的“平民”义另看语境。",
+      "scope": "高中常用义",
+      "reference": "https://en.wiktionary.org/wiki/common"
+    },
+    "comprehension": {
+      "kind": "uncountable",
+      "note": "高中常用不可数名词“理解”；常见 reading comprehension。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/comprehension"
+    },
+    "compulsory": {
+      "kind": "relational",
+      "note": "高中常用作性质、类别、范围或关系形容词，通常不需要机械构造 -er/-est；有可比较语境时须按具体词义判断。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/compulsory"
+    },
+    "confident": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more confident / most confident；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/confident"
+    },
+    "congratulation": {
+      "kind": "plural",
+      "note": "祝贺时通常用复数 congratulations；相关动词 congratulate。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/congratulation"
+    },
+    "conservation": {
+      "kind": "uncountable",
+      "note": "高中常用“保护/节约”不可数；相关动词 conserve。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/conservation"
+    },
+    "considerate": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more considerate / most considerate；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/considerate"
+    },
+    "consistent": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more consistent / most consistent；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/consistent"
+    },
+    "controversial": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more controversial / most controversial；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/controversial"
+    },
+    "convenient": {
+      "kind": "comparison",
+      "note": "形容词 more convenient / most convenient；相关名词 convenience。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/convenient"
+    },
+    "conventional": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more conventional / most conventional；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/conventional"
+    },
+    "courage": {
+      "kind": "uncountable",
+      "note": "不可数名词“勇气”；说 show courage / have the courage to do。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/courage"
+    },
+    "dangerous": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more dangerous / most dangerous；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/dangerous"
+    },
+    "data": {
+      "kind": "irregular",
+      "note": "传统上 datum 的复数为 data；现代非专业语境 data 也常作集合性不可数名词，须依上下文判断一致关系。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/data"
+    },
+    "deliberately": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/deliberately"
+    },
+    "delicate": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more delicate / most delicate；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/delicate"
+    },
+    "desperate": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more desperate / most desperate；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/desperate"
+    },
+    "different": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more different / most different；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/different"
+    },
+    "difficult": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more difficult / most difficult；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/difficult"
+    },
+    "digital": {
+      "kind": "relational",
+      "note": "高中常用作性质、类别、范围或关系形容词，通常不需要机械构造 -er/-est；有可比较语境时须按具体词义判断。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/digital"
+    },
+    "distant": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more distant / most distant；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/distant"
+    },
+    "diverse": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more diverse / most diverse；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/diverse"
+    },
+    "due": {
+      "kind": "mixed",
+      "note": "形容词常用 be due to do / due to；名词 dues 常指会费等应缴款项。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/due"
+    },
+    "dynamic": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more dynamic / most dynamic；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/dynamic"
+    },
+    "eager": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more eager / most eager；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/eager"
+    },
+    "education": {
+      "kind": "uncountable",
+      "note": "通常不可数，常用 receive an education / higher education；特殊类别复数不作为通用规则。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/education"
+    },
+    "electricity": {
+      "kind": "uncountable",
+      "note": "不可数名词“电/电力”；electric / electrical 为相关形容词。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/electricity"
+    },
+    "electronic": {
+      "kind": "relational",
+      "note": "高中常用作性质、类别、范围或关系形容词，通常不需要机械构造 -er/-est；有可比较语境时须按具体词义判断。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/electronic"
+    },
+    "elegant": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more elegant / most elegant；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/elegant"
+    },
+    "endless": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more endless / most endless；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/endless"
+    },
+    "enjoyable": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more enjoyable / most enjoyable；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/enjoyable"
+    },
+    "enthusiastic": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more enthusiastic / most enthusiastic；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/enthusiastic"
+    },
+    "entire": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more entire / most entire；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/entire"
+    },
+    "especially": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/especially"
+    },
+    "eventually": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/eventually"
+    },
+    "evident": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more evident / most evident；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/evident"
+    },
+    "excellent": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more excellent / most excellent；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/excellent"
+    },
+    "expensive": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more expensive / most expensive；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/expensive"
+    },
+    "explicit": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more explicit / most explicit；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/explicit"
+    },
+    "false": {
+      "kind": "comparison",
+      "note": "比较级 falser，最高级 falsest；也可按具体语境用 more/most false。",
+      "scope": "高中常用义",
+      "reference": "https://en.wiktionary.org/wiki/false"
+    },
+    "fantastic": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more fantastic / most fantastic；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/fantastic"
+    },
+    "flexible": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more flexible / most flexible；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/flexible"
+    },
+    "flu": {
+      "kind": "uncountable",
+      "note": "疾病名，常用 the flu / have flu；不把“流感”机械变为 flus。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/flu"
+    },
+    "fluency": {
+      "kind": "uncountable",
+      "note": "不可数名词“流利程度”；相关形容词 fluent，副词 fluently。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/fluency"
+    },
+    "fluent": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more fluent / most fluent；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/fluent"
+    },
+    "forever": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/forever"
+    },
+    "fortunate": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more fortunate / most fortunate；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/fortunate"
+    },
+    "fragile": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more fragile / most fragile；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/fragile"
+    },
+    "furniture": {
+      "kind": "uncountable",
+      "note": "不可数名词“家具”：a piece of furniture；不使用 furnitures 表示一般家具。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/furniture"
+    },
+    "garbage": {
+      "kind": "uncountable",
+      "note": "高中常用不可数名词“垃圾”；说 a bag of garbage，不机械加 -s。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/garbage"
+    },
+    "generous": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more generous / most generous；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/generous"
+    },
+    "gradual": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more gradual / most gradual；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/gradual"
+    },
+    "gradually": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/gradually"
+    },
+    "grateful": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more grateful / most grateful；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/grateful"
+    },
+    "guidance": {
+      "kind": "uncountable",
+      "note": "不可数名词“指导”；可说 a piece of guidance / under guidance。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/guidance"
+    },
+    "guilty": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more guilty / most guilty；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/guilty"
+    },
+    "hardly": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/hardly"
+    },
+    "harmful": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more harmful / most harmful；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/harmful"
+    },
+    "helpful": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more helpful / most helpful；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/helpful"
+    },
+    "honest": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more honest / most honest；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/honest"
+    },
+    "hopeless": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more hopeless / most hopeless；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/hopeless"
+    },
+    "horrible": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more horrible / most horrible；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/horrible"
+    },
+    "however": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/however"
+    },
+    "huge": {
+      "kind": "comparison",
+      "note": "比较级 huger，最高级 hugest；有些语境也可用 more/most huge，不写 hugger。",
+      "scope": "高中常用义",
+      "reference": "https://en.wiktionary.org/wiki/huge"
+    },
+    "humorous": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more humorous / most humorous；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/humorous"
+    },
+    "immediate": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more immediate / most immediate；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/immediate"
+    },
+    "immediately": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/immediately"
+    },
+    "importance": {
+      "kind": "uncountable",
+      "note": "常用不可数名词：the importance of；不是 an importance / importances。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/importance"
+    },
+    "important": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more important / most important；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/important"
+    },
+    "impossible": {
+      "kind": "usage",
+      "note": "形容词“不可能的”，通常不作程度比较；相关名词 impossibility，副词 impossibly。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/impossible"
+    },
+    "indeed": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/indeed"
+    },
+    "independence": {
+      "kind": "uncountable",
+      "note": "高中常用不可数名词“独立/自主”；相关形容词 independent。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/independence"
+    },
+    "information": {
+      "kind": "uncountable",
+      "note": "高中常用“信息”不可数：a piece of information；不用 an information / informations。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/information"
+    },
+    "instead": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/instead"
+    },
+    "just": {
+      "kind": "mixed",
+      "note": "高中常用副词“刚刚/仅仅”不变形；形容词“公正的”比较常用 more just / most just。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/just"
+    },
+    "latter": {
+      "kind": "relational",
+      "note": "高中常用作性质、类别、范围或关系形容词，通常不需要机械构造 -er/-est；有可比较语境时须按具体词义判断。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/latter"
+    },
+    "laughter": {
+      "kind": "uncountable",
+      "note": "不可数名词“笑声”；说 a burst of laughter，不机械加 -s。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/laughter"
+    },
+    "legal": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more legal / most legal；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/legal"
+    },
+    "literary": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more literary / most literary；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/literary"
+    },
+    "main": {
+      "kind": "relational",
+      "note": "高中常用作性质、类别、范围或关系形容词，通常不需要机械构造 -er/-est；有可比较语境时须按具体词义判断。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/main"
+    },
+    "meanwhile": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/meanwhile"
+    },
+    "media": {
+      "kind": "irregular",
+      "note": "medium 的复数可为 media；“媒体”常用 the media。不要从 media 机械写 medias。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/media"
+    },
+    "mental": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more mental / most mental；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/mental"
+    },
+    "merely": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/merely"
+    },
+    "modest": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more modest / most modest；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/modest"
+    },
+    "nationwide": {
+      "kind": "relational",
+      "note": "高中常用作性质、类别、范围或关系形容词，通常不需要机械构造 -er/-est；有可比较语境时须按具体词义判断。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/nationwide"
+    },
+    "natural": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more natural / most natural；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/natural"
+    },
+    "nearby": {
+      "kind": "invariant",
+      "note": "作形容词或副词“附近的/在附近”，通常不构造 nearby-er/nearby-est；nearer/nearest 属于 near。",
+      "scope": "高中常用义",
+      "reference": "https://en.wiktionary.org/wiki/nearby"
+    },
+    "neither": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/neither"
+    },
+    "nervous": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more nervous / most nervous；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/nervous"
+    },
+    "nor": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/nor"
+    },
+    "nowadays": {
+      "kind": "invariant",
+      "note": "高中常用作副词、介词或连词，无规则复数、时态或比较级变化；按具体句中用法理解。",
+      "scope": "高中常用义",
+      "reference": "https://en.wiktionary.org/wiki/nowadays"
+    },
+    "nuclear": {
+      "kind": "relational",
+      "note": "高中常用作性质、类别、范围或关系形容词，通常不需要机械构造 -er/-est；有可比较语境时须按具体词义判断。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/nuclear"
+    },
+    "nutrition": {
+      "kind": "uncountable",
+      "note": "不可数名词“营养”；nutritious / nutritional 为相关形容词。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/nutrition"
+    },
+    "obvious": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more obvious / most obvious；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/obvious"
+    },
+    "once": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/once"
+    },
+    "optimistic": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more optimistic / most optimistic；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/optimistic"
+    },
+    "optional": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more optional / most optional；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/optional"
+    },
+    "otherwise": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/otherwise"
+    },
+    "ought": {
+      "kind": "modal",
+      "note": "情态动词 ought，常与 to 连用；没有普通动词的第三人称 -s、-ing 和不定式变化。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/ought"
+    },
+    "outstanding": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more outstanding / most outstanding；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/outstanding"
+    },
+    "painful": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more painful / most painful；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/painful"
+    },
+    "part-time": {
+      "kind": "relational",
+      "note": "高中常用作性质、类别、范围或关系形容词，通常不需要机械构造 -er/-est；有可比较语境时须按具体词义判断。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/part-time"
+    },
+    "particular": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more particular / most particular；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/particular"
+    },
+    "partly": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/partly"
+    },
+    "patience": {
+      "kind": "uncountable",
+      "note": "不可数名词“耐心”；patient 是相关形容词，不能与“病人”名词用法混淆。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/patience"
+    },
+    "peace": {
+      "kind": "uncountable",
+      "note": "高中常用“和平/安宁”通常不可数；peaceful / peacefully 为相关形式。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/peace"
+    },
+    "peaceful": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more peaceful / most peaceful；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/peaceful"
+    },
+    "percent": {
+      "kind": "usage",
+      "note": "数字后通常用单数形式 percent；percent of + 名词的主谓一致依其指代内容判断；percentage 可数复数 percentages。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/percent"
+    },
+    "permanent": {
+      "kind": "relational",
+      "note": "高中常用作性质、类别、范围或关系形容词，通常不需要机械构造 -er/-est；有可比较语境时须按具体词义判断。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/permanent"
+    },
+    "personal": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more personal / most personal；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/personal"
+    },
+    "personally": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/personally"
+    },
+    "physical": {
+      "kind": "mixed",
+      "note": "形容词 physical → 副词 physically；作“体检”名词可用复数 physicals。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/physical"
+    },
+    "plenty": {
+      "kind": "usage",
+      "note": "常用 plenty of + 可数复数或不可数名词；不把 plenty 当动词加 -ed/-ing。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/plenty"
+    },
+    "poisonous": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more poisonous / most poisonous；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/poisonous"
+    },
+    "political": {
+      "kind": "relational",
+      "note": "高中常用作性质、类别、范围或关系形容词，通常不需要机械构造 -er/-est；有可比较语境时须按具体词义判断。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/political"
+    },
+    "possible": {
+      "kind": "usage",
+      "note": "形容词“可能的”；常用 as ... as possible，相关名词 possibility（复数 possibilities）、副词 possibly。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/possible"
+    },
+    "powerful": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more powerful / most powerful；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/powerful"
+    },
+    "precious": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more precious / most precious；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/precious"
+    },
+    "precise": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more precise / most precise；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/precise"
+    },
+    "previous": {
+      "kind": "usage",
+      "note": "形容词“以前的”，通常不作程度比较；副词 previously。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/previous"
+    },
+    "probably": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/probably"
+    },
+    "proper": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more proper / most proper；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/proper"
+    },
+    "properly": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/properly"
+    },
+    "public": {
+      "kind": "usage",
+      "note": "常用形容词“公共的”；the public 指公众，不能把 publics 当作一般必记复数。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/public"
+    },
+    "punctual": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more punctual / most punctual；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/punctual"
+    },
+    "racial": {
+      "kind": "relational",
+      "note": "高中常用作性质、类别、范围或关系形容词，通常不需要机械构造 -er/-est；有可比较语境时须按具体词义判断。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/racial"
+    },
+    "random": {
+      "kind": "usage",
+      "note": "高中常用形容词 random 和短语 at random；副词 randomly。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/random"
+    },
+    "rather": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/rather"
+    },
+    "reasonable": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more reasonable / most reasonable；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/reasonable"
+    },
+    "recent": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more recent / most recent；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/recent"
+    },
+    "regardless": {
+      "kind": "usage",
+      "note": "常用于 regardless of（不管/不顾），不是动词，不加时态词尾。",
+      "scope": "高中常用义",
+      "reference": "https://en.wiktionary.org/wiki/regardless"
+    },
+    "relevant": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more relevant / most relevant；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/relevant"
+    },
+    "reliable": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more reliable / most reliable；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/reliable"
+    },
+    "ridiculous": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more ridiculous / most ridiculous；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/ridiculous"
+    },
+    "rigid": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more rigid / most rigid；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/rigid"
+    },
+    "safety": {
+      "kind": "uncountable",
+      "note": "高中常用“安全”是不可数名词；不能套用 safety → safeties 表示一般安全。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/safety"
+    },
+    "sale": {
+      "kind": "plural",
+      "note": "名词 sale → sales；on sale 是在售/打折；sell 是相关动词，不是 sale 的规则过去式。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/sale"
+    },
+    "sceptical": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more sceptical / most sceptical；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/sceptical"
+    },
+    "scientific": {
+      "kind": "relational",
+      "note": "高中常用作性质、类别、范围或关系形容词，通常不需要机械构造 -er/-est；有可比较语境时须按具体词义判断。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/scientific"
+    },
+    "seldom": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/seldom"
+    },
+    "selfish": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more selfish / most selfish；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/selfish"
+    },
+    "serious": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more serious / most serious；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/serious"
+    },
+    "shortly": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/shortly"
+    },
+    "significant": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more significant / most significant；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/significant"
+    },
+    "silent": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more silent / most silent；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/silent"
+    },
+    "similar": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more similar / most similar；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/similar"
+    },
+    "since": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/since"
+    },
+    "sincerely": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/sincerely"
+    },
+    "skilful": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more skilful / most skilful；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/skilful"
+    },
+    "social": {
+      "kind": "relational",
+      "note": "高中常用作性质、类别、范围或关系形容词，通常不需要机械构造 -er/-est；有可比较语境时须按具体词义判断。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/social"
+    },
+    "software": {
+      "kind": "uncountable",
+      "note": "不可数名词“软件”：a piece of software / a software program；不用 softwares 表示一般软件。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/software"
+    },
+    "solar": {
+      "kind": "relational",
+      "note": "高中常用作性质、类别、范围或关系形容词，通常不需要机械构造 -er/-est；有可比较语境时须按具体词义判断。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/solar"
+    },
+    "somehow": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/somehow"
+    },
+    "splendid": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more splendid / most splendid；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/splendid"
+    },
+    "statistics": {
+      "kind": "agreement",
+      "note": "指“统计学”通常接单数谓语；指“统计数据”通常接复数谓语。单项统计数据可说 a statistic。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/statistics"
+    },
+    "status": {
+      "kind": "plural",
+      "note": "名词单数 status，复数 statuses；不是 stati。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/status"
+    },
+    "straightforward": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more straightforward / most straightforward；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/straightforward"
+    },
+    "stubborn": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more stubborn / most stubborn；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/stubborn"
+    },
+    "subjective": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more subjective / most subjective；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/subjective"
+    },
+    "successful": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more successful / most successful；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/successful"
+    },
+    "sudden": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more sudden / most sudden；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/sudden"
+    },
+    "suitable": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more suitable / most suitable；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/suitable"
+    },
+    "superb": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more superb / most superb；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/superb"
+    },
+    "technical": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more technical / most technical；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/technical"
+    },
+    "theoretical": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more theoretical / most theoretical；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/theoretical"
+    },
+    "therefore": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/therefore"
+    },
+    "thorough": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more thorough / most thorough；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/thorough"
+    },
+    "though": {
+      "kind": "invariant",
+      "note": "连词/副词“虽然/不过”，不作名词复数或动词变化。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/though"
+    },
+    "throughout": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/throughout"
+    },
+    "thus": {
+      "kind": "invariant",
+      "note": "高中常用作副词、介词或连词，无规则复数、时态或比较级变化；按具体句中用法理解。",
+      "scope": "高中常用义",
+      "reference": "https://en.wiktionary.org/wiki/thus"
+    },
+    "tourism": {
+      "kind": "uncountable",
+      "note": "不可数名词“旅游业”；tourist（游客）可数，复数 tourists。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/tourism"
+    },
+    "traditional": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more traditional / most traditional；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/traditional"
+    },
+    "troublesome": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more troublesome / most troublesome；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/troublesome"
+    },
+    "truly": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/truly"
+    },
+    "typical": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more typical / most typical；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/typical"
+    },
+    "unable": {
+      "kind": "usage",
+      "note": "形容词，常用 be unable to do；不能按动词变形，也不写 unable-er。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/unable"
+    },
+    "unbearable": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more unbearable / most unbearable；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/unbearable"
+    },
+    "unbelievable": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more unbelievable / most unbelievable；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/unbelievable"
+    },
+    "uncertain": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more uncertain / most uncertain；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/uncertain"
+    },
+    "uncomfortable": {
+      "kind": "comparison",
+      "note": "比较级 more uncomfortable，最高级 most uncomfortable；相关副词 uncomfortably。",
+      "scope": "高中常用义",
+      "reference": "https://en.wiktionary.org/wiki/uncomfortable"
+    },
+    "unconditional": {
+      "kind": "usage",
+      "note": "形容词“无条件的”，通常不作程度比较；常用 unconditional support。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/unconditional"
+    },
+    "unconscious": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more unconscious / most unconscious；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/unconscious"
+    },
+    "unemployment": {
+      "kind": "uncountable",
+      "note": "不可数名词“失业/失业状况”；相关形容词 unemployed。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/unemployment"
+    },
+    "unique": {
+      "kind": "usage",
+      "note": "“独一无二的”通常不作规则比较级；常用 a unique opportunity，不机械加 -er/-est。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/unique"
+    },
+    "unless": {
+      "kind": "invariant",
+      "note": "高中常用作副词、介词或连词，无规则复数、时态或比较级变化；按具体句中用法理解。",
+      "scope": "高中常用义",
+      "reference": "https://en.wiktionary.org/wiki/unless"
+    },
+    "unlike": {
+      "kind": "invariant",
+      "note": "高中常用作副词、介词或连词，无规则复数、时态或比较级变化；按具体句中用法理解。",
+      "scope": "高中常用义",
+      "reference": "https://en.wiktionary.org/wiki/unlike"
+    },
+    "unusual": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more unusual / most unusual；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/unusual"
+    },
+    "unwilling": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more unwilling / most unwilling；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/unwilling"
+    },
+    "upward": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/upward"
+    },
+    "urban": {
+      "kind": "relational",
+      "note": "高中常用作性质、类别、范围或关系形容词，通常不需要机械构造 -er/-est；有可比较语境时须按具体词义判断。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/urban"
+    },
+    "urgent": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more urgent / most urgent；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/urgent"
+    },
+    "vacant": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more vacant / most vacant；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/vacant"
+    },
+    "vague": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more vague / most vague；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/vague"
+    },
+    "valid": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more valid / most valid；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/valid"
+    },
+    "valuable": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more valuable / most valuable；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/valuable"
+    },
+    "various": {
+      "kind": "relational",
+      "note": "高中常用作性质、类别、范围或关系形容词，通常不需要机械构造 -er/-est；有可比较语境时须按具体词义判断。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/various"
+    },
+    "via": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/via"
+    },
+    "violence": {
+      "kind": "uncountable",
+      "note": "高中常用不可数名词“暴力”；violent 为相关形容词。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/violence"
+    },
+    "violent": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more violent / most violent；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/violent"
+    },
+    "vivid": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more vivid / most vivid；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/vivid"
+    },
+    "warmth": {
+      "kind": "uncountable",
+      "note": "通常不可数；形容词 warm，副词 warmly。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/warmth"
+    },
+    "wealth": {
+      "kind": "uncountable",
+      "note": "“财富”通常不可数；相关形容词 wealthy，不机械写 wealths。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/wealth"
+    },
+    "welfare": {
+      "kind": "uncountable",
+      "note": "常用不可数名词：社会福利/福祉；说 improve welfare，不机械加 -s。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/welfare"
+    },
+    "whatever": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/whatever"
+    },
+    "whenever": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/whenever"
+    },
+    "wherever": {
+      "kind": "invariant",
+      "note": "高中常用作副词、介词或连词，无规则复数、时态或比较级变化；按具体句中用法理解。",
+      "scope": "高中常用义",
+      "reference": "https://en.wiktionary.org/wiki/wherever"
+    },
+    "whether": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/whether"
+    },
+    "whichever": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/whichever"
+    },
+    "while": {
+      "kind": "mixed",
+      "note": "连词 while 与短语 for a while；作动词“消磨时间”时为 whiles / whiled / whiling。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/while"
+    },
+    "widespread": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more widespread / most widespread；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/widespread"
+    },
+    "wildlife": {
+      "kind": "uncountable",
+      "note": "不可数集合名词“野生动植物”；不机械加 -s。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/wildlife"
+    },
+    "within": {
+      "kind": "invariant",
+      "note": "高中常用介词/副词，within a week / within reach；无需规则复数或动词变化。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/within"
+    },
+    "worldwide": {
+      "kind": "relational",
+      "note": "高中常用作性质、类别、范围或关系形容词，通常不需要机械构造 -er/-est；有可比较语境时须按具体词义判断。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/worldwide"
+    },
+    "worth": {
+      "kind": "usage",
+      "note": "形容词常用 be worth doing / worth + 金额；不要把它当动词写 worthed。",
+      "scope": "高中常用义及常见语法；不宣称穷尽罕见或专业用法",
+      "reference": "https://en.wiktionary.org/wiki/worth"
+    },
+    "worthwhile": {
+      "kind": "comparison",
+      "note": "形容词表达程度比较时，常用 more worthwhile / most worthwhile；不机械拼写 -er/-est。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/worthwhile"
+    },
+    "yet": {
+      "kind": "invariant",
+      "note": "常用作副词、介词、连词或代词：不按名词加复数，也不按动词加 -s/-ed/-ing；具体用法看句中词性。",
+      "scope": "高中常用词性；不把罕见专业义或特殊复数当作必须记忆的规则形式",
+      "reference": "https://en.wiktionary.org/wiki/yet"
+    }
+  }
+}
