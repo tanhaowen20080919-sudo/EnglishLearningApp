@@ -1,0 +1,79 @@
+{
+  "source_commit": "7c85e176205c00e4da8f03370f3ca645a8b58892",
+  "app_tree": "b9c337987a9ca23280658a881ffc7cd767a903ca",
+  "run_id": 40045531503,
+  "run_url": "https://github.com/tanhaowen20080919-sudo/EnglishLearningApp/actions/runs/40045531503",
+  "pr_url": "https://github.com/tanhaowen20080919-sudo/EnglishLearningApp/pull/5",
+  "ui": {
+    "tests": 5,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "api_level": 35,
+    "seconds": 17.084,
+    "p95_ms": 113,
+    "latency_ms": [
+      103,
+      113,
+      72,
+      64,
+      58
+    ],
+    "percentile_method": "empirical nearest rank; five-card sample, not a population latency claim",
+    "scope": "Android emulator, not physical-device touch latency",
+    "artifact_id": 12540978611,
+    "cases": [
+      "quickDayCanFinishOfflineAfterRecreationWithRealGradingAndTimingEvidence",
+      "activeRecallResumesWithoutDuplicateNavigation",
+      "sessionSnapshotAndAnswerAreAtomicAndBackupSafe",
+      "secondaryToolsPreserveDraftsAndSearchWithSingleNavigation",
+      "billingBackupRoundTripAndInvalidImportKeepLocalData"
+    ]
+  },
+  "pr_ui_confirmation": {
+    "run_id": 40045532032,
+    "tests": 5,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "api_level": 35,
+    "seconds": 16.714,
+    "p95_ms": 380,
+    "latency_ms": [
+      380,
+      89,
+      71,
+      101,
+      81
+    ],
+    "percentile_method": "empirical nearest rank; five-card sample, not a population latency claim",
+    "scope": "Android emulator, not physical-device touch latency",
+    "artifact_id": 12540763316,
+    "cases": [
+      "quickDayCanFinishOfflineAfterRecreationWithRealGradingAndTimingEvidence",
+      "activeRecallResumesWithoutDuplicateNavigation",
+      "sessionSnapshotAndAnswerAreAtomicAndBackupSafe",
+      "secondaryToolsPreserveDraftsAndSearchWithSingleNavigation",
+      "billingBackupRoundTripAndInvalidImportKeepLocalData"
+    ]
+  },
+  "jvm": {
+    "tests": 146,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "artifact_id": 12541121608,
+    "run_id": 40045531503,
+    "source_commit": "7c85e176205c00e4da8f03370f3ca645a8b58892"
+  },
+  "release_artifact_id": 12541766040,
+  "release_artifact_zip_sha256": "ce5d066bf67d229933b9bbde4c93b7f62ec0b9032bb990f80e35595cea975ef3",
+  "apk_original_resources": {
+    "independently_verified_from_downloaded_apk": true,
+    "source_commit": "19bd6d46a216c400de6cb1fdc81d8d4537abbbea",
+    "vocabulary_sha256": "aa823f06665c051e5bcfdc4940a0490de8878b6d2ba19e1053527a1d42439072",
+    "audio_manifest_sha256": "49bc7a0c7500e87e4ca853509d44ddae2c7c0ae99f6b1a1c63d4f56f556540a8",
+    "audio_count": 1640,
+    "audio_aggregate_sha256": "73af19e8798e22ef942fd307fa194ce608fc28900cabe87d238f99449e0abdb7"
+  }
+}

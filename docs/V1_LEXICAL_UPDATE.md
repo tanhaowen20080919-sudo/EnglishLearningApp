@@ -16,13 +16,21 @@
 
 新增资料编译为独立的 `word-study-notes.json`，数据库保持 v6。资源在既有数据库 IO 打开路径加载，解析失败保留旧词库回退，不依赖网络或 AI。
 
-对已开始的当天计划，`WorkflowFactory.refreshReviewedVocabulary` 只更新尚未作答、可确认由本地词库生成的词义题及旧拼写提示；已答前缀、当前已评分题、反馈、选择、掌握度、计时和任务索引不变。修复后重复加载不再改变题目。
+对已开始的当天计划，`WorkflowFactory.refreshReviewedVocabulary` 只更新尚未作答、与旧词头及释义模式匹配的词义题及旧拼写提示；已答前缀、当前已评分题、反馈、选择、掌握度、计时和任务索引不变。修复后重复加载不再改变题目。
 
 新核心义同时加入干扰项的近义排除，避免新增“荣幸”义后仍将同义项当错误答案。语境题反馈引用实际抽到的填词句，不再显示另一条默认例句。
 
 ## 验证及正式 APK
 
-本轮最终云端验证与 APK 校验结果在完成后记录于此及验收清单 execution；待执行项不得当作通过。新增测试核对罕见名词排序修复、自定义释义保护、1640 条词形/用法记录、真实 SQLite 评分、旧题修正的幂等性与历史保护、新核心义的干扰项排歧、实际语境反馈。
+- 本地与云端最终源码通过 **146 项 JVM/Robolectric 测试**，0 失败、0 错误、0 跳过；6 项签名恢复安全测试通过。逐例断言结果见 [code10 测试记录](audit/test-results-code10.json)。
+- Lint：0 错误、12 警告、1 信息；Debug、明确未签名的验证 Release 和 Android 测试 APK 编译通过。
+- API35 模拟器实际执行 **5 项 UI/数据测试**，0 失败、0 跳过：完整快速日、真实评分/拼写/语境、Activity 重建、次日计划、0 次 AI、单层导航与草稿/备份保护。
+- 显示本地释义五次原始耗时 **[103, 113, 72, 64, 58] ms**，经验最近秩 P95 **113 ms**。这是该模拟器动作的小样本，不代表全局真机性能。
+- [正式 Build APK](https://github.com/tanhaowen20080919-sudo/EnglishLearningApp/actions/runs/40045531503) 的验证、UI、正式签名三项任务全部通过；PR #5 独立验证也通过。源码提交 `7c85e176205c00e4da8f03370f3ca645a8b58892`，应用树 `b9c337987a9ca23280658a881ffc7cd767a903ca`；合并后的文档更新不改变受测应用代码。
+- 下载后独立核验：固定证书、包名、版本、非调试、APK ZIP 完整性、zipalign、原1640音频和新增资料资产 SHA-256 均通过。机器记录见 [code10 APK](audit/release-code10.json) 与 [云端证据](audit/cloud-verification-code10.json)。
+- 正式 APK：`EnglishLearning-v1.0.0-code10-release.apk`；[Actions 下载页](https://github.com/tanhaowen20080919-sudo/EnglishLearningApp/actions/runs/40045531503/artifacts/12541766040)。文件 SHA-256：`16e89f74c8bafd1c5f40ba368661d8166c9589d44fbbeb41299c534b7946967e`。
+
+新增测试核对罕见名词排序修复、自定义释义保护、1640 条词形/用法记录、真实 SQLite 评分、旧题修正的幂等性与历史保护、新核心义的干扰项排歧、实际语境反馈。
 
 ```sh
 python3 tools/build_word_study_notes.py

@@ -12556,7 +12556,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code9；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -12608,7 +12608,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code9；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -12660,7 +12660,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code9；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -12712,7 +12712,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code9；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -12764,7 +12764,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code9；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -12816,7 +12816,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code9；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -12868,7 +12868,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code9；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -12920,7 +12920,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code9；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -12972,7 +12972,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code9；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -13024,7 +13024,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code9；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -13445,7 +13445,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code9；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -13497,7 +13497,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code9；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -13549,7 +13549,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code9；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -13601,7 +13601,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code9；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -13653,7 +13653,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code9；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -14553,7 +14553,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code9；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         }
       ],
       "tests": [
@@ -14590,7 +14590,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code9；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
@@ -14637,7 +14637,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code9；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
@@ -14694,7 +14694,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code9；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
@@ -14751,7 +14751,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code9；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
@@ -14803,7 +14803,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code9；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
@@ -14860,7 +14860,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code9；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
@@ -14917,7 +14917,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code9；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
@@ -14974,7 +14974,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code9；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
@@ -15031,7 +15031,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code9；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
@@ -15078,7 +15078,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code9；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
@@ -15125,7 +15125,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code9；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
@@ -15172,7 +15172,7 @@
         {
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
-          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code9；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+          "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code10；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
         },
         {
           "file": "app/src/main/java/com/tanhaowen/contextenglish/adaptive/DailyWorkflow.kt",
@@ -16479,9 +16479,57 @@
     "content": "原词库/音频固定哈希不变；243条原创高中卡片、261词有效搭配、1640词形/用法记录具有明确来源与覆盖边界；Codex语言核对不冒称独立教师认证，不以行数或非空字段认定全量教学审校。"
   },
   "execution": {
-    "jvm": "pending code10 final verification",
-    "android_ui": "pending code10 cloud run",
-    "release": "pending code10 permanent signing",
+    "jvm": {
+      "tests": 146,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "local_report": "docs/audit/test-results-code10.json"
+    },
+    "android_ui": {
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "api_level": 35,
+      "seconds": 17.084,
+      "p95_ms": 113,
+      "latency_ms": [
+        103,
+        113,
+        72,
+        64,
+        58
+      ],
+      "percentile_method": "empirical nearest rank; five-card sample, not a population latency claim",
+      "scope": "Android emulator, not physical-device touch latency",
+      "artifact_id": 12540978611,
+      "cases": [
+        "quickDayCanFinishOfflineAfterRecreationWithRealGradingAndTimingEvidence",
+        "activeRecallResumesWithoutDuplicateNavigation",
+        "sessionSnapshotAndAnswerAreAtomicAndBackupSafe",
+        "secondaryToolsPreserveDraftsAndSearchWithSingleNavigation",
+        "billingBackupRoundTripAndInvalidImportKeepLocalData"
+      ]
+    },
+    "release": {
+      "application_id": "com.tanhaowen.contextenglish",
+      "version_code": 10,
+      "version": "1.0.0",
+      "certificate_sha256": "e13229f272357c3d270ae903c1a93bf3b902138282cf24aabe9e8e172d87fbf1",
+      "apk_sha256": "16e89f74c8bafd1c5f40ba368661d8166c9589d44fbbeb41299c534b7946967e",
+      "debuggable": false,
+      "offline_audio_files": 1640,
+      "reviewed_study_cards": 243,
+      "morphology_records": 1640,
+      "study_notes_sha256": "22d4ad378a387ee34e0f37e51c6dc52ce5d2e2ee5ca026c59df9a3cef56d3ad3",
+      "signing_identity": "permanent-v1.0-and-later",
+      "run_url": "https://github.com/tanhaowen20080919-sudo/EnglishLearningApp/actions/runs/40045531503",
+      "artifact_id": 12541766040,
+      "source_commit": "7c85e176205c00e4da8f03370f3ca645a8b58892",
+      "apksigner": "PASS",
+      "zipalign": "PASS"
+    },
     "resources": {
       "reviewed_study_cards": 243,
       "effective_collocations": 261,
@@ -16490,7 +16538,29 @@
       "scope": "record coverage does not certify all senses match the high-school curriculum"
     },
     "ai_live_provider": "Not exercised; manual HTTPS production path remains, no paid provider calls",
-    "physical_device": "No physical device; emulator checks cannot replace hardware acceptance"
+    "physical_device": "No physical device; emulator checks cannot replace hardware acceptance",
+    "source_commit": "7c85e176205c00e4da8f03370f3ca645a8b58892",
+    "app_tree": "b9c337987a9ca23280658a881ffc7cd767a903ca",
+    "cloud_workflow": "https://github.com/tanhaowen20080919-sudo/EnglishLearningApp/actions/runs/40045531503",
+    "cloud_jvm": {
+      "tests": 146,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "artifact_id": 12541121608,
+      "run_id": 40045531503,
+      "source_commit": "7c85e176205c00e4da8f03370f3ca645a8b58892"
+    },
+    "verified_at_utc": "2026-10-24T00:42:09.831077+00:00",
+    "lint": {
+      "errors": 0,
+      "warnings": 12,
+      "information": 1
+    },
+    "signing_safety_tests": {
+      "tests": 6,
+      "failures": 0
+    }
   },
   "previous_execution_code9": {
     "jvm": {
