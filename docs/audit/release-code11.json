@@ -1,0 +1,13 @@
+{
+  "application_id": "com.tanhaowen.contextenglish",
+  "version_code": 11,
+  "version": "1.0.0",
+  "certificate_sha256": "e13229f272357c3d270ae903c1a93bf3b902138282cf24aabe9e8e172d87fbf1",
+  "apk_sha256": "cefed86fbca15b38005655f35077eaf050fc433f64ceb2e1e079bfb22dffcb7e",
+  "debuggable": false,
+  "offline_audio_files": 1640,
+  "reviewed_study_cards": 1640,
+  "morphology_records": 1640,
+  "study_notes_sha256": "4b057087d6b807c76afc3ebbf5e28ea64e84c86c6eacc524f06e3d3b3ae1852c",
+  "signing_identity": "permanent-v1.0-and-later"
+}

@@ -1,0 +1,107 @@
+{
+  "source_commit": "417b6fa5502c63691acee89cb0bfd39cc3de52a2",
+  "app_tree": "815dab61c441d14786327fd0255d06baecf0dba9",
+  "run_id": 40057808843,
+  "run_url": "https://github.com/tanhaowen20080919-sudo/EnglishLearningApp/actions/runs/40057808843",
+  "pr_url": "https://github.com/tanhaowen20080919-sudo/EnglishLearningApp/pull/6",
+  "ui": {
+    "tests": 5,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "api_level": 35,
+    "seconds": 19.435,
+    "p95_ms": 536,
+    "latency_ms": [
+      536,
+      118,
+      84,
+      66,
+      65
+    ],
+    "percentile_method": "empirical nearest rank; five-card sample, not a population latency claim",
+    "scope": "Android emulator, not physical-device touch latency",
+    "artifact_id": 12546535108,
+    "cases": [
+      "quickDayCanFinishOfflineAfterRecreationWithRealGradingAndTimingEvidence",
+      "activeRecallResumesWithoutDuplicateNavigation",
+      "sessionSnapshotAndAnswerAreAtomicAndBackupSafe",
+      "secondaryToolsPreserveDraftsAndSearchWithSingleNavigation",
+      "billingBackupRoundTripAndInvalidImportKeepLocalData"
+    ]
+  },
+  "pr_ui_confirmation": {
+    "tests": 5,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "run_id": 40057814291,
+    "api_level": 35,
+    "seconds": 19.715,
+    "p95_ms": 479,
+    "latency_ms": [
+      479,
+      97,
+      78,
+      88,
+      76
+    ],
+    "percentile_method": "empirical nearest rank; five-card sample, not a population latency claim",
+    "scope": "Android emulator, not physical-device touch latency",
+    "artifact_id": 12545939101,
+    "cases": [
+      "quickDayCanFinishOfflineAfterRecreationWithRealGradingAndTimingEvidence",
+      "activeRecallResumesWithoutDuplicateNavigation",
+      "sessionSnapshotAndAnswerAreAtomicAndBackupSafe",
+      "secondaryToolsPreserveDraftsAndSearchWithSingleNavigation",
+      "billingBackupRoundTripAndInvalidImportKeepLocalData"
+    ]
+  },
+  "jvm": {
+    "tests": 159,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "artifact_id": 12546103415,
+    "run_id": 40057808843,
+    "run_url": "https://github.com/tanhaowen20080919-sudo/EnglishLearningApp/actions/runs/40057808843",
+    "source_commit": "417b6fa5502c63691acee89cb0bfd39cc3de52a2"
+  },
+  "release_artifact_id": 12546675392,
+  "release_artifact_zip_sha256": "982bb0f8398f2f85269d5fd0356d5187232d6784dad96323f7774f70a930251d",
+  "apk_original_resources": {
+    "independently_verified_from_downloaded_apk": true,
+    "source_commit": "19bd6d46a216c400de6cb1fdc81d8d4537abbbea",
+    "vocabulary_sha256": "aa823f06665c051e5bcfdc4940a0490de8878b6d2ba19e1053527a1d42439072",
+    "audio_manifest_sha256": "49bc7a0c7500e87e4ca853509d44ddae2c7c0ae99f6b1a1c63d4f56f556540a8",
+    "audio_count": 1640,
+    "audio_aggregate_sha256": "73af19e8798e22ef942fd307fa194ce608fc28900cabe87d238f99449e0abdb7"
+  },
+  "native_packaging": {
+    "zipalign_4k": "PASS",
+    "zipalign_16k": "PASS",
+    "elf_load_alignments": {
+      "lib/arm64-v8a/libandroidx.graphics.path.so": [
+        16384,
+        16384,
+        16384
+      ],
+      "lib/armeabi-v7a/libandroidx.graphics.path.so": [
+        16384,
+        16384,
+        16384
+      ],
+      "lib/x86/libandroidx.graphics.path.so": [
+        16384,
+        16384,
+        16384
+      ],
+      "lib/x86_64/libandroidx.graphics.path.so": [
+        16384,
+        16384,
+        16384
+      ]
+    },
+    "scope": "Packaged-byte alignment verification; not a physical16KB-device runtime claim"
+  }
+}

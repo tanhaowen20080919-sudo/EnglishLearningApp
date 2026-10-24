@@ -16861,9 +16861,57 @@
     "content": "1640词各有独立常用义/搭配/原创双语例句和按词性义项筛选的词形。原资源固定哈希不变；全量实际评分、结构门禁、独立语法/词形交叉检查均有证据。仅少量同形异音资料终审属于外部验收；不宣称真题或独立教师认证。"
   },
   "execution": {
-    "jvm": "Final spelling-variant regression included; exact159-test cloud/local verification pending",
-    "android_ui": "pending final code11 cloud run",
-    "release": "pending final code11 fixed certificate build",
+    "jvm": {
+      "tests": 159,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "report": "docs/audit/test-results-code11.json"
+    },
+    "android_ui": {
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "api_level": 35,
+      "seconds": 19.435,
+      "p95_ms": 536,
+      "latency_ms": [
+        536,
+        118,
+        84,
+        66,
+        65
+      ],
+      "percentile_method": "empirical nearest rank; five-card sample, not a population latency claim",
+      "scope": "Android emulator, not physical-device touch latency",
+      "artifact_id": 12546535108,
+      "cases": [
+        "quickDayCanFinishOfflineAfterRecreationWithRealGradingAndTimingEvidence",
+        "activeRecallResumesWithoutDuplicateNavigation",
+        "sessionSnapshotAndAnswerAreAtomicAndBackupSafe",
+        "secondaryToolsPreserveDraftsAndSearchWithSingleNavigation",
+        "billingBackupRoundTripAndInvalidImportKeepLocalData"
+      ]
+    },
+    "release": {
+      "application_id": "com.tanhaowen.contextenglish",
+      "version_code": 11,
+      "version": "1.0.0",
+      "certificate_sha256": "e13229f272357c3d270ae903c1a93bf3b902138282cf24aabe9e8e172d87fbf1",
+      "apk_sha256": "cefed86fbca15b38005655f35077eaf050fc433f64ceb2e1e079bfb22dffcb7e",
+      "debuggable": false,
+      "offline_audio_files": 1640,
+      "reviewed_study_cards": 1640,
+      "morphology_records": 1640,
+      "study_notes_sha256": "4b057087d6b807c76afc3ebbf5e28ea64e84c86c6eacc524f06e3d3b3ae1852c",
+      "signing_identity": "permanent-v1.0-and-later",
+      "run_url": "https://github.com/tanhaowen20080919-sudo/EnglishLearningApp/actions/runs/40057808843",
+      "artifact_id": 12546675392,
+      "source_commit": "417b6fa5502c63691acee89cb0bfd39cc3de52a2",
+      "apksigner": "PASS",
+      "zipalign": "PASS"
+    },
     "resources": {
       "reviewed_study_cards": 1640,
       "effective_collocations": 1640,
@@ -16875,7 +16923,41 @@
     },
     "ai_live_provider": "Personal paid relay/model not exercised; production HTTPS transport verified with real local TLS sockets and synthetic remote responses",
     "physical_device": "No physical phone; all device-only boundaries in external acceptance",
-    "language_expert": "Seven specified polysemous/homograph notes and retained recordings await expert final check; no teacher certification claimed"
+    "language_expert": "Seven specified polysemous/homograph notes and retained recordings await expert final check; no teacher certification claimed",
+    "source_commit": "417b6fa5502c63691acee89cb0bfd39cc3de52a2",
+    "app_tree": "815dab61c441d14786327fd0255d06baecf0dba9",
+    "cloud_workflow": "https://github.com/tanhaowen20080919-sudo/EnglishLearningApp/actions/runs/40057808843",
+    "cloud_jvm": {
+      "tests": 159,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "artifact_id": 12546103415,
+      "run_id": 40057808843,
+      "run_url": "https://github.com/tanhaowen20080919-sudo/EnglishLearningApp/actions/runs/40057808843",
+      "source_commit": "417b6fa5502c63691acee89cb0bfd39cc3de52a2"
+    },
+    "verified_at_utc": "2026-10-24T03:35:29.537852+00:00",
+    "lint": {
+      "errors": 0,
+      "warnings": 12,
+      "information": 1
+    },
+    "python": {
+      "tests": 16,
+      "failures": 0,
+      "signing": 6,
+      "data_quality": 10
+    },
+    "superseded_runs": {
+      "runs": [
+        40056593532,
+        40056594013,
+        40056925641,
+        40056865590
+      ],
+      "reason": "Superseded after real review found cached connection-test success and standard-spelling false negatives. Pending runs cancelled where possible; some jobs already completed. Replaced by final corrected-source validation, not skipped failed assertions."
+    }
   },
   "previous_execution_code9": {
     "jvm": {

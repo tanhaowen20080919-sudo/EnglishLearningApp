@@ -4,7 +4,7 @@
 
 ## 当前构建跟进
 
-code11 继续使用同一正式证书和四个已有 Secrets；最终云端验证、下载及核验结果见 [Cloud补齐](V1_CLOUD_COMPLETION.md)。code10结果保留在[历史词条记录](V1_LEXICAL_UPDATE.md)。
+code11 已通过159项JVM、16项Python和5项Android UI测试，云端及下载后固定证书核验通过。继续使用同一正式证书和四个已有 Secrets；最终云端验证、下载及核验结果见 [Cloud补齐](V1_CLOUD_COMPLETION.md)。code10结果保留在[历史词条记录](V1_LEXICAL_UPDATE.md)。
 
 ## code9 正式构建历史
 

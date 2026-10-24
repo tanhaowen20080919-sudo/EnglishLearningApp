@@ -40,7 +40,14 @@
 
 ## 最终执行记录
 
-本轮最终完整JVM/Android云端验证、固定证书Release与下载后独立校验完成后，在此和`acceptance.json.execution`写入实际记录。未完成执行不得当作通过。
+- 最终本地及云端 **159项JVM/Robolectric测试**，0失败/0错误/0跳过；含生产客户端真实本地HTTPS传输、取消、强制重测凭据与SQLite费用/缓存测试。逐例记录见[测试结果](audit/test-results-code11.json)。
+- **16项Python测试**（6项签名恢复安全、10项数据质量）通过；Lint0错误/12警告/1信息；Debug、未签名Release验证包及Android测试APK均构建通过。
+- 正式构建与PR独立运行分别通过 **5项API35 Android UI/数据测试**，0失败/0跳过。离线整日学习、真实评分/拼写/语境、重建恢复、明日计划、0次AI、单层导航和草稿/备份保护均实际核对。
+- 正式运行释义显示原始5次耗时 **[536, 118, 84, 66, 65] ms**，经验最近秩P95 **536 ms**；PR独立运行P95 **479 ms**。只代表该模拟器动作的小样本，不替代真机全局性能。
+- [最终Build APK](https://github.com/tanhaowen20080919-sudo/EnglishLearningApp/actions/runs/40057808843) 验证、UI、固定证书Release三项全部通过；[PR #6](https://github.com/tanhaowen20080919-sudo/EnglishLearningApp/pull/6) 合并。受测源码 `417b6fa5502c63691acee89cb0bfd39cc3de52a2`；应用树 `815dab61c441d14786327fd0255d06baecf0dba9`。后续证据文档不改变受测应用代码。
+- 正式APK：`EnglishLearning-v1.0.0-code11-release.apk`；[Actions产物](https://github.com/tanhaowen20080919-sudo/EnglishLearningApp/actions/runs/40057808843/artifacts/12546675392)。文件SHA-256：`cefed86fbca15b38005655f35077eaf050fc433f64ceb2e1e079bfb22dffcb7e`。
+- 下载后独立核对签名证书、包名`com.tanhaowen.contextenglish`、versionName`1.0.0`、versionCode**11**、非调试、ZIP完整性、zipalign、新资料资产SHA及原词库/音标/1640份MP3固定哈希，全部通过。详见[APK核验](audit/release-code11.json)和[云端证据](audit/cloud-verification-code11.json)。
+- 318项最终状态：**313项已完整实现、5项部分实现、0项未实现**；5项仅由下列外部验收限制整体结论，不包含当前Cloud可解决的开发或词条覆盖缺口。
 
 ## 仅保留外部验收
 
