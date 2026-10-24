@@ -89,6 +89,40 @@ class AuditPersistenceTest {
         assertThrows(IllegalStateException::class.java) { adaptive.answer(before,before.copy(feedback="重复错误评分",correct=false),false,1000) }
         assertEquals(first,adaptive.load(before.day));assertEquals(word,repo.loadWord(word.id))
     }
+    @Test fun replannedQuestionAtSameIndexRejectsOldUiAnswerWithoutAnySideEffects() {
+        val words=repo.loadWords();val word=words.first()
+        val q=LocalContent.vocabulary(word,words,"meaning","same-key")
+        val old=DailyWorkflow(LocalDate.now().toString(),Intensity.QUICK,15,"",listOf(word.id),emptyList(),"garden","",
+            listOf(LearningStep(q.id,"综合小测",word.id,q)),started=true)
+        val edited=old.copy(steps=listOf(old.steps[0].copy(question=q.copy(prompt="重新规划后的题干"))))
+        adaptive.save(old);adaptive.save(edited)
+        val prior=repo.loadWord(word.id)!!
+        assertThrows(IllegalStateException::class.java) { adaptive.answer(old,old.copy(feedback="过期答案"),true,9999,answerValue=q.answer.toString()) }
+        assertEquals(edited,adaptive.load(old.day));assertEquals(prior,repo.loadWord(word.id))
+        helper.readableDatabase.rawQuery("SELECT COUNT(*) FROM diagnostic_attempts",null).use { it.moveToFirst();assertEquals(0,it.getInt(0)) }
+        helper.readableDatabase.rawQuery("SELECT active_ms FROM learning_days WHERE day=?",arrayOf(old.day)).use { it.moveToFirst();assertEquals(0L,it.getLong(0)) }
+        adaptive.answer(edited,edited.copy(feedback="新题真实答案"),true,500,answerValue=q.answer.toString())
+        assertEquals(prior.correctCount+1,repo.loadWord(word.id)!!.correctCount)
+    }
+    @Test fun missingSavedPlanCannotCreateCreditedAnswers() {
+        val words=repo.loadWords();val w=WorkflowFactory.create(LocalDate.now().toString(),Intensity.QUICK,15,words,RecentPerformance(),emptyList(),System.currentTimeMillis())
+        assertThrows(IllegalStateException::class.java) { adaptive.answer(w,w.copy(index=1),true,1000,2) }
+        assertEquals(words,repo.loadWords());assertNull(adaptive.load(w.day))
+    }
+    @Test fun recentPerformanceAndWeeklyAiEvidenceUseExactlySevenDaysWithoutFutureRecords() {
+        val today=LocalDate.now();val words=repo.loadWords();val word=words.first()
+        listOf(-7L to false,-6L to true,0L to true,1L to false).forEach { (offset,right) ->
+            val date=today.plusDays(offset).toString();val q=LocalContent.vocabulary(word,words,"meaning","$date:window")
+            val w=DailyWorkflow(date,Intensity.QUICK,15,"",listOf(word.id),emptyList(),"garden","",listOf(LearningStep(q.id,"综合小测",word.id,q)))
+            adaptive.save(w);adaptive.answer(w,w.copy(index=1),right,500)
+        }
+        val performance=adaptive.performance(today)
+        assertEquals(2,performance.sampleCount);assertEquals(1.0,performance.newAccuracy,0.0);assertEquals(1.0,performance.quiz,0.0)
+        val week=adaptive.weeklySummary(today)
+        assertEquals(today.minusDays(6).toString(),week.getString("periodStart"))
+        assertEquals(2,week.getJSONArray("skills").getJSONObject(0).getInt("total"))
+        assertEquals(2,week.getJSONArray("days").length())
+    }
     @Test fun repeatedLocalQuizPromptsTriggerOptionalSupplementOnlyAfterActualStudy() {
         val words=repo.loadWords();val date=LocalDate.now()
         val today=WorkflowFactory.create(date.toString(),Intensity.STANDARD,45,words,RecentPerformance(),emptyList(),System.currentTimeMillis())

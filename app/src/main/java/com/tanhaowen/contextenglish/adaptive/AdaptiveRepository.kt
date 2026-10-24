@@ -64,7 +64,8 @@ class AdaptiveRepository(private val legacy: EnglishRepository,private val now: 
         db.beginTransaction()
         try {
             val stored=load(before.day)
-            check(stored==null || stored.index==before.index && stored.feedback.isBlank()) { "进度已更新或该题已评分，请重新加载" }
+            check(stored!=null && stored.index==before.index && stored.feedback.isBlank() &&
+                stored.step==before.step) { "当前题目或进度已更新，或该题已评分，请重新加载" }
             val id=db.insertWithOnConflict("diagnostic_attempts",null,ContentValues().apply {
                 put("task_key",step.key); put("day",before.day); put("phase",step.phase); put("form",q?.form ?: "self")
                 put("tag",q?.tag.orEmpty()); put("word_id",q?.wordId ?: step.wordId); put("correct",if(correct) 1 else 0)
@@ -111,7 +112,7 @@ class AdaptiveRepository(private val legacy: EnglishRepository,private val now: 
         }
     }
     fun performance(today: LocalDate = LocalDate.now()): RecentPerformance {
-        val since=today.minusDays(7).toString()
+        val since=today.minusDays(6).toString()
         fun accuracy(where: String): Double = db.rawQuery("SELECT AVG(correct) FROM diagnostic_attempts WHERE day>=? AND day<=? AND ($where)",arrayOf(since,today.toString())).use {
             if(it.moveToFirst() && !it.isNull(0)) it.getDouble(0) else .75
         }
@@ -140,13 +141,13 @@ class AdaptiveRepository(private val legacy: EnglishRepository,private val now: 
     fun attemptContext(key: String): JSONObject = db.rawQuery("SELECT selected_answer,error_reason,correct,elapsed_ms FROM diagnostic_attempts WHERE task_key=?",arrayOf(key)).use {
         if(!it.moveToFirst()) JSONObject() else JSONObject().put("selectedAnswer",it.getString(0)).put("reportedReason",it.getString(1)).put("correct",it.getInt(2)==1).put("elapsedMs",it.getLong(3))
     }
-    fun weeklySummary(): JSONObject {
-        val since=LocalDate.now().minusDays(6).toString()
-        val result=JSONObject().put("periodStart",since).put("periodEnd",LocalDate.now().toString())
-        result.put("skills",JSONArray().also { a -> db.rawQuery("SELECT form,tag,COUNT(*),SUM(correct),SUM(elapsed_ms) FROM diagnostic_attempts WHERE day>=? GROUP BY form,tag",arrayOf(since)).use {
+    fun weeklySummary(today: LocalDate = LocalDate.now()): JSONObject {
+        val since=today.minusDays(6).toString()
+        val result=JSONObject().put("periodStart",since).put("periodEnd",today.toString())
+        result.put("skills",JSONArray().also { a -> db.rawQuery("SELECT form,tag,COUNT(*),SUM(correct),SUM(elapsed_ms) FROM diagnostic_attempts WHERE day>=? AND day<=? GROUP BY form,tag",arrayOf(since,today.toString())).use {
             while(it.moveToNext()) a.put(JSONObject().put("form",it.getString(0)).put("tag",it.getString(1)).put("total",it.getInt(2)).put("correct",it.getInt(3)).put("elapsedMs",it.getLong(4)))
         } })
-        result.put("days",JSONArray().also { a -> db.rawQuery("SELECT day,mode,planned,completed,active_ms FROM learning_days WHERE day>=? AND day<=? ORDER BY day",arrayOf(since,LocalDate.now().toString())).use {
+        result.put("days",JSONArray().also { a -> db.rawQuery("SELECT day,mode,planned,completed,active_ms FROM learning_days WHERE day>=? AND day<=? ORDER BY day",arrayOf(since,today.toString())).use {
             while(it.moveToNext()) a.put(JSONObject().put("day",it.getString(0)).put("mode",it.getString(1)).put("planned",it.getInt(2)).put("completed",it.getInt(3)).put("activeMs",it.getLong(4)))
         } })
         result.put("note","仅此时间窗内的数据；没有对照周，不能断言进步幅度。")

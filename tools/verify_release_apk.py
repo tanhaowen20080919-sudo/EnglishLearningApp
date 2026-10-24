@@ -37,8 +37,8 @@ def verify(apk: Path):
         source_notes=(ROOT/"app/src/main/assets/word-study-notes.json").read_bytes()
         if hashlib.sha256(notes_data).digest()!=hashlib.sha256(source_notes).digest():
             raise ValueError("APK study notes differ from the reviewed source asset.")
-        if len(notes["morphology"])!=1640:
-            raise ValueError("APK is missing word morphology/usage records.")
+        if len(notes["morphology"])!=1640 or len(notes["studyCards"])!=1640 or notes["coverage"].get("posAdaptedProfiles")!=1640:
+            raise ValueError("APK is missing reviewed word cards or POS-scoped morphology/usage records.")
         audio_files = sum(name.startswith("assets/pronunciation/") and name.endswith(".mp3") for name in archive.namelist())
     with apk.open("rb") as stream:
         digest = hashlib.file_digest(stream, "sha256").hexdigest()

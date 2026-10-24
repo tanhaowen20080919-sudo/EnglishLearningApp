@@ -15,7 +15,7 @@ object UsageParser {
         val details = usage.optJSONObject("prompt_tokens_details")
             ?: usage.optJSONObject("input_tokens_details") ?: JSONObject()
         fun number(obj: JSONObject, key: String): Long? = when (val value = obj.opt(key)) {
-            is Number -> value.toDouble().takeIf { it.isFinite() && it>=0 && it==kotlin.math.floor(it) }?.toLong()
+            is Number -> runCatching { java.math.BigDecimal(value.toString()).longValueExact() }.getOrNull()?.takeIf { it>=0 }
             is String -> value.toLongOrNull()?.takeIf { it>=0 }
             else -> null
         }
@@ -36,16 +36,17 @@ object UsageParser {
                 response.optString("object") != "response" &&
                 (usage.has("cache_creation_input_tokens") || usage.has("cache_read_input_tokens"))
         }
-        val cache = write + read
+        val cache = runCatching { Math.addExact(write,read) }.getOrElse { return TokenUsage() }
         val inclusive = when {
-            input != null && separate -> input + cache
+            input != null && separate -> runCatching { Math.addExact(input,cache) }.getOrElse { return TokenUsage() }
             input != null -> input.coerceAtLeast(cache)
-            miss != null -> miss + cache
+            miss != null -> runCatching { Math.addExact(miss,cache) }.getOrElse { return TokenUsage() }
             else -> cache
         }
+        val derivedTotal=runCatching { Math.addExact(inclusive,output ?: 0L) }.getOrElse { return TokenUsage() }
         return TokenUsage(inclusive, output ?: 0L, write, read,
-            (number(usage, "total_tokens") ?: 0L).coerceAtLeast(inclusive + (output ?: 0L)),
-            known = (input != null || miss != null) && output != null,
+            (number(usage, "total_tokens") ?: 0L).coerceAtLeast(derivedTotal),
+            known = (input != null || miss != null) && output != null && (separate || input==null || input>=cache),
             cacheCreationKnown = listOf("cache_write_tokens","cache_creation_tokens").any { number(details,it)!=null } ||
                 listOf("cache_creation_input_tokens","cache_creation_tokens","cache_write_tokens","prompt_cache_creation_tokens").any { number(usage,it)!=null },
             cacheReadKnown = listOf("cached_tokens","cache_read_tokens").any { number(details,it)!=null } ||

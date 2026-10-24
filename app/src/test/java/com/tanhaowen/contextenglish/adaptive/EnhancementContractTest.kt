@@ -44,6 +44,19 @@ class EnhancementContractTest {
         good.put("evidence","At first, only three people came.")
         assertThrows(IllegalArgumentException::class.java) { task.validate(good.toString()) }
     }
+    @Test fun displayedContextUsesTheCurrentClozeRatherThanAnUnrelatedDefaultExample() {
+        val word=words.first().copy(word="review",example="Please review your spelling before the exam.")
+        val q=LocalQuestion("current","We ____ the results together after every experiment.\n我们一起回顾结果。",listOf("review","ignore","invent","freeze"),0,"实际题目","context",wordId=word.id)
+        val w=workflow().copy(steps=listOf(LearningStep(q.id,"综合小测",word.id,q)))
+        val task=LearningEnhancements.displayedContext(w,listOf(word))
+        assertTrue(task.prompt.contains("We review the results together after every experiment."))
+        assertFalse(task.prompt.contains(word.example))
+        val response=JSONObject().put("word","review").put("meaning","回顾分析").put("evidence","review the results")
+            .put("reason","原句明确讲实验后共同回顾分析结果。")
+        task.validate(response.toString())
+        response.put("evidence",word.example)
+        assertThrows(IllegalArgumentException::class.java) { task.validate(response.toString()) }
+    }
     private val words=(1L..20).map { i -> VocabWord(i,"word${('a'+i.toInt())}","/x/","词义$i","","",WordState.LEARNING,false,0,0) }
     private fun workflow()=DailyWorkflow("2026-10-23",Intensity.STANDARD,45,"",words.map { it.id },emptyList(),"garden","时态",emptyList())
     private fun grammarResponse()=JSONObject().put("questions",JSONArray().also { a -> GrammarBank.lessons.first { it.tag=="时态" }.questions.take(3).forEach { q ->

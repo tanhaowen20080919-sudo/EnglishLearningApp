@@ -234,7 +234,7 @@ class AdaptiveViewModel(private val app: ContextEnglishApp,
             val word=snapshot.words.firstOrNull { it.id==(w.step?.question?.wordId ?: w.step?.wordId) }
             when(kind) {
                 "sentence" -> LearningEnhancements.sentence(reading)
-                "context" -> LearningEnhancements.context(word?.word ?: snapshot.lookedUp.keys.lastOrNull() ?: reading.glossary.keys.first(),if(word!=null) WordStudyResources.note(word)?.example ?: word.example else reading.passage)
+                "context" -> LearningEnhancements.displayedContext(w,snapshot.words,snapshot.lookedUp.keys.lastOrNull())
                 "examples" -> LearningEnhancements.examples(word ?: snapshot.words.first { it.id in w.newIds })
                 "practice","supplement" -> LearningEnhancements.practice(w,snapshot.words,snapshot.skills,kind=="supplement")
                 else -> error("未知增强类型")
@@ -269,7 +269,7 @@ class AdaptiveViewModel(private val app: ContextEnglishApp,
         }
     }
     fun analyzeWeek()=aiAction {
-        val summary=withContext(Dispatchers.IO) { repository.weeklySummary() }
+        val summary=withContext(Dispatchers.IO) { repository.weeklySummary(today()) }
         val task=EnhancementTask("weekly-analysis-v2","本周分析","只返回JSON {\"explanation\":\"统计解读\",\"suggestions\":[\"三个可操作建议\"]}。只依据以下真实统计，说明证据不足之处，不决定新词量，不编造对照周。\n$summary",AiTaskScheduler::validateExplanation)
         val explanation=AiTaskScheduler.parseObject(request(task).content).getString("explanation")
         mutable.update { it.copy(aiContent=explanation) }
