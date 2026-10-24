@@ -26,4 +26,11 @@ for word in words:
 assert (assets/'ECDICT-UPSTREAM-LICENSE.txt').is_file()
 assert (assets/'ENRICHMENT-ATTRIBUTION.txt').is_file()
 print('PASS: original vocabulary/IPA/examples and all 1640 original audio files are byte-identical; each word has >=2 attributed offline contexts')
-print('NOTICE: ECDICT supplies inflections for',sum(bool(row['forms']) for row in extra.values()),'words; curated common collocations still cover only 20 words. No fabricated full-coverage claim.')
+from build_word_study_notes import build
+compiled=json.loads((assets/'word-study-notes.json').read_text())
+assert compiled==build(),'Rebuild word-study-notes.json from its reviewed source files'
+assert len(compiled['morphology'])==1640
+assert compiled['coverage']['explicitMorphologyReviews']==264
+old=set(re.findall(r'"([a-z-]+)" to WordNote', (root/'app/src/main/java/com/tanhaowen/contextenglish/adaptive/WordNotes.kt').read_text()))
+print('Reviewed high-school cards:',len(compiled['studyCards']),'of 1640; effective collocations:',len(old|compiled['studyCards'].keys()),'of 1640')
+print('Morphology: 1376 ECDICT records + 264 explicit word-by-word usage reviews. Original dictionary/audio remain unchanged.')

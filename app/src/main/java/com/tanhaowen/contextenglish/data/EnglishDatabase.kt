@@ -8,6 +8,12 @@ import android.database.sqlite.SQLiteOpenHelper
 class EnglishDatabase(private val context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
+    override fun onOpen(db: SQLiteDatabase) {
+        super.onOpen(db)
+        // Opening is already performed on repository IO paths; a bad optional asset keeps the legacy fallback usable.
+        com.tanhaowen.contextenglish.adaptive.WordStudyResources.load(context)
+    }
+
     override fun onConfigure(db: SQLiteDatabase) {
         super.onConfigure(db)
         if (db.version in 1 until DATABASE_VERSION) createRecoveryBackup(context, db)

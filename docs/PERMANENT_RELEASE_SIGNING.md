@@ -2,7 +2,11 @@
 
 用户已明确同意首次卸载旧版后全新安装 v1.0，不再延续此前丢失的旧签名。此后 **v1.1、v1.2、v2.0 等必须沿用本次私钥**，不得因换环境或密码遗失自动生成替代证书。
 
-## 当前正式构建
+## 当前构建跟进
+
+code10 继续使用同一证书和四个已有 Secrets；最新词条修复与实际构建结果见 [词条跟进](V1_LEXICAL_UPDATE.md)。
+
+## code9 正式构建历史
 
 严格审计修复后的 v1.0.0 / code 9 继续使用同一正式证书及 applicationId。139 项 JVM 测试和 5 项 Android UI 测试通过后，由既有 Secrets 构建并再次核验 APK。最新文件 SHA-256、下载及仍未完成的资源/真机验收项见 [本轮交付记录](V1_AUDIT_DELIVERY.md)。构建通过不代表原始规格已全部完成。
 
@@ -80,6 +84,6 @@ python3 tools/verify_release_apk.py app/build/outputs/apk/release/app-release.ap
 
 ## 后续升级约束
 
-每次发布只递增 `versionName` 和 `versionCode`：当前审计修复版 v1.0 为 code9，后续例如 v1.1 code10、v1.2 code11、v2.0 使用更大的 code。applicationId、正式私钥和固定证书指纹保持相同；正常安装更新即可保留 v1.0 起的应用数据。数据格式变化仍需独立执行数据库迁移测试。
+每次发布只递增 `versionName` 和 `versionCode`：当前词条修复版 v1.0 为 code10，后续例如 v1.1 code11、v1.2 code12、v2.0 使用更大的 code。applicationId、正式私钥和固定证书指纹保持相同；正常安装更新即可保留 v1.0 起的应用数据。数据格式变化仍需独立执行数据库迁移测试。
 
 本次 v1.0 与旧签名不兼容，按用户选择由用户先卸载旧版再全新安装；开发环境没有连接手机，也未执行卸载。后续不要重复卸载或清空数据。

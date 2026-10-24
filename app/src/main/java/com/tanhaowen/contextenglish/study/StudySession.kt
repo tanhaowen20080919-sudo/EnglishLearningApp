@@ -53,7 +53,8 @@ object StudyEngine {
             originalIds = distinct.map { it.id }.toSet())
     }
 
-    fun meaning(word: VocabWord): String = word.meaning.lineSequence().firstOrNull { it.isNotBlank() }
+    fun meaning(word: VocabWord): String = com.tanhaowen.contextenglish.adaptive.WordStudyResources.note(word)?.meaning
+        ?: word.meaning.lineSequence().firstOrNull { it.isNotBlank() }
         ?.trim().orEmpty().ifBlank { word.contextMeaning.trim() }
 
     fun question(session: StudySession, words: List<VocabWord>): StudyQuestion? = StudyQuestionBank(words).prepare(session)

@@ -197,21 +197,34 @@ private fun WorkflowScreen(state: AdaptiveState,vm: AdaptiveViewModel,autoSpeak:
                     Text("先在脑中回忆词义，再翻开答案。",color=MaterialTheme.colorScheme.onSurfaceVariant)
                     if(!w.revealed) Button(onClick=vm::reveal,enabled=!state.busy,modifier=Modifier.fillMaxWidth().heightIn(min=50.dp).testTag("reveal-meaning")) { Text("显示释义") }
                     else {
+                        val reviewed=WordStudyResources.note(word)
+                        Text(if(reviewed!=null) "高中常用义" else "原词库释义",style=MaterialTheme.typography.labelMedium)
                         Text(com.tanhaowen.contextenglish.study.StudyEngine.meaning(word),style=MaterialTheme.typography.titleLarge,modifier=Modifier.testTag("learn-meaning"))
-                        if(word.contextMeaning.isNotBlank() && word.contextMeaning!=word.meaning) Text(word.contextMeaning)
-                        Text(word.example,style=MaterialTheme.typography.bodyLarge)
-                        Text(word.exampleTranslation,color=MaterialTheme.colorScheme.onSurfaceVariant)
-                        WordNotes.entries[word.word.lowercase()]?.let { note -> Text("常见搭配：${note.collocation}"); Text("词形：${note.forms}") }
+                        if(reviewed!=null) {
+                            Text("原创高中语境",style=MaterialTheme.typography.labelMedium)
+                            Text(reviewed.example,style=MaterialTheme.typography.bodyLarge)
+                            Text(reviewed.translation,color=MaterialTheme.colorScheme.onSurfaceVariant)
+                        } else {
+                            if(word.contextMeaning.isNotBlank() && word.contextMeaning!=word.meaning) Text(word.contextMeaning)
+                            Text(word.example,style=MaterialTheme.typography.bodyLarge)
+                            Text(word.exampleTranslation,color=MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
                         Text("按真实感受选择，稍后可能随机抽查。",style=MaterialTheme.typography.bodySmall)
                         listOf("不认识","模糊","认识").forEachIndexed { i,label ->
                             OutlinedButton(onClick={ vm.rate(i) },enabled=!state.busy,modifier=Modifier.fillMaxWidth().heightIn(min=50.dp).testTag("rating-$i")) { Text(label) }
                         }
+                        (reviewed?.collocation ?: WordNotes.entries[word.word.lowercase()]?.collocation)?.let { Text("常见搭配：$it") }
+                        WordStudyResources.morphology(word.word)?.let { Text("${if(it.basis=="ECDICT exchange data") "原词典词形（按对应词性使用）" else "词形与用法"}：${it.text}",style=MaterialTheme.typography.bodySmall) }
                         var full by rememberSaveable { mutableStateOf(false) }
                         TextButton(onClick={ full=!full }) { Text("展开完整词义与更多补充") }
                         if (full) {
+                            if(word.contextMeaning.isNotBlank() && word.contextMeaning!=word.meaning) Text("已保存的语境说明：${word.contextMeaning}")
+                            Text("原词库完整释义（含旧义/专业义，保留备查）")
                             Text(word.meaning)
+                            WordNotes.entries[word.word.lowercase()]?.let { Text("补充派生与用法：${it.forms}") }
+                            if(reviewed!=null) { Text("原词库例句");Text(word.example);Text(word.exampleTranslation) }
                             OfflineWordResources.get(word.word)?.let { supplement ->
-                                if(supplement.forms.isNotBlank() && WordNotes.entries[word.word.lowercase()]==null) Text("词形：${supplement.forms}")
+                                if(WordStudyResources.morphology(word.word)==null && supplement.forms.isNotBlank()) Text("词形：${supplement.forms}")
                                 var more by rememberSaveable { mutableStateOf(false) }
                                 TextButton(onClick={ more=!more }) { Text("更多语境 · 离线") }
                                 if(more) supplement.examples.forEach { e -> Text(e.text);if(e.translation.isNotBlank()) Text(e.translation) }

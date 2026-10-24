@@ -52,7 +52,7 @@ object LearningEnhancements {
             require(passage.contains(quote,true) && Regex("(?i)(?<![a-z])${Regex.escape(word)}(?![a-z])").containsMatchIn(quote)) { "语境义证据不在原文中或未包含目标词" }
         })
     fun examples(word: VocabWord)=EnhancementTask("word-examples-v2","例句与易混辨析",
-        "$JSON_ONLY\n为该高考词补充一个自然的新语境例句及中文翻译、常见搭配、必要词形和一个易混词辨析。保持原词义资料不变。返回 {\"word\":\"原词\",\"example\":\"英文例句，原词须原形出现\",\"translation\":\"中文\",\"collocations\":[\"搭配\"],\"forms\":\"词形或明确无变化\",\"contrast\":\"易混词与差别\"}。\n${word.word}: ${word.meaning}\n原例句：${word.example}",{ output ->
+        "$JSON_ONLY\n为该高考词补充一个自然的新语境例句及中文翻译、常见搭配、必要词形和一个易混词辨析。保持原词义资料不变。返回 {\"word\":\"原词\",\"example\":\"英文例句，原词须原形出现\",\"translation\":\"中文\",\"collocations\":[\"搭配\"],\"forms\":\"词形或明确无变化\",\"contrast\":\"易混词与差别\"}。\n${word.word}: ${if(WordStudyResources.note(word)!=null) "已审校高中常用义" else "原词库义（排序未审校）"}=${com.tanhaowen.contextenglish.study.StudyEngine.meaning(word)}；原词库义=${word.meaning}\n原例句：${WordStudyResources.note(word)?.example ?: word.example}",{ output ->
             val j=AiTaskScheduler.parseObject(output);require(text(j,"word").equals(word.word,true))
             require(Regex("(?i)(?<![a-z])${Regex.escape(word.word)}(?![a-z])").containsMatchIn(text(j,"example",10,500)))
             text(j,"translation",3);strings(j,"collocations");text(j,"forms");text(j,"contrast",8)
