@@ -10,6 +10,7 @@
 - `AdaptiveRepository.answer` 在事务内要求已保存计划、当前索引/题目一致且未评分。计划调整后旧UI即使停留在同一索引也不能提交；拒绝时不改掌握度、诊断、计时或快照。已答历史不重判。
 - `LearningEnhancements.displayedContext` 将语境解释绑定到屏幕上实际抽中的句子，恢复挖空答案，禁止用另一条默认例句充当当前语境。
 - `AdaptiveRepository.performance/weeklySummary` 准确限定七天，周AI数据排除未来日期；`UsageParser` 拒绝整数/加法溢出，缓存分项超过总输入时不伪称完整用量。
+- 手动“测试连接”使用独立任务类型并跳过缓存，每次实际验证当前凭据/模型；普通内容请求仍复用有效缓存。真实HTTPS回归先命中内容缓存，再强制刷新收到401，不能伪报成功。
 - SQLite保持v6，未增加破坏性迁移；复用既有迁移备份、回滚、事务及恢复测试。applicationId固定，versionName1.0.0，versionCode11，签名证书未变。
 
 ## 独立质量检查

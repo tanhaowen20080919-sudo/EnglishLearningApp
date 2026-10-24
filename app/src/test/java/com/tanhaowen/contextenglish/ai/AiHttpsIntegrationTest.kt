@@ -74,6 +74,12 @@ class AiHttpsIntegrationTest {
         val cached=scheduler.request(settings,"wire-analysis","指定原文解析",validate=AiTaskScheduler::validateExplanation).getOrThrow()
         assertTrue(cached.fromCache);assertEquals(result.content,cached.content);assertEquals(1,server.requestCount)
         assertEquals(1,repo.aiUsageSummary().calls)
+        server.enqueue(MockResponse().setResponseCode(401).setBody("{\"error\":{\"code\":\"invalid_key\"}}"))
+        val refreshed=scheduler.request(settings,"wire-analysis","指定原文解析",useCache=false)
+        assertFalse(refreshed.isSuccess)
+        assertTrue(refreshed.exceptionOrNull() is AiHttpException)
+        assertEquals(2,server.requestCount)
+        assertEquals(2,repo.aiUsageSummary().calls)
     }
     @Test fun httpErrorAndMalformedBodyCannotEnterCacheOrPreventAnOfflineAnswer()=runBlocking {
         server.enqueue(MockResponse().setResponseCode(429).setBody("{\"error\":{\"code\":\"rate_limit\"}}"))

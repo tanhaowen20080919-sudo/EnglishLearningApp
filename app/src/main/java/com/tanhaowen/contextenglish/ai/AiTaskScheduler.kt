@@ -56,10 +56,10 @@ class AiTaskScheduler(private val repository: EnglishRepository, private val cli
         canStart: () -> Boolean = { true }): Result<AiCallResult> = request(settings,"assistant",prompt,maxTokens,canStart)
 
     suspend fun request(settings: AiSettings,type: String,prompt: String,maxTokens: Int = 2600,
-        canStart: () -> Boolean = { true },validate: (String)->Unit = {}): Result<AiCallResult> = mutex.withLock {
+        canStart: () -> Boolean = { true },useCache: Boolean = true,validate: (String)->Unit = {}): Result<AiCallResult> = mutex.withLock {
         if(!canStart()) return@withLock Result.failure(AiStartSkippedException())
         val key=queue(settings,type,prompt)
-        cached(settings,type,prompt)?.let { content ->
+        (if(useCache) cached(settings,type,prompt) else null)?.let { content ->
             try {
                 validate(content)
                 val actualModel=withContext(Dispatchers.IO) {

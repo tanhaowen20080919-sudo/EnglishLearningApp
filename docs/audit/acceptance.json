@@ -7315,6 +7315,11 @@
           "file": "app/src/main/java/com/tanhaowen/contextenglish/AppViewModel.kt",
           "symbol": "private fun pumpCoach",
           "logic": "旧自动网络入口 pumpCoach 仅清空pending；当前核心AI边界只由显式按钮调用，启动/切页/学习评分最多读写本地队列。"
+        },
+        {
+          "file": "app/src/main/java/com/tanhaowen/contextenglish/AppViewModel.kt",
+          "symbol": "fun testConnection()",
+          "logic": "仅手动触发独立connection-test任务并useCache=false，重新请求当前凭据/模型；旧缓存不能伪造连接成功。"
         }
       ],
       "tests": [
@@ -7367,6 +7372,11 @@
           "file": "app/src/main/java/com/tanhaowen/contextenglish/AppViewModel.kt",
           "symbol": "private fun pumpCoach",
           "logic": "旧自动网络入口 pumpCoach 仅清空pending；当前核心AI边界只由显式按钮调用，启动/切页/学习评分最多读写本地队列。"
+        },
+        {
+          "file": "app/src/main/java/com/tanhaowen/contextenglish/AppViewModel.kt",
+          "symbol": "fun testConnection()",
+          "logic": "仅手动触发独立connection-test任务并useCache=false，重新请求当前凭据/模型；旧缓存不能伪造连接成功。"
         }
       ],
       "tests": [
@@ -12974,6 +12984,11 @@
           "file": "app/build.gradle.kts",
           "symbol": "val verifyPermanentReleaseSigning",
           "logic": "包名 com.tanhaowen.contextenglish 不变，versionName1.0.0/code11；正式签名必须匹配固定e13229…fbf1证书，未生成新key。"
+        },
+        {
+          "file": "app/src/main/java/com/tanhaowen/contextenglish/AppViewModel.kt",
+          "symbol": "fun testConnection()",
+          "logic": "仅手动触发独立connection-test任务并useCache=false，重新请求当前凭据/模型；旧缓存不能伪造连接成功。"
         }
       ],
       "tests": [
@@ -14464,6 +14479,11 @@
           "file": "app/src/main/java/com/tanhaowen/contextenglish/ai/AiTaskScheduler.kt",
           "symbol": "private fun key(",
           "logic": "key 包含版本、endpoint、apiStyle、请求模型、内容类型与完整输入哈希；ai_tasks 保存实际响应模型、生成时间和30天过期时间；无效内容不得进入DONE。"
+        },
+        {
+          "file": "app/src/main/java/com/tanhaowen/contextenglish/AppViewModel.kt",
+          "symbol": "fun testConnection()",
+          "logic": "仅手动触发独立connection-test任务并useCache=false，重新请求当前凭据/模型；旧缓存不能伪造连接成功。"
         }
       ],
       "tests": [
